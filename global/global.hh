@@ -24,4 +24,10 @@ namespace Flaner
 	};
 };
 
+#ifdef DEBUG
+#define FLANER_DEBUG
+#else
+#define FLANER_DEBUG //
+#endif // !DEBUG
+
 #endif // !_FLANER_COMPILER_GLOBAL_HH_
