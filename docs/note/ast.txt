@@ -1,0 +1,34 @@
+AST (struct)
+    -> std::vector<Statement*> statements
+
+StatementKind (enum class)
+    -> Declaration
+    -> Expression
+    -> If
+	-> Switch
+	-> Case
+	-> While
+	-> DoWhile
+	-> For
+	-> TryCatch
+	-> Break
+	-> Continue
+	-> Throw
+	-> Import
+	-> With
+	-> Return
+	-> Class
+	-> Visitor    # 对象和类的成员访问器声明
+	-> Decorator  # 装饰器语句
+	-> Yield
+	
+
+Statement (struct)
+    -> StatementKind kind
+
+Declaration : Statement (struct)
+    -> std::string type
+    -> std::vector<Statement*> body
+Expression : Statement (struct)
+    -> std::string name
+    -> Function* called
