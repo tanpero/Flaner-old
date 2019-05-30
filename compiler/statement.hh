@@ -3,6 +3,7 @@
 
 #include <global.hh>
 #include <expression.hh>
+#include <declaration.hh>
 #include <memory>
 #include <vector>
 #include <variant>
@@ -76,6 +77,36 @@ namespace Flaner
 			public:
 				Header header;
 				std::unique_ptr<StatementSequence> body;
+			};
+
+			class CaseStatement : public Statement
+			{
+			public:
+				std::unique_ptr<Expression> object;
+				std::unique_ptr<StatementSequence> body;
+			};
+
+			class SwitchStatement : public Statement
+			{
+			public:
+				std::unique_ptr<Expression> target;
+				std::vector<std::unique_ptr<CaseStatement>> cases;
+				std::unique_ptr<StatementSequence> defaultCase;
+			};
+
+			class TryCatchStatement : public Statement
+			{
+			public:
+				struct CatchStatement
+				{
+					Identifier bindingId;
+					std::unique_ptr<StatementSequence> body;
+				};
+
+			public:
+				std::unique_ptr<StatementSequence> tryBody;
+				std::vector<std::unique_ptr<CatchStatement>> catchBodies;
+				std::unique_ptr<StatementSequence> finallyBody;
 			};
 		}
 	};

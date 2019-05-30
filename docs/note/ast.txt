@@ -13,6 +13,7 @@ StatementKind (enum class)
 	-> TryCatch
 	-> Break
 	-> Continue
+	-> Function
 	-> Throw
 	-> Import
 	-> With
