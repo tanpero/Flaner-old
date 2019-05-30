@@ -25,7 +25,7 @@ namespace Flaner
 			{
 				std::vector<std::unique_ptr<Statement>> sequence;
 			public:
-				std::auto_ptr<Statement> get();
+				std::unique_ptr<Statement> get();
 				bool next();
 				void insert(Statement statement);
 			};
