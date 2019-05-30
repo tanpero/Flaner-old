@@ -108,7 +108,27 @@ namespace Flaner
 				std::vector<std::unique_ptr<CatchStatement>> catchBodies;
 				std::unique_ptr<StatementSequence> finallyBody;
 			};
-		}
+
+			class LabelStatement : public: Statement
+			{
+			public:
+				std::string name;
+			}
+
+			class BreakStatement : public Statement
+			{
+			public:
+				std::unique_ptr<LabelStatement> label;
+			};
+
+			class ContinueStatement : public Statement
+			{
+			public:
+				std::unique_ptr<LabelStatement> label;
+			};
+
+
+		};
 	};
 };
 
