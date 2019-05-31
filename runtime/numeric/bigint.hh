@@ -83,9 +83,9 @@ namespace Flaner
 				typedef std::vector<long long> vll;
 
 				static vll karatsubaMultiply(const vll &a, const vll &b);
-				Bigint operator*(const Bigint &v) const
+				Bigint operator*(const Bigint &v) const;
 
-			
+			};
 		};
 	};
 };
