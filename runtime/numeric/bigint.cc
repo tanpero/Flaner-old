@@ -370,34 +370,67 @@ namespace Flaner
 
 			void Bigint::read(const std::string &s)
 			{
+				sign = 1;
+				a.clear();
+				int pos = 0;
+				while (pos < (int)s.size() && (s[pos] == '-' || s[pos] == '+')) {
+					if (s[pos] == '-')
+						sign = -sign;
+					++pos;
+				}
+				for (int i = s.size() - 1; i >= pos; i -= base_digits) {
+					int x = 0;
+					for (int j = std::max(pos, i - base_digits + 1); j <= i; j++)
+						x = x * 10 + s[j] - '0';
+					a.push_back(x);
+				}
+				trim();
 			}
 
 
 			std::istream& operator>>(std::istream &stream, Bigint &v)
 			{
+				std::string s;
+				stream >> s;
+				v.read(s);
+				return stream;
 			}
 
 
 			std::ostream& operator<<(std::ostream &stream, const Bigint &v)
 			{
+				if (v.sign == -1)
+					stream << '-';
+				stream << (v.a.empty() ? 0 : v.a.back());
+				for (int i = (int)v.a.size() - 2; i >= 0; --i)
+					stream << std::setw(base_digits) << std::setfill('0') << v.a[i];
+				return stream;
 			}
 
 
 
 			static std::vector<int> convert_base(const std::vector<int> &a, int old_digits, int new_digits)
 			{
-			}
-
-
-			typedef std::vector<long long> vll;
-
-			static vll karatsubaMultiply(const vll &a, const vll &b)
-			{
-			}
-
-
-			Bigint Bigint::operator*(const Bigint &v) const
-			{
+				std::vector<long long> p(std::max(old_digits, new_digits) + 1);
+				p[0] = 1;
+				for (int i = 1; i < (int)p.size(); i++)
+					p[i] = p[i - 1] * 10;
+				std::vector<int> res;
+				long long cur = 0;
+				int cur_digits = 0;
+				for (int i = 0; i < (int)a.size(); i++) {
+					cur += a[i] * p[cur_digits];
+					cur_digits += old_digits;
+					while (cur_digits >= new_digits) {
+						res.push_back(int(cur % p[new_digits]));
+						cur /= p[new_digits];
+						cur_digits -= new_digits;
+					}
+				}
+				res.push_back((int)cur);
+				while (!res.empty() && !res.back())
+					res.pop_back();
+				return res;
 			}
 
 
