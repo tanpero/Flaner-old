@@ -1,10 +1,9 @@
-#include <source.hh>
+#include <io.hh>
 #include <iostream>
-#include <filesystem>
+
 int main()
 {
-	std::filesystem::path path;
-
-	std::cout << "Hello world" << std::endl;
+	using namespace Flaner::Global;
+	IO::File file()
 	return 0;
 }

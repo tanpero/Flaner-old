@@ -4,6 +4,7 @@ project(FlanerCompiler)
 set(CMAKE_CXX_STANDARD 17)
 
 include_directories(.)
-include_directories(../global)
+include_directories(..)
+include_directories(../../global)
 
-add_executable(FlanerCompiler main.cc )
+add_library(shared flaner.numeric bigint.cc rational.cc)
