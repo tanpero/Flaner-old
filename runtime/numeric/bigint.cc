@@ -434,6 +434,71 @@ namespace Flaner
 			}
 
 
+			static std::vector<long long> karatsubaMultiply(const std::vector<long long> &a, const std::vector<long long> &b)
+			{
+				int n = a.size();
+				std::vector<long long> res(n + n);
+				if (n <= 32) {
+					for (int i = 0; i < n; i++)
+						for (int j = 0; j < n; j++)
+							res[i + j] += a[i] * b[j];
+					return res;
+				}
+
+				int k = n >> 1;
+				std::vector<long long> a1(a.begin(), a.begin() + k);
+				std::vector<long long> a2(a.begin() + k, a.end());
+				std::vector<long long> b1(b.begin(), b.begin() + k);
+				std::vector<long long> b2(b.begin() + k, b.end());
+
+				std::vector<long long> a1b1 = karatsubaMultiply(a1, b1);
+				std::vector<long long> a2b2 = karatsubaMultiply(a2, b2);
+
+				for (int i = 0; i < k; i++)
+					a2[i] += a1[i];
+				for (int i = 0; i < k; i++)
+					b2[i] += b1[i];
+
+				std::vector<long long> r = karatsubaMultiply(a2, b2);
+				for (int i = 0; i < (int)a1b1.size(); i++)
+					r[i] -= a1b1[i];
+				for (int i = 0; i < (int)a2b2.size(); i++)
+					r[i] -= a2b2[i];
+
+				for (int i = 0; i < (int)r.size(); i++)
+					res[i + k] += r[i];
+				for (int i = 0; i < (int)a1b1.size(); i++)
+					res[i] += a1b1[i];
+				for (int i = 0; i < (int)a2b2.size(); i++)
+					res[i + n] += a2b2[i];
+				return res;
+			}
+
+
+			Bigint Bigint::operator*(const Bigint &v) const
+			{
+				std::vector<int> a6 = convert_base(this->a, base_digits, 6);
+				std::vector<int> b6 = convert_base(v.a, base_digits, 6);
+				std::vector<long long> a(a6.begin(), a6.end());
+				std::vector<long long> b(b6.begin(), b6.end());
+				while (a.size() < b.size())
+					a.push_back(0);
+				while (b.size() < a.size())
+					b.push_back(0);
+				while (a.size() & (a.size() - 1))
+					a.push_back(0), b.push_back(0);
+				std::vector<long long> c = karatsubaMultiply(a, b);
+				Bigint res;
+				res.sign = sign * v.sign;
+				for (int i = 0, carry = 0; i < (int)c.size(); i++) {
+					long long cur = c[i] + carry;
+					res.a.push_back((int)(cur % 1000000));
+					carry = (int)(cur / 1000000);
+				}
+				res.a = convert_base(res.a, 6, base_digits);
+				res.trim();
+				return res;
+			}
 
 		};
 	};
