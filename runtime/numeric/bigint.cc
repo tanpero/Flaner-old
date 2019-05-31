@@ -62,27 +62,49 @@ namespace Flaner
 			}
 
 
-			int size()
+			int Bigint::size()
 			{
+				if (a.empty())return 0;
+				int ans = (a.size() - 1)*base_digits;
+				int ca = a.back();
+				while (ca)
+					ans++, ca /= 10;
+				return ans;
 			}
 
 
 			Bigint Bigint::operator ^ (const Bigint &v)
 			{
+				Bigint ans = 1, a = *this, b = v;
+				while (!b.isZero()) {
+					if (b % 2)
+						ans *= a;
+					a *= a, b /= 2;
+				}
+				return ans;
 			}
 
 
-			std::string toString()
+			std::string Bigint::toString()
 			{
+				std::stringstream ss;
+				ss << *this;
+				std::string s;
+				ss >> s;
+				return s;
 			}
 
 
-			int sumOf()
+			int Bigint::sumOf()
 			{
+				std::string s = toString();
+				int ans = 0;
+				for (auto c : s)  ans += c - '0';
+				return ans;
 			}
 
 
-			std::pair<Bigint, Bigint> divmod(const Bigint &a1, const Bigint &b1)
+			std::pair<Bigint, Bigint> Bigint::divmod(const Bigint &a1, const Bigint &b1)
 			{
 			}
 
