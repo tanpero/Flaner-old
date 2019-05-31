@@ -48,10 +48,10 @@ namespace Flaner
 				if (sign == v.sign) {
 					Bigint res = v;
 
-					for (int i = 0, carry = 0; i < (int)std::max(a.size(), v.a.size()) || carry; ++i) {
-						if (i == (int)res.a.size())
+					for (int i = 0, carry = 0; i < static_cast<int>(std::max(a.size(), v.a.size()) || carry); ++i) {
+						if (i == static_cast<int>(res.a.size()))
 							res.a.push_back(0);
-						res.a[i] += carry + (i < (int)a.size() ? a[i] : 0);
+						res.a[i] += carry + (i < static_cast<int>(a.size() ? a[i] : 0));
 						carry = res.a[i] >= base;
 						if (carry)
 							res.a[i] -= base;
@@ -67,8 +67,8 @@ namespace Flaner
 				if (sign == v.sign) {
 					if (abs() >= v.abs()) {
 						Bigint res = *this;
-						for (int i = 0, carry = 0; i < (int)v.a.size() || carry; ++i) {
-							res.a[i] -= carry + (i < (int)v.a.size() ? v.a[i] : 0);
+						for (int i = 0, carry = 0; i < static_cast<int>(v.a.size() || carry); ++i) {
+							res.a[i] -= carry + (i < static_cast<int>(v.a.size() ? v.a[i] : 0));
 							carry = res.a[i] < 0;
 							if (carry)
 								res.a[i] += base;
@@ -86,12 +86,12 @@ namespace Flaner
 			{
 				if (v < 0)
 					sign = -sign, v = -v;
-				for (int i = 0, carry = 0; i < (int)a.size() || carry; ++i) {
-					if (i == (int)a.size())
+				for (int i = 0, carry = 0; i < static_cast<int>(a.size() || carry); ++i) {
+					if (i == static_cast<int>(a.size()))
 						a.push_back(0);
 					long long cur = a[i] * (long long)v + carry;
-					carry = (int)(cur / base);
-					a[i] = (int)(cur % base);
+					carry = static_cast<int>((cur / base));
+					a[i] = static_cast<int>((cur % base));
 
 				}
 				trim();
@@ -110,12 +110,12 @@ namespace Flaner
 			{
 				if (v < 0)
 					sign = -sign, v = -v;
-				for (int i = 0, carry = 0; i < (int)a.size() || carry; ++i) {
-					if (i == (int)a.size())
+				for (int i = 0, carry = 0; i < static_cast<int>(a.size() || carry); ++i) {
+					if (i == static_cast<int>(a.size()))
 						a.push_back(0);
 					long long cur = a[i] * (long long)v + carry;
-					carry = (int)(cur / base);
-					a[i] = (int)(cur % base);
+					carry = static_cast<int>((cur / base));
+					a[i] = static_cast<int>((cur % base));
 
 				}
 				trim();
@@ -215,12 +215,13 @@ namespace Flaner
 
 			void Bigint::operator/=(int v)
 			{
+				int rem = 0;
 				if (v < 0)
 					sign = -sign, v = -v;
-				for (int i = (int)a.size() - 1, rem = 0; i >= 0; --i) {
+				for (int i = static_cast<int>(a.size() - 1); i >= 0; --i) {
 					long long cur = a[i] + rem * (long long)base;
-					a[i] = (int)(cur / v);
-					rem = (int)(cur % v);
+					a[i] = static_cast<int>((cur / v));
+					rem = static_cast<int>((cur % v));
 				}
 				trim();
 			}
@@ -373,7 +374,7 @@ namespace Flaner
 				sign = 1;
 				a.clear();
 				int pos = 0;
-				while (pos < (int)s.size() && (s[pos] == '-' || s[pos] == '+')) {
+				while (pos < static_cast<int>(s.size() && (s[pos] == '-' || s[pos] == '+'))) {
 					if (s[pos] == '-')
 						sign = -sign;
 					++pos;
@@ -402,7 +403,7 @@ namespace Flaner
 				if (v.sign == -1)
 					stream << '-';
 				stream << (v.a.empty() ? 0 : v.a.back());
-				for (int i = (int)v.a.size() - 2; i >= 0; --i)
+				for (int i = static_cast<int>(v.a.size() - 2); i >= 0; --i)
 					stream << std::setw(base_digits) << std::setfill('0') << v.a[i];
 				return stream;
 			}
@@ -413,12 +414,12 @@ namespace Flaner
 			{
 				std::vector<long long> p(std::max(old_digits, new_digits) + 1);
 				p[0] = 1;
-				for (int i = 1; i < (int)p.size(); i++)
+				for (int i = 1; i < static_cast<int>(p.size()); i++)
 					p[i] = p[i - 1] * 10;
 				std::vector<int> res;
 				long long cur = 0;
 				int cur_digits = 0;
-				for (int i = 0; i < (int)a.size(); i++) {
+				for (int i = 0; i < static_cast<int>(a.size()); i++) {
 					cur += a[i] * p[cur_digits];
 					cur_digits += old_digits;
 					while (cur_digits >= new_digits) {
@@ -427,7 +428,7 @@ namespace Flaner
 						cur_digits -= new_digits;
 					}
 				}
-				res.push_back((int)cur);
+				res.push_back(static_cast<int>(cur));
 				while (!res.empty() && !res.back())
 					res.pop_back();
 				return res;
@@ -460,16 +461,16 @@ namespace Flaner
 					b2[i] += b1[i];
 
 				std::vector<long long> r = karatsubaMultiply(a2, b2);
-				for (int i = 0; i < (int)a1b1.size(); i++)
+				for (int i = 0; i < static_cast<int>(a1b1.size()); i++)
 					r[i] -= a1b1[i];
-				for (int i = 0; i < (int)a2b2.size(); i++)
+				for (int i = 0; i < static_cast<int>(a2b2.size()); i++)
 					r[i] -= a2b2[i];
 
-				for (int i = 0; i < (int)r.size(); i++)
+				for (int i = 0; i < static_cast<int>(r.size()); i++)
 					res[i + k] += r[i];
-				for (int i = 0; i < (int)a1b1.size(); i++)
+				for (int i = 0; i < static_cast<int>(a1b1.size()); i++)
 					res[i] += a1b1[i];
-				for (int i = 0; i < (int)a2b2.size(); i++)
+				for (int i = 0; i < static_cast<int>(a2b2.size()); i++)
 					res[i + n] += a2b2[i];
 				return res;
 			}
@@ -490,10 +491,10 @@ namespace Flaner
 				std::vector<long long> c = karatsubaMultiply(a, b);
 				Bigint res;
 				res.sign = sign * v.sign;
-				for (int i = 0, carry = 0; i < (int)c.size(); i++) {
+				for (int i = 0, carry = 0; i < static_cast<int>(c.size()); i++) {
 					long long cur = c[i] + carry;
-					res.a.push_back((int)(cur % 1000000));
-					carry = (int)(cur / 1000000);
+					res.a.push_back(static_cast<int>((cur % 1000000)));
+					carry = static_cast<int>((cur / 1000000));
 				}
 				res.a = convert_base(res.a, 6, base_digits);
 				res.trim();
