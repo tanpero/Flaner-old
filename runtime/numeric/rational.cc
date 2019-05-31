@@ -69,8 +69,8 @@ void simplifyFun(int& a, int& b) {
 
 
 // friend functions definitions
-RationalNum operator+(const RationalNum& left, const RationalNum& right) {
-	RationalNum temp;
+Rational operator+(const Rational& left, const Rational& right) {
+	Rational temp;
 	int tempLD = left.getDenominator();
 	int tempRD = right.getDenominator();
 	simplifyFun(tempLD, tempRD);
@@ -80,14 +80,14 @@ RationalNum operator+(const RationalNum& left, const RationalNum& right) {
 	return temp;
 }
 
-RationalNum operator-(const RationalNum& left, const RationalNum& right) {
+Rational operator-(const Rational& left, const Rational& right) {
 	return left + (-right);
 }
 
-RationalNum operator * (const RationalNum& left, const RationalNum& right) {
-	RationalNum temp;
-	RationalNum temp_2(right.getNumerator(), left.getDenominator());
-	RationalNum temp_3(left.getNumerator(), right.getDenominator());
+Rational operator * (const Rational& left, const Rational& right) {
+	Rational temp;
+	Rational temp_2(right.getNumerator(), left.getDenominator());
+	Rational temp_3(left.getNumerator(), right.getDenominator());
 	int a = temp_2.getDenominator();
 	int b = temp_2.getNumerator();
 	int c = temp_3.getDenominator();
@@ -97,57 +97,57 @@ RationalNum operator * (const RationalNum& left, const RationalNum& right) {
 	return temp;
 }
 
-RationalNum operator/(const RationalNum& left, const RationalNum& right) {
-	RationalNum temp_1(left.getNumerator(), left.getDenominator());
-	RationalNum temp_2(right.getDenominator(), right.getNumerator());
+Rational operator/(const Rational& left, const Rational& right) {
+	Rational temp_1(left.getNumerator(), left.getDenominator());
+	Rational temp_2(right.getDenominator(), right.getNumerator());
 	return temp_1  *  temp_2;
 }
 
-bool operator==(const RationalNum& left, const RationalNum& right) {
+bool operator==(const Rational& left, const Rational& right) {
 	return (left.numerator == right.numerator && left.denominator == right.denominator);
 }
 
-bool operator!=(const RationalNum& left, const RationalNum& right) {
+bool operator!=(const Rational& left, const Rational& right) {
 	return !(left == right);
 }
 
-bool operator<(const RationalNum& left, const RationalNum& right) {
+bool operator<(const Rational& left, const Rational& right) {
 	int lside = left.getNumerator() * right.getDenominator();
 	int rside = left.getDenominator() * right.getNumerator();
 	return (lside < rside);
 }
 
-bool operator>(const RationalNum& left, const RationalNum& right) {
+bool operator>(const Rational& left, const Rational& right) {
 	int lside = left.getNumerator() * right.getDenominator();
 	int rside = left.getDenominator() * right.getNumerator();
 	return (lside > rside);
 }
 
-bool operator<=(const RationalNum& left, const RationalNum& right) {
+bool operator<=(const Rational& left, const Rational& right) {
 	return ((left < right) || (left == right));
 }
 
-bool operator>=(const RationalNum& left, const RationalNum& right) {
+bool operator>=(const Rational& left, const Rational& right) {
 	return ((left > right) || (left == right));
 }
 
-ostream& operator<<(ostream& out, const RationalNum& obj) {
-	out << obj.numerator;
-	if (obj.numerator != 0 && obj.denominator != 1) {
-		out << "/" << obj.denominator;
+std::ostream& operator<<(std::ostream& out, const Rational& obj) {
+	out << obj.getNumerator();
+	if (obj.getNumerator() != 0 && obj.getDenominator() != 1) {
+		out << "/" << obj.getDenominator();
 	}
 	return out;
 }
 
-istream& operator>>(istream& in, RationalNum& obj) {
-	string inputstr;
+std::istream& operator>>(std::istream& in, Rational& obj) {
+	std::string inputstr;
 	int num = 0;
 	int sign = 1;
 	bool slashExist = false;
 	bool dotExist = false;
 	bool validInput = true;
 	int virtualDenominator = 1;
-	cin >> inputstr;
+	std::cin >> inputstr;
 	for (int i = 0; i < inputstr.size(); i++) {
 		char temp = inputstr[i];
 		if (temp == '.') {
@@ -186,20 +186,20 @@ istream& operator>>(istream& in, RationalNum& obj) {
 		else if (temp <= '9' && temp >= '0') {
 			if (dotExist) {
 				if (virtualDenominator > INT_MAX / 10) {
-					cout << "this frational is too long to handle.";
+					std::cout << "this frational is too long to handle.";
 					validInput = false;
 					break;
 				}
 				else {
-					virtualDenominator  * = 10;
+					virtualDenominator  *= 10;
 				}
 			}
 			if (num > INT_MAX / 10) {
-				cout << "this number is too long to handle.";
+				std::cout << "this number is too long to handle.";
 				validInput = false;
 				break;
 			}
-			num  * = 10;
+			num  *= 10;
 			num += inputstr[i] - '0';
 		}
 		else {
@@ -211,7 +211,7 @@ istream& operator>>(istream& in, RationalNum& obj) {
 	if (validInput == false) {
 		obj.setNumerator(0);
 		obj.setDenominator(1);
-		cout << "Input is not valid! The whole set to 0" << endl;
+		std::cout << "Input is not valid! The whole set to 0" << std::endl;
 	}
 	else {
 		if (slashExist == true) {
@@ -234,22 +234,22 @@ istream& operator>>(istream& in, RationalNum& obj) {
 
 
 // member function definition
-RationalNum::RationalNum() {
+Rational::Rational() {
 	setNumerator(0);
 	setDenominator(1);
 }
 
-RationalNum::RationalNum(double x) {
+Rational::Rational(double x) {
 	int i = 1;
 	while (x * i - static_cast<int>(x * i) != 0) {
 		if (i > INT_MAX / 10) {
-			cout << "this frational number : " << x << " can not be transfer to rational number, it's too long, now set it 0." << endl;
+			std::cout << "this frational number : " << x << " can not be transfer to rational number, it's too long, now set it 0." << std::endl;
 			setNumerator(0);
 			setDenominator(1);
 			return;
 		}
 		else {
-			i  * = 10;
+			i  *= 10;
 		}
 	}
 	setNumerator(x * i);
@@ -257,95 +257,108 @@ RationalNum::RationalNum(double x) {
 	simplify();
 }
 
-RationalNum::RationalNum(int numerator_, int denominator_) {
-	setNumerator(numerator_);
-	setDenominator(denominator_);
+Rational::Rational(int numerator_, int denominator_) {
+	int n = numerator_;
+	int d = denominator_;
+	if (d == 0) {
+		setNumerator(0);
+		setDenominator(1);
+	}
+	else {
+		if (d < 0) { // right, we don't want this negative, so
+			n = -n;
+			d = -d;	// if they were both negative, we want them both positive
+					// otherwise, n is now negative
+		}
+	}
+	setNumerator(n);
+	setDenominator(d);
 	simplify();
 }
 
-RationalNum& RationalNum::operator=(const RationalNum& obj) {
+Rational& Rational::operator=(const Rational& obj) {
 	setNumerator(obj.getNumerator());
 	setDenominator(obj.getDenominator());
 	return  * this;
 }
 
-RationalNum& RationalNum::operator+=(const RationalNum& obj) {
+Rational& Rational::operator+=(const Rational& obj) {
 	 * this =  * this + obj;
 	return  * this;
 }
 
-RationalNum& RationalNum::operator-=(const RationalNum& obj) {
+Rational& Rational::operator-=(const Rational& obj) {
 	 * this =  * this - obj;
 	return  * this;
 }
 
-RationalNum& RationalNum::operator * =(const RationalNum& obj) {
+Rational& Rational::operator *=(const Rational& obj) {
 	 * this =  * this * obj;
 	return  * this;
 }
 
-RationalNum& RationalNum::operator/=(const RationalNum& obj) {
+Rational& Rational::operator/=(const Rational& obj) {
 	 * this =  * this / obj;
 	return  * this;
 }
-RationalNum& RationalNum::operator++() {
+Rational& Rational::operator++() {
 	 * this =  * this + 1;
 	return  * this;
 }
 
-RationalNum RationalNum::operator++(int) {
-	RationalNum before =  * this;
+Rational Rational::operator++(int) {
+	Rational before =  * this;
 	 * this =  * this + 1;
 	return before;
 }
 
-RationalNum& RationalNum::operator--() {
+Rational& Rational::operator--() {
 	 * this =  * this - 1;
 	return  * this;
 }
 
-RationalNum RationalNum::operator--(int) {
-	RationalNum before =  * this;
+Rational Rational::operator--(int) {
+	Rational before =  * this;
 	 * this =  * this - 1;
 	return before;
 }
 
-RationalNum RationalNum::operator+() const {
+Rational Rational::operator+() const {
 	return  * this;
 }
 
-RationalNum RationalNum::operator-() const {
-	RationalNum temp;
+Rational Rational::operator-() const {
+	Rational temp;
 	temp.setNumerator(-getNumerator());
 	temp.setDenominator(getDenominator());
 	return temp;
 }
 
-void RationalNum::setNumerator(int numerator_) {
+void Rational::setNumerator(int numerator_) {
 	numerator = numerator_;
 }
 
-int RationalNum::getNumerator() const {
+int Rational::getNumerator() const {
 	return numerator;
 }
 
-void RationalNum::setDenominator(int denominator_) {
+void Rational::setDenominator(int denominator_) {
 	if (denominator_ == 0) {
 		denominator = 1;
 		numerator = 0;
-		cout << "Denominator is 0! Not good! THe whole is set to 0." << endl;
+		std::cout << "Denominator is 0! Not good! THe whole is set to 0." << std::endl;
 	}
 	else {
 		denominator = denominator_;
 	}
 }
 
-int RationalNum::getDenominator() const {
+int Rational::getDenominator() const {
 	return denominator;
 }
 
 
-void RationalNum::simplify() {
+void Rational::simplify() {
 	int tempN = numerator;
 	int tempD = denominator;
 	simplifyFun(tempN, tempD);
