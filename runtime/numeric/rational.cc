@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 #include <cmath>
-#include <std::vector>
+#include <vector>
 #include <limits>
 
 int absInt(int x) {
