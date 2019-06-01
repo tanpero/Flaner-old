@@ -20,7 +20,13 @@ namespace Flaner
 
 			};
 
-			class Operator
+			class UnaryOperator
+			{
+			public:
+
+			};
+
+			class BinaryOperator
 			{
 			public:
 				enum Kind
@@ -40,13 +46,14 @@ namespace Flaner
 
 				Kind kind;
 				Operator(std::string op);
-				Operator(Lex::Token token);
+				Operator(Lex::TokenType token);
 			};
 
 			class UnaryExpression : public Expression
 			{
 			public:
-				UnaryExpression()
+				std::unique_ptr<Expression> right;
+				UnaryOperator op;
 			};
 
 			class BinaryExpreesion : public Expression
@@ -54,13 +61,21 @@ namespace Flaner
 			public:
 				std::unique_ptr<Expression> left;
 				std::unique_ptr<Expression> right;
-				std::string op
+				BinaryOperator op;
+			};
+
+			class TernaryExpression : public Expression
+			{
+			public:
+				std::unique_ptr<Expression> condition;
+				std::unique_ptr<Expression> yes;
+				std::unique_ptr<Expression> no;
 			};
 
 			class Value : public Expression
 			{
 			public:
-				Expression form;
+				Expression form; 
 			};
 
 			class Param
