@@ -26,6 +26,12 @@ namespace Flaner
 				read(s);
 			}
 
+			Bigint::Bigint(std::string & s, int base)
+			{
+				sign = 1;
+				read(s, base);
+			}
+
 
 			void Bigint::operator=(const Bigint &v)
 			{

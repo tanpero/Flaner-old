@@ -33,7 +33,6 @@ namespace Flaner
 				void operator=(const Bigint &v);
 				void operator=(long long v);
 				void operator=(std::string s);
-				void operator=(std::string s, int base);
 
 				Bigint operator+(const Bigint &v) const;
 				Bigint operator-(const Bigint &v) const;
@@ -79,8 +78,8 @@ namespace Flaner
 				friend Bigint gcd(const Bigint &a, const Bigint &b);
 				friend Bigint lcm(const Bigint &a, const Bigint &b);
 
-				void read(const std::string &s);
-				void read(const std::string &s, int base);
+				void fromString(const std::string &s);
+				void fromString(const std::string &s, int base);
 
 				friend std::istream& operator>>(std::istream &stream, Bigint &v);
 				friend std::ostream& operator<<(std::ostream &stream, const Bigint &v);
