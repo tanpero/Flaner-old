@@ -8,6 +8,7 @@
 #include <vector>
 #include <variant>
 #include <tuple>
+#include <string>
 
 namespace Flaner
 {
@@ -18,7 +19,8 @@ namespace Flaner
 			class Statement
 			{
 			public:
-
+				virtual std::string type() override;
+				virtual void walk() override;
 			};
 
 			class StatementSequence
@@ -33,8 +35,13 @@ namespace Flaner
 			class IfStatement : public Statement
 			{
 			public:
+				IfStatement
+				virtual std::string type();
+				virtual void walk();
+
 				std::unique_ptr<Expression> condition;
 				std::unique_ptr<StatementSequence> body;
+
 			};
 
 			class WhileStatement : public Statement

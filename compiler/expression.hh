@@ -3,6 +3,7 @@
 
 #include <global.hh>
 #include <statement.hh>
+#include <token.hh>
 #include <memory>
 #include <vector>
 #include <variant>
@@ -19,11 +20,41 @@ namespace Flaner
 
 			};
 
+			class Operator
+			{
+			public:
+				enum Kind
+				{
+					PLUS,
+					MINUS,
+					MULTI,
+					DEVIDE,
+					POWER,
+					MOD,
+					LOGIC_AND,
+					LOGIC_OR,
+					BIT_AND,
+					BIT_OR,
+					BIT_XOR
+				};
+
+				Kind kind;
+				Operator(std::string op);
+				Operator(Lex::Token token);
+			};
+
+			class UnaryExpression : public Expression
+			{
+			public:
+				UnaryExpression()
+			};
+
 			class BinaryExpreesion : public Expression
 			{
 			public:
 				std::unique_ptr<Expression> left;
 				std::unique_ptr<Expression> right;
+				std::string op
 			};
 
 			class Value : public Expression
