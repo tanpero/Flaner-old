@@ -23,6 +23,18 @@ namespace Flaner
 
 				TOKEN_NUMBER,
 				TOKEN_STRING,
+
+				TOKEN_IF,
+				TOKEN_ELSE,
+				TOKEN_SWITCH,
+				TOKEN_CASE,
+				TOKEN_DEFAULT,
+				TOKEN_WHILE,
+				TOKEN_DO,
+				TOKEN_FOR,
+				TOKEN_CONTINUE,
+				TOKEN_BREAK,
+				TOKEN_RETURN
 				
 			};
 

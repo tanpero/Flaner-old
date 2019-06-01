@@ -30,6 +30,13 @@ namespace Flaner
 				std::unique_ptr<Statement> get();
 				bool next();
 				void insert(Statement statement);
+
+			};
+
+			class BlockStatement : public Statement
+			{
+			public:
+				std::unique_ptr<StatementSequence> body;
 			};
 
 			class IfStatement : public Statement
@@ -40,7 +47,7 @@ namespace Flaner
 				virtual void walk();
 
 				std::unique_ptr<Expression> condition;
-				std::unique_ptr<StatementSequence> body;
+				std::unique_ptr<BlockStatement> block;
 
 			};
 
@@ -48,14 +55,14 @@ namespace Flaner
 			{
 			public:
 				std::unique_ptr<Expression> condition;
-				std::unique_ptr<StatementSequence> body;
+				std::unique_ptr<BlockStatement> block;
 			};
 
 			class DoWhileStatement : public Statement
 			{
 			public:
 				std::unique_ptr<Expression> condition;
-				std::unique_ptr<StatementSequence> body;
+				std::unique_ptr<BlockStatement> block;
 			};
 
 			class ForStatement : public Statement
@@ -83,14 +90,14 @@ namespace Flaner
 
 			public:
 				Header header;
-				std::unique_ptr<StatementSequence> body;
+				std::unique_ptr<BlockStatement> block;
 			};
 
 			class CaseStatement : public Statement
 			{
 			public:
 				std::unique_ptr<Expression> object;
-				std::unique_ptr<StatementSequence> body;
+				std::unique_ptr<BlockStatement> block;
 			};
 
 			class SwitchStatement : public Statement
@@ -98,7 +105,7 @@ namespace Flaner
 			public:
 				std::unique_ptr<Expression> target;
 				std::vector<std::unique_ptr<CaseStatement>> cases;
-				std::unique_ptr<StatementSequence> defaultCase;
+				std::unique_ptr<BlockStatement> defaultCase;
 			};
 
 			class TryCatchStatement : public Statement
@@ -107,13 +114,13 @@ namespace Flaner
 				struct CatchStatement
 				{
 					Identifier bindingId;
-					std::unique_ptr<StatementSequence> body;
+					std::unique_ptr<BlockStatement> block;
 				};
 
 			public:
-				std::unique_ptr<StatementSequence> tryBody;
+				std::unique_ptr<BlockStatement> tryBody;
 				std::vector<std::unique_ptr<CatchStatement>> catchBodies;
-				std::unique_ptr<StatementSequence> finallyBody;
+				std::unique_ptr<BlockStatement> finallyBody;
 			};
 
 			class LabelStatement : public: Statement
@@ -172,7 +179,7 @@ namespace Flaner
 			{
 			public:
 				std::unique_ptr<Value> object;
-				std::unique_ptr<StatementSequence> body;
+				std::unique_ptr<BlockStatement> block;
 			};
 
 			class ReturnStatement : public Statement

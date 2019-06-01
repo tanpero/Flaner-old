@@ -79,6 +79,28 @@ namespace Flaner
 				return Lex::TokenList std::unique_ptr<AST::Expression>();
 			}
 
+			std::unique_ptr<AST::IfStatement> parseIfStatement(std::unique_ptr<Lex::TokenList> tokenList)
+			{
+				if (tokenList->now() != TOKEN_IF)
+				{
+					return nullptr;
+				}
+
+				if (tokenList->forword() != TOKEN_PAREN_BEGIN)
+				{
+					syntax_error("mission '(' after keyword if");
+				}
+
+				std::unique_ptr<AST::Expression> expression = parseExpression(tokenList);
+				
+				if (!expression)
+				{
+					syntax_error("unexpected token ')'");
+				}
+
+				if 
+			}
+
 		};
 	};
 };
