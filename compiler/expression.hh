@@ -29,7 +29,7 @@ namespace Flaner
 			class Value : public Expression
 			{
 			public:
-
+				Expression form;
 			};
 
 			class Param

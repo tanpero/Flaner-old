@@ -147,15 +147,37 @@ namespace Flaner
 				std::vector<std::unique_ptr<ObjectMember>> members;
 			};
 
-			class Throw : public Statement
+			class ThrowStatement : public Statement
 			{
 			public:
 				Value value;
 			};
 
-			class Import : public Statement
+			class ImportStatement : public Statement
 			{
+			public:
+				std::string name;
+				std::string path;
+				std::string rename;
+			};
 
+			class WithStatement : public Statement
+			{
+			public:
+				std::unique_ptr<Value> object;
+				std::unique_ptr<StatementSequence> body;
+			};
+
+			class ReturnStatement : public Statement
+			{
+			public:
+				std::unique_ptr<Value> value;
+			};
+
+			class YieldStatement : public Statement
+			{
+			public:
+				std::unique_ptr<Value> value;
 			};
 
 		};
