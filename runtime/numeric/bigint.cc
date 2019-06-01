@@ -443,6 +443,56 @@ namespace Flaner
 				trim();
 			}
 
+			void Bigint::read(const std::string & s, int base)
+			{
+				if (base < 2 || base > 36)
+				{
+					*this = 0;
+					return;
+				}
+				
+				Bigint value = 0;
+				
+				bool isNegative = (s[0] == '-');
+
+				int startIndex = s.length() - 1;
+				int endIndex = isNegative ? 1 : 0;
+
+				long value = 0;
+				int digitValue = 1;
+
+				for (int i = startIndex; i >= endIndex; --i)
+				{
+					char c = s[i];
+
+					// Uppercase it - NOTE: could be done with std::toupper
+					if (c >= 'a' && c <= 'z')
+						c -= ('a' - 'A');
+
+					// Convert char to int value - NOTE: could be done with std::atoi
+					// 0-9
+					if (c >= '0' && c <= '9')
+						c -= '0';
+					// A-Z
+					else
+						c = c - 'A' + 10;
+
+					if (c >= base)
+						*this = 0;
+
+					// Get the base 10 value of this digit    
+					value += c * digitValue;
+
+					// Each digit has value base^digit position - NOTE: this avoids pow
+					digitValue *= base;
+				}
+
+				if (isNegative)
+					value *= -1;
+
+				*this = value;
+			}
+
 
 			std::istream& operator>>(std::istream &stream, Bigint &v)
 			{
