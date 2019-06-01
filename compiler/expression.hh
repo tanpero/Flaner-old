@@ -52,8 +52,8 @@ namespace Flaner
 			class UnaryExpression : public Expression
 			{
 			public:
-				std::unique_ptr<Expression> right;
-				UnaryOperator op;
+				std::unique_ptr<Value> right;
+				std::unique_ptr<UnaryOperator> op;
 			};
 
 			class BinaryExpreesion : public Expression

@@ -48,7 +48,10 @@ namespace Flaner
 				Token pop();
 
 				// 设置游标位置
-				void resetCursor(int n = 0);
+				void reset(int n = 0);
+
+				// 获取当前游标位置
+				int pos();
 
 				// 获取上一个 token，游标不变
 				Token last();

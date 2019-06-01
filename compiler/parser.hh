@@ -2,6 +2,8 @@
 #define _FLANER_COMPILER_PARSER_HH_
 
 #include <token.hh>
+#include <scanner.hh>
+#include <declaration.hh>
 
 /*
 * File: parser.hh
@@ -14,12 +16,75 @@ namespace Flaner
 	{
 		namespace Parser
 		{
-			Identifier parseIdentifier(Lex::TokenList* tokenList)
+
+			//  调用时此函数时，当前 token 已经是 identifier
+			std::unique_ptr<AST::Identifier> parseIdentifier(std::unique_ptr<Lex::TokenList> tokenList)
 			{
-				if (isIDHead())
+				std::unique_ptr<AST::Identifier> identifier = tokenList->now();
+				return identifier;
 			}
 
+			// 调用此函数时，当前 token 是 '(' 或 identifier
+			std::unique_ptr<AST::Value> parseValue(std::unique_ptr<Lex::TokenList> tokenList)
+			{
+				AST::Value value;
+				Lex::Token now = tokenList->next();
+				if (now.is(TOKEN_IDENTIFIER))
+				{
+					value.form = now;
+					return value;
+				}
+				else if (now.is(TOKEN_PAREN_BEGIN))
+				{
+					AST::Expression expression;
+					tokenList->next();
+					expression = parseExpression(tokenList);
+					return AST::Value(AST::Expression);
+				}
+				else if (now.is(TOKEN_NUMBER))
+				{
+					// 数字字面值
 
+				}
+				else if (now.is(TOKEN_STRING))
+				{
+					// 字符串字面值
+
+				}
+				else
+				{
+					// 这种情况不应当出现
+					return nullptr;
+				}
+			}
+
+			std::unique_ptr<AST::UnaryExpression> parseUnaryExpression(std::unique_ptr<Lex::TokenList> tokenList)
+			{
+				std::unique_ptr<AST::UnaryExpression> unaryExpression;
+
+				// 当前 token 一定是一个 unary operator
+				std::unique_ptr<AST::UnaryOperator> unaryOperator = tokenList->now();
+
+				// 那么下一个 token 就应该是一个 value
+				AST::Value value = parseValue(tokenList);
+
+				if (value == nullptr)
+				{
+					syntax_error("Unexpected token")
+				}
+
+				unaryExpression->right = value;
+				unaryExpression->op = unaryOperator;
+				
+				return value;
+			}
+
+			std::unique_ptr<AST::Expression> parseExpression(std::unique_ptr<Lex::TokenList> tokenList)
+			{
+				
+			}
+
+			// 当调用 parseExpression 时，当前 token 是 '('
 			Expression parseExpression()
 			{
 				Expression expression;
