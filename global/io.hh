@@ -57,7 +57,7 @@ namespace Flaner::Global
 
 			void open(File f);
 
-			char read();
+			char fromString();
 
 			std::istreambuf_iterator<char> getBegin() const {
 				return begin;
@@ -83,9 +83,9 @@ namespace Flaner::Global
 				this->in = in;
 			}
 
-			std::vector<char> readNBytes(long long n);
+			std::vector<char> fromStringNBytes(long long n);
 
-			std::vector<char> readAllBytes();
+			std::vector<char> fromStringAllBytes();
 
 			void skip(long long n);
 
@@ -124,7 +124,7 @@ void Flaner::Global::IO::InputStream::open(File f)
 	end = std::istreambuf_iterator<char>();
 }
 
-char Flaner::Global::IO::InputStream::read()
+char Flaner::Global::IO::InputStream::fromString()
 {
 	char c = *begin;
 	++begin;
@@ -132,19 +132,19 @@ char Flaner::Global::IO::InputStream::read()
 	return c;
 }
 
-std::vector<char> Flaner::Global::IO::InputStream::readNBytes(long long n)
+std::vector<char> Flaner::Global::IO::InputStream::fromStringNBytes(long long n)
 {
 	std::vector<char> bts;
 
 	for (long long i = 0; i < n; i += 1)
 	{
-		bts.push_back(this->read());
+		bts.push_back(this->fromString());
 	}
 
 	return bts;
 }
 
-std::vector<char> Flaner::Global::IO::InputStream::readAllBytes()
+std::vector<char> Flaner::Global::IO::InputStream::fromStringAllBytes()
 {
 	std::vector<char> bts = std::vector<char>();
 	std::copy(begin, end, std::back_inserter(bts));

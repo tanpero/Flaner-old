@@ -23,13 +23,13 @@ namespace Flaner
 			Bigint::Bigint(std::string & s)
 			{
 				sign = 1;
-				read(s);
+				fromString(s);
 			}
 
 			Bigint::Bigint(std::string & s, int base)
 			{
 				sign = 1;
-				read(s, base);
+				fromString(s, base);
 			}
 
 
@@ -52,7 +52,7 @@ namespace Flaner
 
 			void Bigint::operator=(std::string s)
 			{
-				read(s);
+				fromString(s);
 			}
 
 
@@ -184,14 +184,13 @@ namespace Flaner
 				if (isNegative)
 					*this *= -1;
 
-				// NOTE: it's probably possible to reserve string based on value
 				std::string output;
 
 				do
 				{
 					char digit = *this % base;
 
-					// Convert to appropriate base character
+					// 根据适当的基数转换
 					// 0-9
 					if (digit < 10)
 						digit += '0';
@@ -199,7 +198,7 @@ namespace Flaner
 					else
 						digit = digit + 'A' - 10;
 
-					// Append digit to string (in reverse order)
+					// 把数字添加到字符串后
 					output += digit;
 
 					*this /= base;
@@ -209,11 +208,10 @@ namespace Flaner
 				if (isNegative)
 					output += '-';
 
-				// Reverse the string - NOTE: could be done with std::reverse
+				// 将字符串反向
 				int len = output.size() - 1;
 				for (int i = 0; i < len; ++i)
 				{
-					// Swap characters - NOTE: Could be done with std::swap
 					char temp = output[i];
 					output[i] = output[len - i];
 					output[len - i] = temp;
@@ -429,8 +427,7 @@ namespace Flaner
 			}
 
 
-
-			void Bigint::read(const std::string &s)
+			void Bigint::fromString(const std::string &s)
 			{
 				sign = 1;
 				a.clear();
@@ -449,7 +446,7 @@ namespace Flaner
 				trim();
 			}
 
-			void Bigint::read(const std::string & s, int base)
+			void Bigint::fromString(const std::string & s, int base)
 			{
 				if (base < 2 || base > 36)
 				{
@@ -464,32 +461,32 @@ namespace Flaner
 				int startIndex = s.length() - 1;
 				int endIndex = isNegative ? 1 : 0;
 
-				long value = 0;
 				int digitValue = 1;
 
 				for (int i = startIndex; i >= endIndex; --i)
 				{
 					char c = s[i];
 
-					// Uppercase it - NOTE: could be done with std::toupper
+					// 将其变为大写
 					if (c >= 'a' && c <= 'z')
 						c -= ('a' - 'A');
 
-					// Convert char to int value - NOTE: could be done with std::atoi
-					// 0-9
+					// 将字符转化为整数值
 					if (c >= '0' && c <= '9')
+					{
 						c -= '0';
-					// A-Z
+					}
 					else
+					{
 						c = c - 'A' + 10;
+					}
 
 					if (c >= base)
 						*this = 0;
 
-					// Get the base 10 value of this digit    
-					value += c * digitValue;
+					// 获取十进制的数值
+					value += (c * digitValue);
 
-					// Each digit has value base^digit position - NOTE: this avoids pow
 					digitValue *= base;
 				}
 
@@ -504,7 +501,7 @@ namespace Flaner
 			{
 				std::string s;
 				stream >> s;
-				v.read(s);
+				v.fromString(s);
 				return stream;
 			}
 
