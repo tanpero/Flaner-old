@@ -8,7 +8,7 @@
 #include <memory>
 #include <iostream>
 #include <iomanip>
-#include <cstdlib>
+#include <rational.hh>
 
 namespace Flaner
 {
@@ -25,12 +25,14 @@ namespace Flaner
 				std::vector<int> a;
 				int sign;
 
-			public:
-				Bigint();
+			public:			
+				Bigint() noexcept;
 				Bigint(long long v);
 				Bigint(std::string &s);
 				void operator=(const Bigint &v);
 				void operator=(long long v);
+				void operator=(std::string s);
+
 				Bigint operator+(const Bigint &v) const;
 				Bigint operator-(const Bigint &v) const;
 				void operator*=(int v);
@@ -42,6 +44,7 @@ namespace Flaner
 				int size();
 				Bigint operator ^ (const Bigint &v);
 				std::string toString();
+				std::string toString(int base);
 				int sumOf();
 
 			public:
@@ -80,10 +83,21 @@ namespace Flaner
 				friend std::ostream& operator<<(std::ostream &stream, const Bigint &v);
 
 				static std::vector<int> convert_base(const std::vector<int> &a, int old_digits, int new_digits);
-				typedef std::vector<long long> vll;
-
-				static vll karatsubaMultiply(const vll &a, const vll &b);
 				Bigint operator*(const Bigint &v) const;
+
+				Bigint pow(Bigint n) const;
+				Bigint pow(int n) const;
+				Bigint pow(long long n) const;
+
+				Bigint operator&(Bigint n) const;
+				Bigint operator|(Bigint n) const;
+				Bigint operator<<(Bigint n) const;
+				Bigint operator>>(Bigint n) const;
+
+				Bigint operator++();
+				Bigint operator++(int);
+				Bigint operator--();
+				Bigint operator--(int);
 
 			};
 		};

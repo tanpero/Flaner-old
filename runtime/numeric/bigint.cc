@@ -7,7 +7,7 @@ namespace Flaner
 		namespace numeric
 		{
 
-			Bigint::Bigint()
+			Bigint::Bigint() noexcept
 			{
 				sign = 1;
 			}
@@ -15,12 +15,14 @@ namespace Flaner
 
 			Bigint::Bigint(long long v)
 			{
+				sign = 1;
 				*this = v;
 			}
 
 
 			Bigint::Bigint(std::string & s)
 			{
+				sign = 1;
 				read(s);
 			}
 
@@ -40,6 +42,11 @@ namespace Flaner
 					sign = -1, v = -v;
 				for (; v > 0; v = v / base)
 					a.push_back(v % base);
+			}
+
+			void Bigint::operator=(std::string s)
+			{
+				read(s);
 			}
 
 
@@ -160,6 +167,54 @@ namespace Flaner
 				std::string s;
 				ss >> s;
 				return s;
+			}
+
+			std::string Bigint::toString(int base)
+			{
+				if (base < 2 || base > 36)
+					return "0";
+
+				bool isNegative = (*this < 0);
+				if (isNegative)
+					*this *= -1;
+
+				// NOTE: it's probably possible to reserve string based on value
+				std::string output;
+
+				do
+				{
+					char digit = *this % base;
+
+					// Convert to appropriate base character
+					// 0-9
+					if (digit < 10)
+						digit += '0';
+					// A-Z
+					else
+						digit = digit + 'A' - 10;
+
+					// Append digit to string (in reverse order)
+					output += digit;
+
+					*this /= base;
+
+				} while (*this > 0);
+
+				if (isNegative)
+					output += '-';
+
+				// Reverse the string - NOTE: could be done with std::reverse
+				int len = output.size() - 1;
+				for (int i = 0; i < len; ++i)
+				{
+					// Swap characters - NOTE: Could be done with std::swap
+					char temp = output[i];
+					output[i] = output[len - i];
+					output[len - i] = temp;
+				}
+
+				return output;
+			
 			}
 
 
@@ -409,32 +464,6 @@ namespace Flaner
 			}
 
 
-
-			static std::vector<int> convert_base(const std::vector<int> &a, int old_digits, int new_digits)
-			{
-				std::vector<long long> p(std::max(old_digits, new_digits) + 1);
-				p[0] = 1;
-				for (int i = 1; i < static_cast<int>(p.size()); i++)
-					p[i] = p[i - 1] * 10;
-				std::vector<int> res;
-				long long cur = 0;
-				int cur_digits = 0;
-				for (int i = 0; i < static_cast<int>(a.size()); i++) {
-					cur += a[i] * p[cur_digits];
-					cur_digits += old_digits;
-					while (cur_digits >= new_digits) {
-						res.push_back(int(cur % p[new_digits]));
-						cur /= p[new_digits];
-						cur_digits -= new_digits;
-					}
-				}
-				res.push_back(static_cast<int>(cur));
-				while (!res.empty() && !res.back())
-					res.pop_back();
-				return res;
-			}
-
-
 			static std::vector<long long> karatsubaMultiply(const std::vector<long long> &a, const std::vector<long long> &b)
 			{
 				int n = a.size();
@@ -476,6 +505,32 @@ namespace Flaner
 			}
 
 
+			std::vector<int> Bigint::convert_base(const std::vector<int>& a, int old_digits, int new_digits)
+			{
+
+				std::vector<long long> p(std::max(old_digits, new_digits) + 1);
+				p[0] = 1;
+				for (int i = 1; i < static_cast<int>(p.size()); i++)
+					p[i] = p[i - 1] * 10;
+				std::vector<int> res;
+				long long cur = 0;
+				int cur_digits = 0;
+				for (int i = 0; i < static_cast<int>(a.size()); i++) {
+					cur += a[i] * p[cur_digits];
+					cur_digits += old_digits;
+					while (cur_digits >= new_digits) {
+						res.push_back(int(cur % p[new_digits]));
+						cur /= p[new_digits];
+						cur_digits -= new_digits;
+					}
+				}
+				res.push_back(static_cast<int>(cur));
+				while (!res.empty() && !res.back())
+					res.pop_back();
+				return res;
+			}
+
+
 			Bigint Bigint::operator*(const Bigint &v) const
 			{
 				std::vector<int> a6 = convert_base(this->a, base_digits, 6);
@@ -499,6 +554,32 @@ namespace Flaner
 				res.a = convert_base(res.a, 6, base_digits);
 				res.trim();
 				return res;
+			}
+
+			Bigint Bigint::pow(Bigint n) const
+			{
+				if (n < 0)
+				{
+					// 应当抛出异常
+					return 0;
+				}
+				else if (n == 0)
+				{
+					return 1;
+				}
+				else if (n == 1)
+				{
+					return *this;
+				}
+				else
+				{
+					Bigint value = *this;
+					for (Bigint i = 1; i <= n; i += 1)
+					{
+						value *= i;
+					}
+					return value;
+				}
 			}
 
 		};

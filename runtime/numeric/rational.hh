@@ -25,7 +25,7 @@ namespace Flaner
 				friend std::istream& operator>>(std::istream& in, Rational& obj);
 
 			public:
-				Rational();
+				Rational() noexcept;
 				Rational(double x);
 				Rational(int numerator_, int denominator_ = 1);
 

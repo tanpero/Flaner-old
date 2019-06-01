@@ -62,7 +62,7 @@ namespace Flaner
 				}
 
 				getFactors(small, factorSet);
-				for (int i = 0; i < factorSet.size(); i++) {
+				for (unsigned int i = 0; i < factorSet.size(); i++) {
 					temp = factorSet[i];
 					while (tempN % temp == 0 && tempD % temp == 0) {
 						tempN /= temp;
@@ -154,7 +154,7 @@ namespace Flaner
 				bool validInput = true;
 				int virtualDenominator = 1;
 				std::cin >> inputstr;
-				for (int i = 0; i < inputstr.size(); i++) {
+				for (unsigned int i = 0; i < inputstr.size(); i++) {
 					char temp = inputstr[i];
 					if (temp == '.') {
 						if (dotExist == false && slashExist == false && i != 0) {
@@ -240,7 +240,8 @@ namespace Flaner
 
 
 			// member function definition
-			Rational::Rational() {
+			Rational::Rational() noexcept
+			{
 				setNumerator(0);
 				setDenominator(1);
 			}
