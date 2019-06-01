@@ -454,13 +454,10 @@ namespace Flaner
 					return;
 				}
 				
-				Bigint value = 0;
-				
+				Bigint value = 0;				
 				bool isNegative = (s[0] == '-');
-
 				int startIndex = s.length() - 1;
 				int endIndex = isNegative ? 1 : 0;
-
 				int digitValue = 1;
 
 				for (int i = startIndex; i >= endIndex; --i)
@@ -486,13 +483,11 @@ namespace Flaner
 
 					// 获取十进制的数值
 					value += (c * digitValue);
-
 					digitValue *= base;
 				}
 
 				if (isNegative)
 					value *= -1;
-
 				*this = value;
 			}
 
@@ -609,7 +604,7 @@ namespace Flaner
 				return res;
 			}
 
-			Bigint Bigint::pow(Bigint n) const
+			Bigint Bigint::pow(Bigint& n) const
 			{
 				if (n < 0)
 				{
@@ -635,6 +630,32 @@ namespace Flaner
 				}
 			}
 
-		};
+			Bigint Bigint::operator++()
+			{
+				*this += 1;
+				return *this;
+			}
+
+			Bigint Bigint::operator++(int)
+			{
+				Bigint self = *this;
+				*this += 1;
+				return self;
+			}
+
+			Bigint Bigint::operator--()
+			{
+				*this -= 1;
+				return *this;
+			}
+
+			Bigint Bigint::operator--(int)
+			{
+				Bigint self = *this;
+				*this += 1;
+				return self;
+			}
+
+};
 	};
 };

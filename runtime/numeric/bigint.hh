@@ -87,9 +87,7 @@ namespace Flaner
 				static std::vector<int> convert_base(const std::vector<int> &a, int old_digits, int new_digits);
 				Bigint operator*(const Bigint &v) const;
 
-				Bigint pow(Bigint n) const;
-				Bigint pow(int n) const;
-				Bigint pow(long long n) const;
+				Bigint pow(Bigint& n) const;
 
 				Bigint operator&(Bigint n) const;
 				Bigint operator|(Bigint n) const;
