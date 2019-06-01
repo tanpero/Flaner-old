@@ -5,6 +5,7 @@
 #include <statement.hh>
 #include <memory>
 #include <vector>
+#include <variant>
 
 namespace Flaner
 {
@@ -61,9 +62,29 @@ namespace Flaner
 			class FunctionValue : public Value
 			{
 			public:
+				enum FunctionKind
+				{
+					COMMON,
+					GENERATOR
+				};
 				std:unique_ptr<Identifier> name;
 				std::unique_ptr<ParamsList> paramsList;
 				std::unique_ptr<StatementSequence> body;
+			};
+
+			class ObjectMember
+			{
+			public:
+				struct CommonMemberValue
+				{
+					std::unique_ptr<Value> value;
+				};
+				struct DescribedMemberValue
+				{
+					std::unique_ptr<FunctionValue> getter;
+					std::unique_ptr<FunctionValue> setter;
+				};
+				std::variant<CommonMemberValue, DescribedMemberValue> value;
 			};
 		}
 	};

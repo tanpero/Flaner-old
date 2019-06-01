@@ -127,7 +127,36 @@ namespace Flaner
 				std::unique_ptr<LabelStatement> label;
 			};
 
+			class VisitorStatement : public Statement
+			{
+			public:
+				enum Kind
+				{
+					getter, setter
+				};
+
+				Kind kind;
+				FunctionValue function;
+			};
 			
+			class ClassStatement : public Statement
+			{
+			public:
+				Identifier name;
+				FunctionValue constructor;
+				std::vector<std::unique_ptr<ObjectMember>> members;
+			};
+
+			class Throw : public Statement
+			{
+			public:
+				Value value;
+			};
+
+			class Import : public Statement
+			{
+
+			};
 
 		};
 	};

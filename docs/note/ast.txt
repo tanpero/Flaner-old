@@ -15,6 +15,7 @@ StatementKind (enum class)
 	-> Continue
 	-> Throw
 	-> Import
+	-> Export
 	-> With
 	-> Return
 	-> Class
