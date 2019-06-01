@@ -42,7 +42,15 @@ namespace Flaner
 			{
 				TokenType type;
 				std::string value;
+
+				// 用于确定 token 的范围
 				inline bool is(TokenType t)
+				{
+					return type == t;
+				}
+
+				// 用于确定 token 是否与指定类型相等
+				inline bool operator==(TokenType t)
 				{
 					return type == t;
 				}

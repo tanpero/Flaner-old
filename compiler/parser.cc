@@ -18,29 +18,29 @@ namespace Flaner
 			std::unique_ptr<AST::Value> parseValue(std::unique_ptr<Lex::TokenList> tokenList)
 			{
 				AST::Value value;
-				Lex::Token now = tokenList->next();
+				Lex::Token now = tokenList->forward();
 
-				if (now.is(TOKEN_IDENTIFIER))
+				if (now == TOKEN_IDENTIFIER)
 				{
 					value.form = now;
 					return value;
 				}
 
-				else if (now.is(TOKEN_PAREN_BEGIN))
+				else if (now == TOKEN_PAREN_BEGIN)
 				{
 					AST::Expression expression;
-					tokenList->next();
+					tokenList->forward();
 					expression = parseExpression(tokenList);
 					return AST::Value(AST::Expression);
 				}
 
-				else if (now.is(TOKEN_NUMBER))
+				else if (now == TOKEN_NUMBER)
 				{
 					// 数字字面值
 
 				}
 
-				else if (now.is(TOKEN_STRING))
+				else if (now == TOKEN_STRING)
 				{
 					// 字符串字面值
 
@@ -77,6 +77,11 @@ namespace Flaner
 			Lex::TokenList std::unique_ptr<AST::Expression> parseExpression(std::unique_ptr<Lex::TokenList> tokenList)
 			{
 				return Lex::TokenList std::unique_ptr<AST::Expression>();
+			}
+
+			std::unique_ptr<AST::BlockStatement> parseBlockStatement(std::unique_ptr<Lex::TokenList> tokenList)
+			{
+				if (tokenList->now())
 			}
 
 			std::unique_ptr<AST::IfStatement> parseIfStatement(std::unique_ptr<Lex::TokenList> tokenList)
