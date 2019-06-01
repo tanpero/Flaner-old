@@ -133,6 +133,11 @@ namespace Flaner
 				return true;
 			}
 
+			bool isStingLiteral(char* s)
+			{
+
+			}
+
 		};
 	};
 };

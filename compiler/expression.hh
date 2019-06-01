@@ -61,7 +61,7 @@ namespace Flaner
 			public:
 				std::unique_ptr<Expression> left;
 				std::unique_ptr<Expression> right;
-				BinaryOperator op;
+				std::unique_ptr<BinaryOperator> op;
 			};
 
 			class TernaryExpression : public Expression

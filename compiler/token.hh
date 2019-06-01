@@ -17,7 +17,13 @@ namespace Flaner
 		{
 			enum TokenType
 			{
+				TOKEN_UNKONWN,
 
+				TOKEN_IDENTIFIER,
+
+				TOKEN_NUMBER,
+				TOKEN_STRING,
+				
 			};
 
 			struct Token

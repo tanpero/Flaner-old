@@ -49,6 +49,8 @@ namespace Flaner
 
 			inline bool isHexadecimalDigits(char* s);
 
+			bool isStingLiteral(char* s);
+
 		};
 	};
 };
