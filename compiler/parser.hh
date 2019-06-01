@@ -1,13 +1,20 @@
 #ifndef _FLANER_COMPILER_PARSER_HH_
 #define _FLANER_COMPILER_PARSER_HH_
 
+#include <token.hh>
+
+/*
+* File: parser.hh
+* Note: 根据 token 列表进行语法分析
+*/
+
 namespace Flaner
 {
 	namespace Compiler
 	{
 		namespace Parser
 		{
-			Identifier parseIdentifier(TokenList* tokenList)
+			Identifier parseIdentifier(Lex::TokenList* tokenList)
 			{
 				if (isIDHead())
 			}

@@ -1,6 +1,11 @@
 #ifndef _FLANER_COMPILER_TOKEN_HH_
 #define _FLANER_COMPILER_TOKEN_HH_
 
+/*
+* File: token.hh
+* 定义 token 模型和列表
+*/
+
 #include <string>
 #include <vector>
 
