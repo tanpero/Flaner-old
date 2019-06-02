@@ -4,7 +4,7 @@
 #include <token.hh>
 #include <scanner.hh>
 #include <declaration.hh>
-#include <optinal>
+#include <optional>
 
 /*
 * File: parser.hh
@@ -18,36 +18,41 @@ namespace Flaner
 		namespace Parser
 		{
 
+			using TokenList = std::unique_ptr<Lex::TokenList>;
+
 			//  调用时此函数时，当前 token 已经是 identifier
-			std::unique_ptr<AST::Identifier> parseIdentifier(std::unique_ptr<Lex::TokenList> tokenList);
+			std::unique_ptr<AST::Identifier> parseIdentifier(TokenList tokenList);
 
 			// 调用此函数时，当前 token 是 '(' 或 identifier
-			std::unique_ptr<AST::Value> parseValue(std::unique_ptr<Lex::TokenList> tokenList);
+			std::unique_ptr<AST::Value> parseValue(TokenList tokenList);
 
-			std::unique_ptr<AST::UnaryExpression> parseUnaryExpression(std::unique_ptr<Lex::TokenList> tokenList);
+			std::unique_ptr<AST::UnaryExpression> parseUnaryExpression(TokenList tokenList);
 
-			std::unique_ptr<AST::Expression> parseExpression(std::unique_ptr<Lex::TokenList> tokenList);
+			std::unique_ptr<AST::Expression> parseExpression(TokenList tokenList);
 
 
-			std::unique_ptr<AST::BlockStatement> parseBlockStatement(std::unique_ptr<Lex::TokenList> tokenList);
+			std::unique_ptr<AST::BlockStatement> parseBlockStatement(TokenList tokenList);
 
-			std::unique_ptr<AST::IfStatement> parseIfStatement(std::unique_ptr<Lex::TokenList> tokenList);
+			std::unique_ptr<AST::IfStatement> parseIfStatement(TokenList tokenList);
 
-			std::unique_ptr<AST::CaseClause>   parseCaseClause(std::unique_ptr<Lex::TokenList> tokenList);
-			std::unique_ptr<AST::DefaultClause> parseDefaultClause(std::unique_ptr<Lex::TokenList> tokenList);
-			std::optional<std::variant<std::unique_ptr<AST::CaseClause, AST::DefaultClause>>>
-				parseSwitchClause(std::unique_ptr<Lex::TokenList> tokenList);
-			std::vector<std::optional<std::variant<std::unique_ptr<AST::CaseClause, AST::DefaultClause>>>>
-				parseSwitchClauseList(std::unique_ptr<Lex::TokenList>);
-			std::unique_ptr<AST::SwitchStatement> parseSwitchStatement(std::unique_ptr<Lex::TokenList> tokenList);			
+			std::unique_ptr<AST::CaseClause>   parseCaseClause(TokenList tokenList);
+			std::unique_ptr<AST::DefaultClause> parseDefaultClause(TokenList tokenList);
+			
+			using SwitchClause = std::optional<std::variant<std::unique_ptr<AST::CaseClause>, std::unique_ptr<AST::DefaultClause>>>;
+			SwitchClause parseSwitchClause(TokenList tokenList);
+			
+			using SwitchClauseList = std::vector<SwitchClause>;
+			SwitchClauseList parseSwitchClauseList(TokenList);
 
-			std::unique_ptr<AST::WhileStatement> parseWhileStatement(std::unique_ptr<Lex::TokenList> tokenList);
+			std::unique_ptr<AST::SwitchStatement> parseSwitchStatement(TokenList tokenList);			
 
-			std::unique_ptr<AST::ForStatement> parseForStatement(std::unique_ptr<Lex::TokenList> tokenList);
+			std::unique_ptr<AST::WhileStatement> parseWhileStatement(TokenList tokenList);
 
-			std::unique_ptr<AST::ContinueStatement> parseContinueStatement(std::unique_ptr<Lex::TokenList> tokenList);
+			std::unique_ptr<AST::ForStatement> parseForStatement(TokenList tokenList);
 
-			std::unique_ptr<AST::BreakStatement> parseBreakStatement(std::unique_ptr<Lex::TokenList> tokenList);
+			std::unique_ptr<AST::ContinueStatement> parseContinueStatement(TokenList tokenList);
+
+			std::unique_ptr<AST::BreakStatement> parseBreakStatement(TokenList tokenList);
 
 		}
 	};

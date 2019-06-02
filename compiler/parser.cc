@@ -8,13 +8,13 @@ namespace Flaner
 		namespace Parser
 		{
 
-			std::unique_ptr<AST::Identifier> parseIdentifier(std::unique_ptr<Lex::TokenList> tokenList)
+			std::unique_ptr<AST::Identifier> parseIdentifier(TokenList tokenList)
 			{
 				std::unique_ptr<AST::Identifier> identifier = tokenList->now();
 				return identifier;
 			}
 
-			std::unique_ptr<AST::Value> parseValue(std::unique_ptr<Lex::TokenList> tokenList)
+			std::unique_ptr<AST::Value> parseValue(TokenList tokenList)
 			{
 				AST::Value value;
 				Lex::Token now = tokenList->forward();
@@ -52,7 +52,7 @@ namespace Flaner
 				}
 			}
 
-			std::unique_ptr<AST::UnaryExpression> parseUnaryExpression(std::unique_ptr<Lex::TokenList> tokenList)
+			std::unique_ptr<AST::UnaryExpression> parseUnaryExpression(TokenList tokenList)
 			{
 				std::unique_ptr<AST::UnaryExpression> unaryExpression;
 
@@ -73,12 +73,12 @@ namespace Flaner
 				return value;
 			}
 
-			Lex::TokenList std::unique_ptr<AST::Expression> parseExpression(std::unique_ptr<Lex::TokenList> tokenList)
+			Lex::TokenList std::unique_ptr<AST::Expression> parseExpression(TokenList tokenList)
 			{
 				return Lex::TokenList std::unique_ptr<AST::Expression>();
 			}
 
-			std::unique_ptr<AST::BlockStatement> parseBlockStatement(std::unique_ptr<Lex::TokenList> tokenList)
+			std::unique_ptr<AST::BlockStatement> parseBlockStatement(TokenList tokenList)
 			{
 				// 使用大括号包裹的块语句，解析到对应的最后一个 '}'
 				if (tokenList->now() == TOKEN_BRACE_BEGIN)
@@ -93,7 +93,7 @@ namespace Flaner
 				}
 			}
 
-			std::unique_ptr<AST::IfStatement> parseIfStatement(std::unique_ptr<Lex::TokenList> tokenList)
+			std::unique_ptr<AST::IfStatement> parseIfStatement(TokenList tokenList)
 			{
 				if (tokenList->now() != TOKEN_IF)
 				{
@@ -131,7 +131,7 @@ namespace Flaner
 				return ifStatement;
 			}
 
-			std::unique_ptr<AST::CaseClause> parseCaseClause(std::unique_ptr<Lex::TokenList> tokenList)
+			std::unique_ptr<AST::CaseClause> parseCaseClause(TokenList tokenList)
 			{
 				Lex::Token token = tokenList->now();
 				if (token != TOKEN_CASE)
@@ -159,7 +159,7 @@ namespace Flaner
 				return caseClause;
 			}
 
-			std::unique_ptr<AST::DefaultClause> parseDefaultClause(std::unique_ptr<Lex::TokenList> tokenList)
+			std::unique_ptr<AST::DefaultClause> parseDefaultClause(TokenList tokenList)
 			{
 				Lex::Token token = tokenList->now();
 
@@ -185,8 +185,7 @@ namespace Flaner
 				return clause;
 			}
 
-			std::optional<std::variant<std::unique_ptr<AST::CaseClause>, std::unique_ptr<AST::DefaultClause>>>
-				parseSwitchClause(std::unique_ptr<Lex::TokenList> tokenList)
+			SwitchClause parseSwitchClause(TokenList tokenList)
 			{
 				std::variant<std::unique_ptr<AST::CaseClause>, std::unique_ptr<AST::DefaultClause>> clause;
 
@@ -205,8 +204,7 @@ namespace Flaner
 				return std::nullopt;
 			}
 
-			std::vector<std::optional<std::variant<std::unique_ptr<AST::CaseClause>, std::unique_ptr<AST::DefaultClause>>>>
-				parseSwitchClauseList(std::unique_ptr<Lex::TokenList>)
+			SwitchClauseList parseSwitchClauseList(TokenList)
 			{
 				Lex::Token token = tokenList->now();
 
@@ -215,12 +213,11 @@ namespace Flaner
 					unexpected_token_syntax_error(token)
 				}
 
-				std::vector<std::optional<std::variant<std::unique_ptr<AST::CaseClause>, std::unique_ptr<AST::DefaultClause>>>> clauseList;
+				SwitchClauseList clauseList;
 
 				while (true)
 				{
-					std::optional<std::variant<std::unique_ptr<AST::CaseClause, AST::DefaultClause>>>
-						clause = parseSwitchClause(tokenList);
+					SwitchClause clause = parseSwitchClause(tokenList);
 
 					if (!clause)
 					{
@@ -240,7 +237,7 @@ namespace Flaner
 				return clauseList;
 			}
 
-			std::unique_ptr<AST::SwitchStatement> parseSwitchStatement(std::unique_ptr<Lex::TokenList> tokenList)
+			std::unique_ptr<AST::SwitchStatement> parseSwitchStatement(TokenList tokenList)
 			{
 				if (tokenList->now() != TOKEN_SWITCH)
 				{
