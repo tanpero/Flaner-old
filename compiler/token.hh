@@ -54,6 +54,11 @@ namespace Flaner
 				{
 					return type == t;
 				}
+
+				inline bool operator!=(TokenType t)
+				{
+					return type != t;
+				}
 			};
 
 			class TokenList

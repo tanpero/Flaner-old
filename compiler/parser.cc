@@ -1,4 +1,5 @@
 #include <parser.hh>
+#include <exception.hh>
 
 namespace Flaner
 {
@@ -6,8 +7,6 @@ namespace Flaner
 	{
 		namespace Parser
 		{
-
-			
 
 			std::unique_ptr<AST::Identifier> parseIdentifier(std::unique_ptr<Lex::TokenList> tokenList)
 			{
@@ -112,14 +111,63 @@ namespace Flaner
 				}
 
 				// 可能会抛出错误，否则一定获取了正确的值
-				std::unique_ptr<AST::BlockStatement> block = parseBlockStatement(tokenList);
+				std::unique_ptr<AST::BlockStatement> body = parseBlockStatement(tokenList);
 
 				std::unique_ptr<AST::IfStatement> ifStatement;
 
 				ifStatement->condition = expression;
-				ifStatement->block = block;
+				ifStatement->body = body;
 
 				return ifStatement;
+			}
+
+			std::unique_ptr<AST::CaseClause> parseCaseClause(std::unique_ptr<Lex::TokenList> tokenList)
+			{
+				Lex::Token token = tokenList->now();
+				if (token != TOKEN_CASE)
+				{
+					unexpected_token_syntax_error(token);
+				}
+
+
+			}
+
+			std::unique_ptr<AST::SwitchStatement> parseSwitchStatement(std::unique_ptr<Lex::TokenList> tokenList)
+			{
+				if (tokenList->now() != TOKEN_SWITCH)
+				{
+					return nullptr;
+				}
+
+				std::unique_ptr<AST::SwitchStatement> switchStatement;
+
+				Lex::Token now = tokenList->forward();
+
+				// 如果关键字后不是小括号
+				if (now != TOKEN_PAREN_BEGIN)
+				{
+					syntax_error("Invalid or unexpected token '" + now.value);
+				}
+
+				AST::Expression expression = parseExpression(tokenList);
+
+				// 如果关键字后不是大括号
+				if (now != TOKEN_BRACE_BEGIN)
+				{
+					syntax_error("Invalid or unexpected token '" + now.value);
+				}
+
+				tokenList->forward();
+
+				std::vector<std::unique_ptr<CaseClause>> cases;
+				std::unique_ptr<CaseClause> oneCase;
+
+				do
+				{
+					oneCase = parseCaseClause();
+				} while (oneCase != nullptr);
+
+				while (one)
 			}
 
 		};
