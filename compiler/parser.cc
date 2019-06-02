@@ -98,12 +98,28 @@ namespace Flaner
 
 				std::unique_ptr<AST::Expression> expression = parseExpression(tokenList);
 				
+				// 条件为空
 				if (!expression)
 				{
-					syntax_error("unexpected token ')'");
+					syntax_error("Unexpected token ')'");
 				}
 
-				if 
+				// 条件解析完毕，如果条件括号后的第一个 token 是起始括号以外的标点符号，
+				// 说明混入了奇奇怪怪的东西
+				if (tokenList->next().is(PUNCTUATION) && !tokenList->next().is(BEGIN_PUNCTUATION))
+				{
+					syntax_error(std::string("Invalid or unexpected token" + tokenList->next());
+				}
+
+				// 可能会抛出错误，否则一定获取了正确的值
+				std::unique_ptr<AST::BlockStatement> block = parseBlockStatement(tokenList);
+
+				std::unique_ptr<AST::IfStatement> ifStatement;
+
+				ifStatement->condition = expression;
+				ifStatement->block = block;
+
+				return ifStatement;
 			}
 
 		};
