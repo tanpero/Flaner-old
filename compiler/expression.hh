@@ -132,7 +132,7 @@ namespace Flaner
 				};
 				std::variant<CommonMemberValue, DescribedMemberValue> value;
 			};
-		}
+		};
 	};
 };
 

@@ -129,7 +129,24 @@ namespace Flaner
 					unexpected_token_syntax_error(token);
 				}
 
+				tokenList->forward();
 
+				// 表达式解析完毕后，当前 token 应当是 ':'
+				std::unique_ptr<AST::Expression> expression = parseExpression(tokenList);
+				
+				token = tokenList->now();
+				if (token != TOKEN_COLON)
+				{
+					unexpected_token_syntax_error(token);
+				}
+
+				tokenList->forward();
+				std::unique_ptr<AST::BlockStatement> block = parseBlockStatement(tokenList);
+
+				std::unique_ptr<AST::CaseClause> caseClause;
+				caseClause->object = expression;
+				caseClause->body = block;
+				return caseClause;
 			}
 
 			std::unique_ptr<AST::SwitchStatement> parseSwitchStatement(std::unique_ptr<Lex::TokenList> tokenList)

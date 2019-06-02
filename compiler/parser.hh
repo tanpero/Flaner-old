@@ -25,29 +25,8 @@ namespace Flaner
 
 			std::unique_ptr<AST::UnaryExpression> parseUnaryExpression(std::unique_ptr<Lex::TokenList> tokenList);
 
-			Lex::TokenList
-
 			std::unique_ptr<AST::Expression> parseExpression(std::unique_ptr<Lex::TokenList> tokenList);
 
-			parse
-
-			// 当调用 parseExpression 时，当前 token 是 '('
-			Expression parseExpression()
-			{
-				Expression expression;
-				int parenCursor = 0;
-				do
-				{
-
-					Token t = tokenList.next();
-					if (t.is(TOKEN_PAREN_BEGIN))
-					{
-						parenCursor += 1;
-					}
-
-				} while (parenCursor > 0)
-
-			}
 
 			std::unique_ptr<AST::BlockStatement> parseBlockStatement(std::unique_ptr<Lex::TokenList> tokenList);
 

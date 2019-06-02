@@ -58,5 +58,8 @@ namespace Flaner
 		} \
 	} while (false); 
 
+		};
+	};
+};
 #endif // !_FLANER_COMPILER_EXCEPTION_HH_
 
