@@ -80,7 +80,17 @@ namespace Flaner
 
 			std::unique_ptr<AST::BlockStatement> parseBlockStatement(std::unique_ptr<Lex::TokenList> tokenList)
 			{
-				if (tokenList->now())
+				// 使用大括号包裹的块语句，解析到对应的最后一个 '}'
+				if (tokenList->now() == TOKEN_BRACE_BEGIN)
+				{
+
+				}
+
+				// 解析到第一个分号
+				else
+				{
+
+				}
 			}
 
 			std::unique_ptr<AST::IfStatement> parseIfStatement(std::unique_ptr<Lex::TokenList> tokenList)
@@ -126,7 +136,7 @@ namespace Flaner
 				Lex::Token token = tokenList->now();
 				if (token != TOKEN_CASE)
 				{
-					unexpected_token_syntax_error(token);
+					return nullptr;
 				}
 
 				tokenList->forward();
@@ -147,6 +157,32 @@ namespace Flaner
 				caseClause->object = expression;
 				caseClause->body = block;
 				return caseClause;
+			}
+
+			std::unique_ptr<AST::DefaultClause> parseDefaultClause(std::unique_ptr<Lex::TokenList> tokenList)
+			{
+				Lex::Token token = tokenList->now();
+
+				if (token != TOKEN_DEFAULT)
+				{
+					return nullptr;
+				}
+
+				token = tokenList->forward();
+
+				if (token != TOKEN_COLON)
+				{
+					unexpected_token_syntax_error(token)
+				}
+
+				tokenList->forward();
+
+				std::unique_ptr<AST::BlockStatement> block = parseBlockStatement(tokenList);
+
+				std::unique_ptr<AST::DefaultClause> clause;
+				clause->body = block;
+
+				return clause;
 			}
 
 			std::unique_ptr<AST::SwitchStatement> parseSwitchStatement(std::unique_ptr<Lex::TokenList> tokenList)
@@ -190,3 +226,4 @@ namespace Flaner
 		};
 	};
 };
+
