@@ -4,6 +4,7 @@
 #include <token.hh>
 #include <scanner.hh>
 #include <declaration.hh>
+#include <optinal>
 
 /*
 * File: parser.hh
@@ -34,9 +35,9 @@ namespace Flaner
 
 			std::unique_ptr<AST::CaseClause>   parseCaseClause(std::unique_ptr<Lex::TokenList> tokenList);
 			std::unique_ptr<AST::DefaultClause> parseDefaultClause(std::unique_ptr<Lex::TokenList> tokenList);
-			std::variant<std::unique_ptr<AST::CaseClause, AST::DefaultClause>>
+			std::optional<std::variant<std::unique_ptr<AST::CaseClause, AST::DefaultClause>>>
 				parseSwitchClause(std::unique_ptr<Lex::TokenList> tokenList);
-			std::vector<std::variant<std::unique_ptr<AST::CaseClause, AST::DefaultClause>>>
+			std::vector<std::optional<std::variant<std::unique_ptr<AST::CaseClause, AST::DefaultClause>>>>
 				parseSwitchClauseList(std::unique_ptr<Lex::TokenList>);
 			std::unique_ptr<AST::SwitchStatement> parseSwitchStatement(std::unique_ptr<Lex::TokenList> tokenList);			
 
