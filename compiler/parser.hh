@@ -34,6 +34,10 @@ namespace Flaner
 
 			std::unique_ptr<AST::CaseClause>   parseCaseClause(std::unique_ptr<Lex::TokenList> tokenList);
 			std::unique_ptr<AST::DefaultClause> parseDefaultClause(std::unique_ptr<Lex::TokenList> tokenList);
+			std::variant<std::unique_ptr<AST::CaseClause, AST::DefaultClause>>
+				parseSwitchClause(std::unique_ptr<Lex::TokenList> tokenList);
+			std::vector<std::variant<std::unique_ptr<AST::CaseClause, AST::DefaultClause>>>
+				parseSwitchClauseList(std::unique_ptr<Lex::TokenList>);
 			std::unique_ptr<AST::SwitchStatement> parseSwitchStatement(std::unique_ptr<Lex::TokenList> tokenList);			
 
 			std::unique_ptr<AST::WhileStatement> parseWhileStatement(std::unique_ptr<Lex::TokenList> tokenList);
