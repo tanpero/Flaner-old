@@ -15,6 +15,17 @@ namespace Flaner
 			{
 			public:
 				std::string name;
+
+				Identifier(Lex::Token token)
+				{
+					name = token.value;
+				}
+
+				inline std::unique_ptr<Identifier> operator=(Lex::Token token)
+				{
+					name = token.value;
+					return std::make_unique<Identifier>(token);
+				}
 			};
 
 			class Declaration : public Statement

@@ -1,4 +1,5 @@
 #include <parser.hh>
+#include <scanner.hh>
 #include <exception.hh>
 
 namespace Flaner
@@ -10,46 +11,16 @@ namespace Flaner
 
 			std::unique_ptr<AST::Identifier> parseIdentifier(TokenList tokenList)
 			{
-				std::unique_ptr<AST::Identifier> identifier = tokenList->now();
+				std::unique_ptr<AST::Identifier> identifier = std::make_unique<AST::Identifier>(tokenList->now);
+
 				return identifier;
 			}
 
+			
 			std::unique_ptr<AST::Value> parseValue(TokenList tokenList)
 			{
-				AST::Value value;
-				Lex::Token now = tokenList->forward();
-
-				if (now == TOKEN_IDENTIFIER)
-				{
-					value.form = now;
-					return value;
-				}
-
-				else if (now == TOKEN_PAREN_BEGIN)
-				{
-					AST::Expression expression;
-					tokenList->forward();
-					expression = parseExpression(tokenList);
-					return AST::Value(AST::Expression);
-				}
-
-				else if (now == TOKEN_NUMBER)
-				{
-					// 数字字面值
-
-				}
-
-				else if (now == TOKEN_STRING)
-				{
-					// 字符串字面值
-
-				}
-
-				else
-				{
-					// 这种情况不应当出现
-					return nullptr;
-				}
+				// TODO...
+				return std::unique_ptr<AST::Value>();
 			}
 
 			std::unique_ptr<AST::UnaryExpression> parseUnaryExpression(TokenList tokenList)
@@ -57,31 +28,31 @@ namespace Flaner
 				std::unique_ptr<AST::UnaryExpression> unaryExpression;
 
 				// 当前 token 一定是一个 unary operator
-				std::unique_ptr<AST::UnaryOperator> unaryOperator = tokenList->now();
+				std::unique_ptr<AST::UnaryOperator> unaryOperator = std::make_unique<AST::UnaryOperator>(tokenList->now());
 
 				// 那么下一个 token 就应该是一个 value
-				AST::Value value = parseValue(tokenList);
+				std::unique_ptr<AST::Value> value = std::make_unique<AST::Value>(parseValue(tokenList));
 
 				if (value == nullptr)
 				{
-					syntax_error("Unexpected token")
+					unexpected_token_syntax_error(tokenList->now())
 				}
 
-				unaryExpression->right = value;
-				unaryExpression->op = unaryOperator;
+				unaryExpression->right = std::make_unique<AST::Value>(value);
+				unaryExpression->op = std::make_unique<AST::UnaryOperator>(unaryOperator);
 
-				return value;
+				return unaryExpression;
 			}
 
-			Lex::TokenList std::unique_ptr<AST::Expression> parseExpression(TokenList tokenList)
+			std::unique_ptr<AST::Expression> parseExpression(TokenList tokenList)
 			{
-				return Lex::TokenList std::unique_ptr<AST::Expression>();
+				return std::unique_ptr<AST::Expression>();
 			}
 
 			std::unique_ptr<AST::BlockStatement> parseBlockStatement(TokenList tokenList)
 			{
 				// 使用大括号包裹的块语句，解析到对应的最后一个 '}'
-				if (tokenList->now() == TOKEN_BRACE_BEGIN)
+				if (tokenList->now() == Lex::TOKEN_BRACE_BEGIN)
 				{
 
 				}
@@ -95,14 +66,14 @@ namespace Flaner
 
 			std::unique_ptr<AST::IfStatement> parseIfStatement(TokenList tokenList)
 			{
-				if (tokenList->now() != TOKEN_IF)
+				if (tokenList->now() != Lex::TOKEN_IF)
 				{
 					return nullptr;
 				}
 
-				if (tokenList->forword() != TOKEN_PAREN_BEGIN)
+				if (tokenList->forward() != Lex::TOKEN_PAREN_BEGIN)
 				{
-					syntax_error("mission '(' after keyword if");
+					unexpected_token_syntax_error(tokenList->now())
 				}
 
 				std::unique_ptr<AST::Expression> expression = parseExpression(tokenList);
@@ -110,14 +81,16 @@ namespace Flaner
 				// 条件为空
 				if (!expression)
 				{
-					syntax_error("Unexpected token ')'");
+					unexpected_token_syntax_error(tokenList->now())
 				}
 
 				// 条件解析完毕，如果条件括号后的第一个 token 是起始括号以外的标点符号，
 				// 说明混入了奇奇怪怪的东西
-				if (tokenList->next().is(PUNCTUATION) && !tokenList->next().is(BEGIN_PUNCTUATION))
+
+				Lex::Token next = tokenList->next();
+				if (Scanner::isPunctuation(next.raw_value()) && !Scanner::isBeginPunctuation(next.raw_value()))
 				{
-					syntax_error(std::string("Invalid or unexpected token" + tokenList->next());
+					unexpected_token_syntax_error(next)
 				}
 
 				// 可能会抛出错误，否则一定获取了正确的值
@@ -134,7 +107,7 @@ namespace Flaner
 			std::unique_ptr<AST::CaseClause> parseCaseClause(TokenList tokenList)
 			{
 				Lex::Token token = tokenList->now();
-				if (token != TOKEN_CASE)
+				if (token != Lex::TOKEN_CASE)
 				{
 					return nullptr;
 				}
@@ -145,7 +118,7 @@ namespace Flaner
 				std::unique_ptr<AST::Expression> expression = parseExpression(tokenList);
 				
 				token = tokenList->now();
-				if (token != TOKEN_COLON)
+				if (token != Lex::TOKEN_COLON)
 				{
 					unexpected_token_syntax_error(token);
 				}
@@ -163,14 +136,14 @@ namespace Flaner
 			{
 				Lex::Token token = tokenList->now();
 
-				if (token != TOKEN_DEFAULT)
+				if (token != Lex::TOKEN_DEFAULT)
 				{
 					return nullptr;
 				}
 
 				token = tokenList->forward();
 
-				if (token != TOKEN_COLON)
+				if (token != Lex::TOKEN_COLON)
 				{
 					unexpected_token_syntax_error(token)
 				}
@@ -208,7 +181,7 @@ namespace Flaner
 			{
 				Lex::Token token = tokenList->now();
 
-				if (token != TOKEN_BRACE_BEGIN)
+				if (token != Lex::TOKEN_BRACE_BEGIN)
 				{
 					unexpected_token_syntax_error(token)
 				}
@@ -229,7 +202,7 @@ namespace Flaner
 
 				token = tokenList->forward();
 
-				if (token != TOKEN_BRACE_END)
+				if (token != Lex::TOKEN_BRACE_END)
 				{
 					unexpected_token_syntax_error(token)
 				}
@@ -239,7 +212,7 @@ namespace Flaner
 
 			std::unique_ptr<AST::SwitchStatement> parseSwitchStatement(TokenList tokenList)
 			{
-				if (tokenList->now() != TOKEN_SWITCH)
+				if (tokenList->now() != Lex::TOKEN_SWITCH)
 				{
 					return nullptr;
 				}
@@ -249,30 +222,29 @@ namespace Flaner
 				Lex::Token now = tokenList->forward();
 
 				// 如果关键字后不是小括号
-				if (now != TOKEN_PAREN_BEGIN)
+				if (now != Lex::TOKEN_PAREN_BEGIN)
 				{
 					syntax_error("Invalid or unexpected token '" + now.value);
 				}
 
-				AST::Expression expression = parseExpression(tokenList);
+				std::unique_ptr<AST::Expression> expression = parseExpression(tokenList);
 
 				// 如果关键字后不是大括号
-				if (now != TOKEN_BRACE_BEGIN)
+				if (now != Lex::TOKEN_BRACE_BEGIN)
 				{
 					syntax_error("Invalid or unexpected token '" + now.value);
 				}
 
 				tokenList->forward();
 
-				std::vector<std::unique_ptr<CaseClause>> cases;
-				std::unique_ptr<CaseClause> oneCase;
+				std::vector<std::unique_ptr<AST::CaseClause>> cases;
+				std::unique_ptr<AST::CaseClause> oneCase;
 
 				do
 				{
 					oneCase = parseCaseClause();
 				} while (oneCase != nullptr);
 
-				while (one)
 			}
 
 		};

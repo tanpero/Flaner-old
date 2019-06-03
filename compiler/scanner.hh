@@ -51,6 +51,10 @@ namespace Flaner
 
 			bool isStingLiteral(char* s);
 
+			bool isPunctuation(char s);
+
+			bool isBeginPunctuation(char s);
+
 		};
 	};
 };

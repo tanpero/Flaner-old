@@ -23,7 +23,7 @@ namespace Flaner
 			class UnaryOperator
 			{
 			public:
-
+				UnaryOperator operator=(Lex::Token token);
 			};
 
 			class BinaryOperator
@@ -45,8 +45,8 @@ namespace Flaner
 				};
 
 				Kind kind;
-				Operator(std::string op);
-				Operator(Lex::TokenType token);
+				BinaryOperator(std::string op);
+				BinaryOperator(Lex::TokenType token);
 			};
 
 			class UnaryExpression : public Expression
@@ -75,7 +75,7 @@ namespace Flaner
 			class Value : public Expression
 			{
 			public:
-				Expression form; 
+				std::unique_ptr<Expression> form;
 			};
 
 			class Param
@@ -84,20 +84,27 @@ namespace Flaner
 				bool hasDefaultValue();
 				bool isRest();
 				std::unique_ptr<Value> defaultValue;
-				Identifier id;
+				std::unique_ptr<Identifier> id;
+
+				Param(std::unique_ptr<Identifier> _id, std::unique_ptr<Value> _defaultValue = false)
+				{
+					id = _id;
+					defaultValue = _defaultValue;
+				}
 
 			};
 
 			class ParamsList
 			{
-				std::vector<std::unique_ptr<Param>> params;
+				using list = std::vector<std::unique_ptr<Param>>;
+				list params;
 			public:
-				inline std::iterator begin()
+				inline list::iterator begin()
 				{
 					return params.begin();
 				}
 
-				inline std::iterator end()
+				inline list::iterator end()
 				{
 					return params.end();
 				}
@@ -113,7 +120,7 @@ namespace Flaner
 					COMMON,
 					GENERATOR
 				};
-				std:unique_ptr<Identifier> name;
+				std::unique_ptr<Identifier> name;
 				std::unique_ptr<ParamsList> paramsList;
 				std::unique_ptr<StatementSequence> body;
 			};

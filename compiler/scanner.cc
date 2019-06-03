@@ -138,6 +138,32 @@ namespace Flaner
 
 			}
 
+			bool isPunctuation(char s)
+			{
+				if (s >= 0x21 && s <= 0x2f)
+				{
+					return true;
+				}
+				else if (s >= 0x3a && s <= 0x40)
+				{
+					return true;
+				}
+				else if (s >= 0x5b && s <= 0x5e)
+				{
+					return true;
+				}
+				else if (s >= 0x7b && s <= 0x7e)
+				{
+					return true;
+				}
+				return false;
+			}
+
+			bool isBeginPunctuation(char s)
+			{
+				return s == 0x28 || s == 0x5b || s == 0x7b;
+			}
+
 		};
 	};
 };

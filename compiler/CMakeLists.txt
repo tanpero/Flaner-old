@@ -6,4 +6,4 @@ set(CMAKE_CXX_STANDARD 17)
 include_directories(.)
 include_directories(../global)
 
-add_executable(FlanerCompiler main.cc scanner.cc)
+add_executable(FlanerCompiler main.cc scanner.cc statement.hh statement.cc parser.cc)

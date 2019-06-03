@@ -17,9 +17,9 @@ namespace Flaner
 		{
 			enum TokenType
 			{
-				TOKEN_UNKONWN,
+				TOKEN_UNKNOWN,
 
-				TOKEN_IDENTIFIER,
+				TOKEN_ID,
 
 				TOKEN_NUMBER,
 				TOKEN_STRING,
@@ -34,14 +34,31 @@ namespace Flaner
 				TOKEN_FOR,
 				TOKEN_CONTINUE,
 				TOKEN_BREAK,
-				TOKEN_RETURN
+				TOKEN_RETURN,
 				
+				TOKEN_PAREN_BEGIN,
+				TOKEN_PAREN_END,
+				TOKEN_BRACKET_BEGIN,
+				TOKEN_BRACKET_END,
+				TOKEN_BRACE_BEGIN,
+				TOKEN_BRACE_END,
+
+				TOKEN_COLON,
+				TOKEN_COMMA,
+				TOKEN_DOT,
+				TOKEN_DOT_DOT_DOT,
+				TOKEN_QUESTION
 			};
 
 			struct Token
 			{
 				TokenType type;
 				std::string value;
+
+				constexpr char raw_value()
+				{
+					return value.data()[0];
+				}
 
 				// 用于确定 token 的范围
 				inline bool is(TokenType t)
@@ -60,6 +77,7 @@ namespace Flaner
 					return type != t;
 				}
 			};
+
 
 			class TokenList
 			{

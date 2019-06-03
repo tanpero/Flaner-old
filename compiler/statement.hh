@@ -21,6 +21,7 @@ namespace Flaner
 			public:
 				virtual std::string type() override;
 				virtual void walk() override;
+				using ptr = std::unique_ptr<decltype(*this)>;
 			};
 
 			class StatementSequence
@@ -135,11 +136,11 @@ namespace Flaner
 				std::unique_ptr<BlockStatement> finallyBlockStatement;
 			};
 
-			class LabelStatement : public: Statement
+			class LabelStatement : public Statement
 			{
 			public:
 				std::string name;
-			}
+			};
 
 			class BreakStatement : public Statement
 			{
