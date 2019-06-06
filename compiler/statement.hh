@@ -17,7 +17,6 @@ namespace Flaner
 	{
 		namespace AST
 		{
-			class Identifier;
 
 			class Statement
 			{

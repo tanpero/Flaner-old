@@ -35,6 +35,15 @@ namespace Flaner
 			{
 			}
 
+			std::string Statement::type()
+			{
+				return std::string();
+			}
+
+			void Statement::walk()
+			{
+			}
+
 		};
 	};
 };
