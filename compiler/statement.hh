@@ -48,6 +48,15 @@ namespace Flaner
 			};
 
 
+			class DefintionStatement : public Statement
+			{
+			public:
+				Declaration::Kind kind;
+				Identifier identifier;
+				Value initialized;
+			};
+
+
 			class IfStatement : public Statement
 			{
 			public:
@@ -83,12 +92,12 @@ namespace Flaner
 			class ForInitializer : public Statement
 			{
 				using NullStatement = std::shared_ptr<AST::NullStatement>;
-				using Declaration   = std::shared_ptr<AST::Declaration>;
+				using Defintion     = std::shared_ptr<AST::DefintionStatement>;
 				using Expression    = std::shared_ptr<AST::Expression>;
 			public:
-				std::variant<NullStatement, Declaration, Expression> body;
+				std::variant<NullStatement, Defintion, Expression> body;
 				std::shared_ptr<ForInitializer> operator=
-					(std::variant<NullStatement, Declaration, Expression> initializer)
+					(std::variant<NullStatement, Defintion, Expression> initializer)
 				{
 					body = initializer;
 				}

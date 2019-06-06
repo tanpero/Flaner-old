@@ -24,6 +24,9 @@ namespace Flaner
 				TOKEN_NUMBER,
 				TOKEN_STRING,
 
+				TOKEN_LET,
+				TOKEN_CONST,
+
 				TOKEN_IF,
 				TOKEN_ELSE,
 				TOKEN_SWITCH,
@@ -43,11 +46,14 @@ namespace Flaner
 				TOKEN_BRACE_BEGIN,
 				TOKEN_BRACE_END,
 
+				TOKEN_ASSIGN,
+
 				TOKEN_COLON,
 				TOKEN_COMMA,
 				TOKEN_DOT,
 				TOKEN_DOT_DOT_DOT,
-				TOKEN_QUESTION
+				TOKEN_QUESTION,
+				TOKEN_SEMICOLON
 			};
 
 			struct Token

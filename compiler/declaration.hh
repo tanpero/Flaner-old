@@ -41,7 +41,7 @@ namespace Flaner
 
 			public:
 				Kind kind;
-				Identifier identifier;
+				std::shared_ptr<Identifier> identifier;
 			};
 
 		};

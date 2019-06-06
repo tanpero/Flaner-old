@@ -10,16 +10,86 @@ namespace Flaner
 		{
 			std::shared_ptr<AST::NullStatement> parseNullStatement(TokenList tokenList)
 			{
-				return std::shared_ptr<AST::NullStatement>();
+				if (tokenList->now() == Lex::TOKEN_SEMICOLON)
+				{
+					return std::make_shared<AST::NullStatement>();
+				}
+				else
+				{
+					return nullptr;
+				}
 			}
+
+
 			std::shared_ptr<AST::Declaration> parseVariableDeclaration(TokenList tokenList)
 			{
-				return std::shared_ptr<AST::Declaration>();
+				Lex::Token now = tokenList->now();
+				Lex::Token forward = tokenList->forward();
+
+				if (now == Lex::TOKEN_LET)
+				{
+					if (forward != Lex::TOKEN_ID)
+					{
+						unexpected_token_syntax_error(forward);
+					}
+					std::shared_ptr<AST::Declaration> declaration;
+					declaration->kind = AST::Declaration::Variable;
+
+					std::shared_ptr<AST::Identifier> id;
+					id->name = forward.value;
+					declaration->identifier = id;
+
+					tokenList->forward();
+					return declaration;
+				}
+				else
+				{
+					return nullptr;
+				}
 			}
+
+
 			std::shared_ptr<AST::Declaration> parseConstantDeclaration(TokenList tokenList)
+			{
+				Lex::Token now = tokenList->now();
+				Lex::Token forward = tokenList->forward();
+
+				if (now == Lex::TOKEN_CONST)
+				{
+					if (forward != Lex::TOKEN_ID)
+					{
+						unexpected_token_syntax_error(forward);
+					}
+
+					std::shared_ptr<AST::Declaration> declaration;
+					declaration->kind = AST::Declaration::Variable;
+
+					std::shared_ptr<AST::Identifier> id;
+					id->name = forward.value;
+					declaration->identifier = id;
+
+					tokenList->forward();
+					return declaration;
+				}
+				else
+				{
+					return nullptr;
+				}
+			}
+
+
+			std::shared_ptr<AST::Declaration> parseVariableDefintion(TokenList tokenList)
+			{
+				
+			}
+
+
+			std::shared_ptr<AST::Declaration> parseConstantDefintion(TokenList tokenList)
 			{
 				return std::shared_ptr<AST::Declaration>();
 			}
+
+
 			std::shared_ptr<AST::Identifier> parseIdentifier(TokenList tokenList)
 			{
 				std::shared_ptr<AST::Identifier> identifier = std::make_shared<AST::Identifier>(tokenList->now());
@@ -27,11 +97,13 @@ namespace Flaner
 				return identifier;
 			}
 
+
 			std::shared_ptr<AST::Value> parseValue(TokenList tokenList)
 			{
 				// TODO...
 				return std::shared_ptr<AST::Value>();
 			}
+
 
 			std::shared_ptr<AST::UnaryExpression> parseUnaryExpression(TokenList tokenList)
 			{
@@ -54,10 +126,12 @@ namespace Flaner
 				return unaryExpression;
 			}
 
+
 			std::shared_ptr<AST::Expression> parseExpression(TokenList tokenList)
 			{
 				return std::shared_ptr<AST::Expression>();
 			}
+
 
 			std::shared_ptr<AST::BlockStatement> parseBlockStatement(TokenList tokenList)
 			{
@@ -73,6 +147,7 @@ namespace Flaner
 
 				}
 			}
+
 
 			std::shared_ptr<AST::IfStatement> parseIfStatement(TokenList tokenList)
 			{
@@ -114,6 +189,7 @@ namespace Flaner
 				return ifStatement;
 			}
 
+
 			std::shared_ptr<AST::SwitchClause> parseCaseClause(TokenList tokenList)
 			{
 				Lex::Token token = tokenList->now();
@@ -145,6 +221,7 @@ namespace Flaner
 				return clause;
 			}
 
+			
 			std::shared_ptr<AST::SwitchClause> parseDefaultClause(TokenList tokenList)
 			{
 				Lex::Token token = tokenList->now();
@@ -173,6 +250,7 @@ namespace Flaner
 				return clause;
 			}
 
+
 			std::shared_ptr<AST::SwitchClause> parseSwitchClause(TokenList tokenList)
 			{
 				std::shared_ptr<AST::SwitchClause> clause;
@@ -191,6 +269,7 @@ namespace Flaner
 
 				return nullptr;
 			}
+
 
 			std::shared_ptr<AST::SwitchClauseList> parseSwitchClauseList(TokenList tokenList)
 			{
@@ -224,6 +303,7 @@ namespace Flaner
 
 				return clauseList;
 			}
+
 
 			std::shared_ptr<AST::SwitchStatement> parseSwitchStatement(TokenList tokenList)
 			{
@@ -263,6 +343,7 @@ namespace Flaner
 
 			}
 
+
 			std::shared_ptr<AST::ForInitializer> parseForInitializer(TokenList tokenList)
 			{
 				std::shared_ptr<AST::ForInitializer> initializer;
@@ -287,6 +368,7 @@ namespace Flaner
 				initializer = parseExpression(tokenList);
 				return initializer;
 			}
+
 
 			std::shared_ptr<AST::ForStatement> parseForStatement(TokenList tokenList)
 			{

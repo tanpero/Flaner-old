@@ -57,9 +57,18 @@ namespace Flaner
 			syntax_error("Unexpected token" + token.value) \
 				break; \
 		} \
-	} while (false); 
+	} \
+	while (false); 
+
+#define compiler_warn(info) \
+	do \
+	{ \
+\
+	} \
+	while (false);
 
 		};
+
 	};
 };
 #endif // !_FLANER_COMPILER_EXCEPTION_HH_
