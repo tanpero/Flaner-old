@@ -20,6 +20,10 @@ namespace Flaner
 
 			using TokenList = std::shared_ptr<Lex::TokenList>;
 
+			std::shared_ptr<AST::NullStatement> parseNullStatement(TokenList tokenList);
+			std::shared_ptr<AST::Declaration> parseVariableDeclaration(TokenList tokenList);
+			std::shared_ptr<AST::Declaration> parseConstantDeclaration(TokenList tokenList);
+
 			//  调用时此函数时，当前 token 已经是 identifier
 			std::shared_ptr<AST::Identifier> parseIdentifier(TokenList tokenList);
 
@@ -46,6 +50,8 @@ namespace Flaner
 
 			std::shared_ptr<AST::WhileStatement> parseWhileStatement(TokenList tokenList);
 
+
+			std::shared_ptr<AST::ForInitializer> parseForInitializer(TokenList tokenList);
 			std::shared_ptr<AST::ForStatement> parseForStatement(TokenList tokenList);
 
 			std::shared_ptr<AST::ContinueStatement> parseContinueStatement(TokenList tokenList);

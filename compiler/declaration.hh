@@ -43,8 +43,9 @@ namespace Flaner
 				Kind kind;
 				Identifier identifier;
 			};
-		}
-	}
-}
+
+		};
+	};
+};
 
 #endif // !_FLANER_COMPILER_DECLARATION_HH_

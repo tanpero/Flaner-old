@@ -8,7 +8,18 @@ namespace Flaner
 	{
 		namespace Parser
 		{
-
+			std::shared_ptr<AST::NullStatement> parseNullStatement(TokenList tokenList)
+			{
+				return std::shared_ptr<AST::NullStatement>();
+			}
+			std::shared_ptr<AST::Declaration> parseVariableDeclaration(TokenList tokenList)
+			{
+				return std::shared_ptr<AST::Declaration>();
+			}
+			std::shared_ptr<AST::Declaration> parseConstantDeclaration(TokenList tokenList)
+			{
+				return std::shared_ptr<AST::Declaration>();
+			}
 			std::shared_ptr<AST::Identifier> parseIdentifier(TokenList tokenList)
 			{
 				std::shared_ptr<AST::Identifier> identifier = std::make_shared<AST::Identifier>(tokenList->now());
@@ -246,9 +257,40 @@ namespace Flaner
 
 				do
 				{
+					// TODO...
 					oneCase = parseCaseClause(tokenList);
 				} while (oneCase != nullptr);
 
+			}
+
+			std::shared_ptr<AST::ForInitializer> parseForInitializer(TokenList tokenList)
+			{
+				std::shared_ptr<AST::ForInitializer> initializer;
+				initializer = parseNullStatement(tokenList);
+				if (initializer)
+				{
+					return initializer;
+				}
+
+				initializer = parseVariableDefintion(tokenList);
+				if (initializer)
+				{
+					return initializer;
+				}
+
+				initializer = parseConstantDefintion(tokenList);
+				if (initializer)
+				{
+					return initializer;
+				}
+
+				initializer = parseExpression(tokenList);
+				return initializer;
+			}
+
+			std::shared_ptr<AST::ForStatement> parseForStatement(TokenList tokenList)
+			{
+				return std::shared_ptr<AST::ForStatement>();
 			}
 
 		};

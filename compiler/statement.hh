@@ -35,6 +35,12 @@ namespace Flaner
 
 			};
 
+			class NullStatement : public Statement
+			{
+			public:
+
+			};
+
 			class BlockStatement : public Statement
 			{
 			public:
@@ -71,6 +77,21 @@ namespace Flaner
 			public:
 				std::shared_ptr<Expression> condition;
 				std::shared_ptr<BlockStatement> body;
+			};
+
+
+			class ForInitializer : public Statement
+			{
+				using NullStatement = std::shared_ptr<AST::NullStatement>;
+				using Declaration   = std::shared_ptr<AST::Declaration>;
+				using Expression    = std::shared_ptr<AST::Expression>;
+			public:
+				std::variant<NullStatement, Declaration, Expression> body;
+				std::shared_ptr<ForInitializer> operator=
+					(std::variant<NullStatement, Declaration, Expression> initializer)
+				{
+					body = initializer;
+				}
 			};
 
 			class ForStatement : public Statement
