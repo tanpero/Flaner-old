@@ -55,7 +55,7 @@ namespace Flaner
 				TokenType type;
 				std::string value;
 
-				constexpr char raw_value()
+				inline char raw_value()
 				{
 					return value.data()[0];
 				}

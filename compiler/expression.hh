@@ -4,6 +4,7 @@
 #include <global.hh>
 #include <statement.hh>
 #include <token.hh>
+#include <declaration.hh>
 #include <memory>
 #include <vector>
 #include <variant>
@@ -14,6 +15,11 @@ namespace Flaner
 	{
 		namespace AST
 		{
+			class Value;
+			class Identifier;
+			//class Statement;
+			class StatementSequence;
+
 			class Expression : public Statement
 			{
 			public:
@@ -87,10 +93,7 @@ namespace Flaner
 				std::unique_ptr<Identifier> id;
 
 				Param(std::unique_ptr<Identifier> _id, std::unique_ptr<Value> _defaultValue = false)
-				{
-					id = _id;
-					defaultValue = _defaultValue;
-				}
+					: id(_id), defaultValue(_defaultValue) {}
 
 			};
 

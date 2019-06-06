@@ -2,6 +2,7 @@
 #define _FLANER_COMPILER_DECLARATION_HH_
 
 #include <global.hh>
+#include <token.hh>
 #include <statement.hh>
 #include <string>
 
@@ -11,6 +12,7 @@ namespace Flaner
 	{
 		namespace AST
 		{
+
 			class Identifier
 			{
 			public:

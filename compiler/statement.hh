@@ -2,8 +2,9 @@
 #define  _FLANER_COMPILER_STATEMENT_HH_
 
 #include <global.hh>
-#include <expression.hh>
 #include <declaration.hh>
+#include <expression.hh>
+
 #include <memory>
 #include <vector>
 #include <variant>
@@ -16,12 +17,13 @@ namespace Flaner
 	{
 		namespace AST
 		{
+			class Identifier;
+
 			class Statement
 			{
 			public:
-				virtual std::string type() override;
-				virtual void walk() override;
-				using ptr = std::unique_ptr<decltype(*this)>;
+				virtual std::string type();
+				virtual void walk();
 			};
 
 			class StatementSequence
@@ -126,7 +128,7 @@ namespace Flaner
 			public:
 				struct CatchStatement
 				{
-					Identifier bindingId;
+					std::unique_ptr<Identifier> bindingId;
 					std::unique_ptr<BlockStatement> body;
 				};
 
@@ -169,8 +171,8 @@ namespace Flaner
 			class ClassStatement : public Statement
 			{
 			public:
-				Identifier name;
 				FunctionValue constructor;
+				Identifier name;
 				std::vector<std::unique_ptr<ObjectMember>> members;
 			};
 

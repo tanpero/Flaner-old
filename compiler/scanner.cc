@@ -135,7 +135,7 @@ namespace Flaner
 
 			bool isStingLiteral(char* s)
 			{
-
+				return true;
 			}
 
 			bool isPunctuation(char s)

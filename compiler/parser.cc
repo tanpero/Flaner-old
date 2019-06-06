@@ -9,47 +9,47 @@ namespace Flaner
 		namespace Parser
 		{
 
-			std::unique_ptr<AST::Identifier> parseIdentifier(TokenList tokenList)
+			std::shared_ptr<AST::Identifier> parseIdentifier(TokenList tokenList)
 			{
-				std::unique_ptr<AST::Identifier> identifier = std::make_unique<AST::Identifier>(tokenList->now);
+				std::shared_ptr<AST::Identifier> identifier = std::make_shared<AST::Identifier>(tokenList->now());
 
 				return identifier;
 			}
 
 			
-			std::unique_ptr<AST::Value> parseValue(TokenList tokenList)
+			std::shared_ptr<AST::Value> parseValue(TokenList tokenList)
 			{
 				// TODO...
-				return std::unique_ptr<AST::Value>();
+				return std::shared_ptr<AST::Value>();
 			}
 
-			std::unique_ptr<AST::UnaryExpression> parseUnaryExpression(TokenList tokenList)
+			std::shared_ptr<AST::UnaryExpression> parseUnaryExpression(TokenList tokenList)
 			{
-				std::unique_ptr<AST::UnaryExpression> unaryExpression;
+				std::shared_ptr<AST::UnaryExpression> unaryExpression;
 
 				// 当前 token 一定是一个 unary operator
-				std::unique_ptr<AST::UnaryOperator> unaryOperator = std::make_unique<AST::UnaryOperator>(tokenList->now());
+				std::shared_ptr<AST::UnaryOperator> unaryOperator = std::make_shared<AST::UnaryOperator>(tokenList->now());
 
 				// 那么下一个 token 就应该是一个 value
-				std::unique_ptr<AST::Value> value = std::make_unique<AST::Value>(parseValue(tokenList));
+				std::shared_ptr<AST::Value> value = std::make_shared<AST::Value>(parseValue(tokenList));
 
 				if (value == nullptr)
 				{
 					unexpected_token_syntax_error(tokenList->now())
 				}
 
-				unaryExpression->right = std::make_unique<AST::Value>(value);
-				unaryExpression->op = std::make_unique<AST::UnaryOperator>(unaryOperator);
+				unaryExpression->right = std::make_shared<AST::Value>(value);
+				unaryExpression->op = std::make_shared<AST::UnaryOperator>(unaryOperator);
 
 				return unaryExpression;
 			}
 
-			std::unique_ptr<AST::Expression> parseExpression(TokenList tokenList)
+			std::shared_ptr<AST::Expression> parseExpression(TokenList tokenList)
 			{
-				return std::unique_ptr<AST::Expression>();
+				return std::shared_ptr<AST::Expression>();
 			}
 
-			std::unique_ptr<AST::BlockStatement> parseBlockStatement(TokenList tokenList)
+			std::shared_ptr<AST::BlockStatement> parseBlockStatement(TokenList tokenList)
 			{
 				// 使用大括号包裹的块语句，解析到对应的最后一个 '}'
 				if (tokenList->now() == Lex::TOKEN_BRACE_BEGIN)
@@ -64,7 +64,7 @@ namespace Flaner
 				}
 			}
 
-			std::unique_ptr<AST::IfStatement> parseIfStatement(TokenList tokenList)
+			std::shared_ptr<AST::IfStatement> parseIfStatement(TokenList tokenList)
 			{
 				if (tokenList->now() != Lex::TOKEN_IF)
 				{
@@ -76,7 +76,7 @@ namespace Flaner
 					unexpected_token_syntax_error(tokenList->now())
 				}
 
-				std::unique_ptr<AST::Expression> expression = parseExpression(tokenList);
+				std::shared_ptr<AST::Expression> expression = std::move(parseExpression(tokenList));
 				
 				// 条件为空
 				if (!expression)
@@ -94,17 +94,17 @@ namespace Flaner
 				}
 
 				// 可能会抛出错误，否则一定获取了正确的值
-				std::unique_ptr<AST::BlockStatement> body = parseBlockStatement(tokenList);
+				//std::shared_ptr<AST::BlockStatement> body = parseBlockStatement(tokenList);
 
-				std::unique_ptr<AST::IfStatement> ifStatement;
+				std::shared_ptr<AST::IfStatement> ifStatement;
 
-				ifStatement->condition = expression;
-				ifStatement->body = body;
-
+				//ifStatement->condition = expression;
+				//ifStatement->body = body;
+				
 				return ifStatement;
 			}
 
-			std::unique_ptr<AST::CaseClause> parseCaseClause(TokenList tokenList)
+			std::shared_ptr<AST::CaseClause> parseCaseClause(TokenList tokenList)
 			{
 				Lex::Token token = tokenList->now();
 				if (token != Lex::TOKEN_CASE)
@@ -115,7 +115,7 @@ namespace Flaner
 				tokenList->forward();
 
 				// 表达式解析完毕后，当前 token 应当是 ':'
-				std::unique_ptr<AST::Expression> expression = parseExpression(tokenList);
+				std::shared_ptr<AST::Expression> expression = parseExpression(tokenList);
 				
 				token = tokenList->now();
 				if (token != Lex::TOKEN_COLON)
@@ -124,15 +124,15 @@ namespace Flaner
 				}
 
 				tokenList->forward();
-				std::unique_ptr<AST::BlockStatement> block = parseBlockStatement(tokenList);
+				std::shared_ptr<AST::BlockStatement> block = parseBlockStatement(tokenList);
 
-				std::unique_ptr<AST::CaseClause> caseClause;
-				caseClause->object = expression;
-				caseClause->body = block;
+				std::shared_ptr<AST::CaseClause> caseClause;
+				caseClause->object = std::move(expression);
+				caseClause->body = std::move(block);
 				return caseClause;
 			}
 
-			std::unique_ptr<AST::DefaultClause> parseDefaultClause(TokenList tokenList)
+			std::shared_ptr<AST::DefaultClause> parseDefaultClause(TokenList tokenList)
 			{
 				Lex::Token token = tokenList->now();
 
@@ -150,18 +150,18 @@ namespace Flaner
 
 				tokenList->forward();
 
-				std::unique_ptr<AST::BlockStatement> block = parseBlockStatement(tokenList);
+				std::shared_ptr<AST::BlockStatement> block = parseBlockStatement(tokenList);
 
-				std::unique_ptr<AST::DefaultClause> clause;
-				clause->body = block;
+				std::shared_ptr<AST::DefaultClause> clause;
+				//clause->body = block;
 
 				return clause;
 			}
 
 			SwitchClause parseSwitchClause(TokenList tokenList)
 			{
-				std::variant<std::unique_ptr<AST::CaseClause>, std::unique_ptr<AST::DefaultClause>> clause;
-
+				std::variant<std::shared_ptr<AST::CaseClause>, std::shared_ptr<AST::DefaultClause>> clause;
+				
 				clause = parseCaseClause(tokenList);
 				if (clause)
 				{
@@ -177,7 +177,7 @@ namespace Flaner
 				return std::nullopt;
 			}
 
-			SwitchClauseList parseSwitchClauseList(TokenList)
+			SwitchClauseList parseSwitchClauseList(TokenList tokenList)
 			{
 				Lex::Token token = tokenList->now();
 
@@ -200,7 +200,9 @@ namespace Flaner
 					clauseList.push_back(clause);
 				}
 
+
 				token = tokenList->forward();
+				//token = tokenList->forward();
 
 				if (token != Lex::TOKEN_BRACE_END)
 				{
@@ -210,14 +212,14 @@ namespace Flaner
 				return clauseList;
 			}
 
-			std::unique_ptr<AST::SwitchStatement> parseSwitchStatement(TokenList tokenList)
+			std::shared_ptr<AST::SwitchStatement> parseSwitchStatement(TokenList tokenList)
 			{
 				if (tokenList->now() != Lex::TOKEN_SWITCH)
 				{
 					return nullptr;
 				}
 
-				std::unique_ptr<AST::SwitchStatement> switchStatement;
+				std::shared_ptr<AST::SwitchStatement> switchStatement;
 
 				Lex::Token now = tokenList->forward();
 
@@ -227,7 +229,7 @@ namespace Flaner
 					syntax_error("Invalid or unexpected token '" + now.value);
 				}
 
-				std::unique_ptr<AST::Expression> expression = parseExpression(tokenList);
+				std::shared_ptr<AST::Expression> expression = parseExpression(tokenList);
 
 				// 如果关键字后不是大括号
 				if (now != Lex::TOKEN_BRACE_BEGIN)
@@ -237,12 +239,12 @@ namespace Flaner
 
 				tokenList->forward();
 
-				std::vector<std::unique_ptr<AST::CaseClause>> cases;
-				std::unique_ptr<AST::CaseClause> oneCase;
+				std::vector<std::shared_ptr<AST::CaseClause>> cases;
+				std::shared_ptr<AST::CaseClause> oneCase;
 
 				do
 				{
-					oneCase = parseCaseClause();
+					oneCase = parseCaseClause(tokenList);
 				} while (oneCase != nullptr);
 
 			}
