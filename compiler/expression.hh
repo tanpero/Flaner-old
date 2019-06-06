@@ -58,30 +58,30 @@ namespace Flaner
 			class UnaryExpression : public Expression
 			{
 			public:
-				std::unique_ptr<Value> right;
-				std::unique_ptr<UnaryOperator> op;
+				std::shared_ptr<Value> right;
+				std::shared_ptr<UnaryOperator> op;
 			};
 
 			class BinaryExpreesion : public Expression
 			{
 			public:
-				std::unique_ptr<Expression> left;
-				std::unique_ptr<Expression> right;
-				std::unique_ptr<BinaryOperator> op;
+				std::shared_ptr<Expression> left;
+				std::shared_ptr<Expression> right;
+				std::shared_ptr<BinaryOperator> op;
 			};
 
 			class TernaryExpression : public Expression
 			{
 			public:
-				std::unique_ptr<Expression> condition;
-				std::unique_ptr<Expression> yes;
-				std::unique_ptr<Expression> no;
+				std::shared_ptr<Expression> condition;
+				std::shared_ptr<Expression> yes;
+				std::shared_ptr<Expression> no;
 			};
 
 			class Value : public Expression
 			{
 			public:
-				std::unique_ptr<Expression> form;
+				std::shared_ptr<Expression> form;
 			};
 
 			class Param
@@ -89,17 +89,17 @@ namespace Flaner
 			public:
 				bool hasDefaultValue();
 				bool isRest();
-				std::unique_ptr<Value> defaultValue;
-				std::unique_ptr<Identifier> id;
+				std::shared_ptr<Value> defaultValue;
+				std::shared_ptr<Identifier> id;
 
-				Param(std::unique_ptr<Identifier> _id, std::unique_ptr<Value> _defaultValue = false)
+				Param(std::shared_ptr<Identifier> _id, std::shared_ptr<Value> _defaultValue = false)
 					: id(_id), defaultValue(_defaultValue) {}
 
 			};
 
 			class ParamsList
 			{
-				using list = std::vector<std::unique_ptr<Param>>;
+				using list = std::vector<std::shared_ptr<Param>>;
 				list params;
 			public:
 				inline list::iterator begin()
@@ -123,9 +123,9 @@ namespace Flaner
 					COMMON,
 					GENERATOR
 				};
-				std::unique_ptr<Identifier> name;
-				std::unique_ptr<ParamsList> paramsList;
-				std::unique_ptr<StatementSequence> body;
+				std::shared_ptr<Identifier> name;
+				std::shared_ptr<ParamsList> paramsList;
+				std::shared_ptr<StatementSequence> body;
 			};
 
 			class ObjectMember
@@ -133,12 +133,12 @@ namespace Flaner
 			public:
 				struct CommonMemberValue
 				{
-					std::unique_ptr<Value> value;
+					std::shared_ptr<Value> value;
 				};
 				struct DescribedMemberValue
 				{
-					std::unique_ptr<FunctionValue> getter;
-					std::unique_ptr<FunctionValue> setter;
+					std::shared_ptr<FunctionValue> getter;
+					std::shared_ptr<FunctionValue> setter;
 				};
 				std::variant<CommonMemberValue, DescribedMemberValue> value;
 			};

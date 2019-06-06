@@ -19,9 +19,9 @@ namespace Flaner
 			}
 
 
-			std::unique_ptr<Statement> StatementSequence::get()
+			std::shared_ptr<Statement> StatementSequence::get()
 			{
-				return std::unique_ptr<Statement>();
+				return std::shared_ptr<Statement>();
 			}
 
 

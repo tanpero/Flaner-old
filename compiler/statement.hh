@@ -28,9 +28,9 @@ namespace Flaner
 
 			class StatementSequence
 			{
-				std::vector<std::unique_ptr<Statement>> sequence;
+				std::vector<std::shared_ptr<Statement>> sequence;
 			public:
-				std::unique_ptr<Statement> get();
+				std::shared_ptr<Statement> get();
 				bool next();
 				void insert(Statement statement);
 
@@ -39,7 +39,7 @@ namespace Flaner
 			class BlockStatement : public Statement
 			{
 			public:
-				std::unique_ptr<StatementSequence> body;
+				std::shared_ptr<StatementSequence> body;
 			};
 
 
@@ -49,29 +49,29 @@ namespace Flaner
 				virtual std::string type();
 				virtual void walk();
 
-				std::unique_ptr<Expression> condition;
-				std::unique_ptr<BlockStatement> body;
+				std::shared_ptr<Expression> condition;
+				std::shared_ptr<BlockStatement> body;
 
 			};
 
 			class ElseClause : public Statement
 			{
 			public:
-				std::unique_ptr<BlockStatement> body;
+				std::shared_ptr<BlockStatement> body;
 			};
 
 			class WhileStatement : public Statement
 			{
 			public:
-				std::unique_ptr<Expression> condition;
-				std::unique_ptr<BlockStatement> body;
+				std::shared_ptr<Expression> condition;
+				std::shared_ptr<BlockStatement> body;
 			};
 
 			class DoWhileStatement : public Statement
 			{
 			public:
-				std::unique_ptr<Expression> condition;
-				std::unique_ptr<BlockStatement> body;
+				std::shared_ptr<Expression> condition;
+				std::shared_ptr<BlockStatement> body;
 			};
 
 			class ForStatement : public Statement
@@ -79,9 +79,9 @@ namespace Flaner
 			public:
 				struct CommonHeader
 				{
-					std::unique_ptr<Expression> initialization;
-					std::unique_ptr<Expression> condition;
-					std::unique_ptr<Expression> increment;
+					std::shared_ptr<Expression> initialization;
+					std::shared_ptr<Expression> condition;
+					std::shared_ptr<Expression> increment;
 				};
 
 				// 保留 for...in 和 for...of 语句的循环头定义
@@ -99,28 +99,18 @@ namespace Flaner
 
 			public:
 				Header header;
-				std::unique_ptr<BlockStatement> body;
+				std::shared_ptr<BlockStatement> body;
 			};
 
-			class CaseClause : public Statement
-			{
-			public:
-				std::unique_ptr<Expression> object;
-				std::unique_ptr<BlockStatement> body;
-			};
-
-			class DefaultClause : public Statement
-			{
-			public:
-				std::unique_ptr<BlockStatement> body;
-			};
+			// 若表达式指针为 nullptr，则该子句为 default 子句，否则为 case 子句
+			using SwitchClause = std::pair<std::shared_ptr<Expression>, std::shared_ptr<BlockStatement>>;
+			using SwitchClauseList = std::vector<std::shared_ptr<SwitchClause>>;
 
 			class SwitchStatement : public Statement
 			{
 			public:
-				std::unique_ptr<Expression> target;
-				std::vector<std::unique_ptr<CaseClause>> cases;
-				std::unique_ptr<DefaultClause> defaultClause;
+				std::shared_ptr<Expression> target;
+				std::shared_ptr<SwitchClauseList> clauseList;
 			};
 
 			class TryCatchStatement : public Statement
@@ -128,14 +118,14 @@ namespace Flaner
 			public:
 				struct CatchStatement
 				{
-					std::unique_ptr<Identifier> bindingId;
-					std::unique_ptr<BlockStatement> body;
+					std::shared_ptr<Identifier> bindingId;
+					std::shared_ptr<BlockStatement> body;
 				};
 
 			public:
-				std::unique_ptr<BlockStatement> tryBlockStatement;
-				std::vector<std::unique_ptr<CatchStatement>> catchBodies;
-				std::unique_ptr<BlockStatement> finallyBlockStatement;
+				std::shared_ptr<BlockStatement> tryBlockStatement;
+				std::vector<std::shared_ptr<CatchStatement>> catchBodies;
+				std::shared_ptr<BlockStatement> finallyBlockStatement;
 			};
 
 			class LabelStatement : public Statement
@@ -147,13 +137,13 @@ namespace Flaner
 			class BreakStatement : public Statement
 			{
 			public:
-				std::unique_ptr<LabelStatement> label;
+				std::shared_ptr<LabelStatement> label;
 			};
 
 			class ContinueStatement : public Statement
 			{
 			public:
-				std::unique_ptr<LabelStatement> label;
+				std::shared_ptr<LabelStatement> label;
 			};
 
 			class VisitorStatement : public Statement
@@ -173,7 +163,7 @@ namespace Flaner
 			public:
 				FunctionValue constructor;
 				Identifier name;
-				std::vector<std::unique_ptr<ObjectMember>> members;
+				std::vector<std::shared_ptr<ObjectMember>> members;
 			};
 
 			class ThrowStatement : public Statement
@@ -193,20 +183,20 @@ namespace Flaner
 			class WithStatement : public Statement
 			{
 			public:
-				std::unique_ptr<Value> object;
-				std::unique_ptr<BlockStatement> body;
+				std::shared_ptr<Value> object;
+				std::shared_ptr<BlockStatement> body;
 			};
 
 			class ReturnStatement : public Statement
 			{
 			public:
-				std::unique_ptr<Value> value;
+				std::shared_ptr<Value> value;
 			};
 
 			class YieldStatement : public Statement
 			{
 			public:
-				std::unique_ptr<Value> value;
+				std::shared_ptr<Value> value;
 			};
 
 		};

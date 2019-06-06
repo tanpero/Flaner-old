@@ -35,14 +35,12 @@ namespace Flaner
 
 			std::shared_ptr<AST::IfStatement> parseIfStatement(TokenList tokenList);
 
-			std::shared_ptr<AST::CaseClause>   parseCaseClause(TokenList tokenList);
-			std::shared_ptr<AST::DefaultClause> parseDefaultClause(TokenList tokenList);
+			std::shared_ptr<AST::SwitchClause> parseCaseClause(TokenList tokenList);
+			std::shared_ptr<AST::SwitchClause> parseDefaultClause(TokenList tokenList);
 			
-			using SwitchClause = std::optional<std::variant<std::shared_ptr<AST::CaseClause>, std::shared_ptr<AST::DefaultClause>>>;
-			SwitchClause parseSwitchClause(TokenList tokenList);
+			std::shared_ptr<AST::SwitchClause> parseSwitchClause(TokenList tokenList);
 			
-			using SwitchClauseList = std::vector<SwitchClause>;
-			SwitchClauseList parseSwitchClauseList(TokenList);
+			std::shared_ptr<AST::SwitchClauseList> parseSwitchClauseList(TokenList);
 
 			std::shared_ptr<AST::SwitchStatement> parseSwitchStatement(TokenList tokenList);			
 

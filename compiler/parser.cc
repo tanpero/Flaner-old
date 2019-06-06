@@ -16,7 +16,6 @@ namespace Flaner
 				return identifier;
 			}
 
-			
 			std::shared_ptr<AST::Value> parseValue(TokenList tokenList)
 			{
 				// TODO...
@@ -94,19 +93,21 @@ namespace Flaner
 				}
 
 				// 可能会抛出错误，否则一定获取了正确的值
-				//std::shared_ptr<AST::BlockStatement> body = parseBlockStatement(tokenList);
+				std::shared_ptr<AST::BlockStatement> body = parseBlockStatement(tokenList);
 
 				std::shared_ptr<AST::IfStatement> ifStatement;
 
-				//ifStatement->condition = expression;
-				//ifStatement->body = body;
+				ifStatement->condition = expression;
+				ifStatement->body = body;
 				
 				return ifStatement;
 			}
 
-			std::shared_ptr<AST::CaseClause> parseCaseClause(TokenList tokenList)
+			std::shared_ptr<AST::SwitchClause> parseCaseClause(TokenList tokenList)
 			{
 				Lex::Token token = tokenList->now();
+
+				// 如果关键字不是 case，那么它可能为 default 子句
 				if (token != Lex::TOKEN_CASE)
 				{
 					return nullptr;
@@ -126,16 +127,18 @@ namespace Flaner
 				tokenList->forward();
 				std::shared_ptr<AST::BlockStatement> block = parseBlockStatement(tokenList);
 
-				std::shared_ptr<AST::CaseClause> caseClause;
-				caseClause->object = std::move(expression);
-				caseClause->body = std::move(block);
-				return caseClause;
+				std::shared_ptr<AST::SwitchClause> clause;
+				clause->first = expression;
+				clause->second = block;
+
+				return clause;
 			}
 
-			std::shared_ptr<AST::DefaultClause> parseDefaultClause(TokenList tokenList)
+			std::shared_ptr<AST::SwitchClause> parseDefaultClause(TokenList tokenList)
 			{
 				Lex::Token token = tokenList->now();
 
+				// 如果不是 defualt，那么必然也不是 case，在 parseSwitchClause 中将产生错误
 				if (token != Lex::TOKEN_DEFAULT)
 				{
 					return nullptr;
@@ -152,15 +155,16 @@ namespace Flaner
 
 				std::shared_ptr<AST::BlockStatement> block = parseBlockStatement(tokenList);
 
-				std::shared_ptr<AST::DefaultClause> clause;
-				//clause->body = block;
+				std::shared_ptr<AST::SwitchClause> clause;
+				clause->first = nullptr;
+				clause->second = block;
 
 				return clause;
 			}
 
-			SwitchClause parseSwitchClause(TokenList tokenList)
+			std::shared_ptr<AST::SwitchClause> parseSwitchClause(TokenList tokenList)
 			{
-				std::variant<std::shared_ptr<AST::CaseClause>, std::shared_ptr<AST::DefaultClause>> clause;
+				std::shared_ptr<AST::SwitchClause> clause;
 				
 				clause = parseCaseClause(tokenList);
 				if (clause)
@@ -174,10 +178,10 @@ namespace Flaner
 					return clause;
 				}
 
-				return std::nullopt;
+				return nullptr;
 			}
 
-			SwitchClauseList parseSwitchClauseList(TokenList tokenList)
+			std::shared_ptr<AST::SwitchClauseList> parseSwitchClauseList(TokenList tokenList)
 			{
 				Lex::Token token = tokenList->now();
 
@@ -186,23 +190,21 @@ namespace Flaner
 					unexpected_token_syntax_error(token)
 				}
 
-				SwitchClauseList clauseList;
+				std::shared_ptr<AST::SwitchClauseList> clauseList;
 
 				while (true)
 				{
-					SwitchClause clause = parseSwitchClause(tokenList);
+					std::shared_ptr<AST::SwitchClause> clause = parseSwitchClause(tokenList);
 
 					if (!clause)
 					{
 						break;
 					}
-
-					clauseList.push_back(clause);
+					clauseList->push_back(clause);
 				}
 
 
 				token = tokenList->forward();
-				//token = tokenList->forward();
 
 				if (token != Lex::TOKEN_BRACE_END)
 				{
@@ -239,8 +241,8 @@ namespace Flaner
 
 				tokenList->forward();
 
-				std::vector<std::shared_ptr<AST::CaseClause>> cases;
-				std::shared_ptr<AST::CaseClause> oneCase;
+				std::vector<std::shared_ptr<AST::SwitchClause>> cases;
+				std::shared_ptr<AST::SwitchClause> oneCase;
 
 				do
 				{

@@ -23,10 +23,10 @@ namespace Flaner
 					name = token.value;
 				}
 
-				inline std::unique_ptr<Identifier> operator=(Lex::Token token)
+				inline std::shared_ptr<Identifier> operator=(Lex::Token token)
 				{
 					name = token.value;
-					return std::make_unique<Identifier>(token);
+					return std::make_shared<Identifier>(token);
 				}
 			};
 
