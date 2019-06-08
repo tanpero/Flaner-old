@@ -13,36 +13,7 @@ namespace Flaner
 		namespace AST
 		{
 
-			class Identifier
-			{
-			public:
-				std::string name;
-
-				Identifier(Lex::Token token)
-				{
-					name = token.value;
-				}
-
-				inline std::shared_ptr<Identifier> operator=(Lex::Token token)
-				{
-					name = token.value;
-					return std::make_shared<Identifier>(token);
-				}
-			};
-
-			class Declaration : public Statement
-			{
-			public:
-				enum Kind
-				{
-					Variable,
-					Constant
-				};
-
-			public:
-				Kind kind;
-				std::shared_ptr<Identifier> identifier;
-			};
+			
 
 		};
 	};

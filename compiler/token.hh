@@ -66,11 +66,18 @@ namespace Flaner
 					return value.data()[0];
 				}
 
-				// 用于确定 token 的范围
-				inline bool is(TokenType t)
+				// 以下方法用于确定 token 的范围
+
+				inline bool isStringLiteral()
 				{
-					return type == t;
+					return this->type == TOKEN_STRING;
 				}
+
+				inline bool isNumberLiteral()
+				{
+					return this->type == TOKEN_NUMBER;
+				}
+
 
 				// 用于确定 token 是否与指定类型相等
 				inline bool operator==(TokenType t)

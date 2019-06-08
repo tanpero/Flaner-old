@@ -80,7 +80,8 @@ namespace Flaner
 
 			std::shared_ptr<AST::Declaration> parseVariableDefintion(TokenList tokenList)
 			{
-				
+				// TODO...
+				return std::shared_ptr<AST::Declaration>();
 			}
 
 
@@ -104,13 +105,20 @@ namespace Flaner
 				return std::shared_ptr<AST::Value>();
 			}
 
-
+			// TODO...
+			/*
 			std::shared_ptr<AST::UnaryExpression> parseUnaryExpression(TokenList tokenList)
 			{
 				std::shared_ptr<AST::UnaryExpression> unaryExpression;
 
-				// 当前 token 一定是一个 unary operator
-				std::shared_ptr<AST::UnaryOperator> unaryOperator = std::make_shared<AST::UnaryOperator>(tokenList->now());
+				Lex::Token token = tokenList->now();
+
+				// 检测当前 token 是否为 unary operator
+				// TODO...
+				std::shared_ptr<AST::UnaryOperator> unaryOperator;
+				unaryOperator->name = std::make_shared<Lex::Token>(token);
+
+				tokenList->forward();
 
 				// 那么下一个 token 就应该是一个 value
 				std::shared_ptr<AST::Value> value = std::make_shared<AST::Value>(parseValue(tokenList));
@@ -125,7 +133,7 @@ namespace Flaner
 
 				return unaryExpression;
 			}
-
+			*/
 
 			std::shared_ptr<AST::Expression> parseExpression(TokenList tokenList)
 			{
@@ -135,6 +143,8 @@ namespace Flaner
 
 			std::shared_ptr<AST::BlockStatement> parseBlockStatement(TokenList tokenList)
 			{
+				// TODO...
+
 				// 使用大括号包裹的块语句，解析到对应的最后一个 '}'
 				if (tokenList->now() == Lex::TOKEN_BRACE_BEGIN)
 				{
@@ -146,6 +156,8 @@ namespace Flaner
 				{
 
 				}
+
+				return std::shared_ptr<AST::BlockStatement>();
 			}
 
 
@@ -345,7 +357,7 @@ namespace Flaner
 
 
 			std::shared_ptr<AST::ForInitializer> parseForInitializer(TokenList tokenList)
-			{
+			{/*
 				std::shared_ptr<AST::ForInitializer> initializer;
 				initializer = parseNullStatement(tokenList);
 				if (initializer)
@@ -366,7 +378,9 @@ namespace Flaner
 				}
 
 				initializer = parseExpression(tokenList);
-				return initializer;
+				return initializer;*/
+				return std::shared_ptr<AST::ForInitializer>();
+
 			}
 
 
