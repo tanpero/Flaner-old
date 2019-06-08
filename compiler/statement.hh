@@ -2,8 +2,7 @@
 #define  _FLANER_COMPILER_STATEMENT_HH_
 
 #include <global.hh>
-#include <declaration.hh>
-#include <expression.hh>
+#include <token.hh>
 
 #include <memory>
 #include <vector>
@@ -114,6 +113,8 @@ namespace Flaner
 				BinaryOperator(std::string op);
 				BinaryOperator(Lex::TokenType token);
 			};
+
+			class Value;
 
 			class UnaryExpression : public Expression
 			{

@@ -3,8 +3,7 @@
 
 #include <token.hh>
 #include <scanner.hh>
-#include <declaration.hh>
-#include <optional>
+#include <statement.hh>
 
 /*
 * File: parser.hh
