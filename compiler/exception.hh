@@ -39,10 +39,10 @@ namespace Flaner
 #define unexpected_token_syntax_error(token) \
 	do \
 	{ \
-		switch (token.type) \
+		switch (token->type) \
 		{ \
 		case Lex::TOKEN_UNKNOWN: \
-			syntax_error("Invalid or unexpected token '" + token.value + "'") \
+			syntax_error("Invalid or unexpected token '" + token->value + "'") \
 				break; \
 		case Lex::TOKEN_ID: \
 			syntax_error("Unexpected identifier") \
@@ -54,7 +54,7 @@ namespace Flaner
 			syntax_error("Unexpected string") \
 				break; \
 		default: \
-			syntax_error("Unexpected token" + token.value) \
+			syntax_error("Unexpected token" + token->value) \
 				break; \
 		} \
 	} \

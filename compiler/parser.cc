@@ -10,7 +10,7 @@ namespace Flaner
 		{
 			std::shared_ptr<AST::NullStatement> parseNullStatement(TokenList tokenList)
 			{
-				if (tokenList->now() == Lex::TOKEN_SEMICOLON)
+				if (tokenList->now()->noteq(Lex::TOKEN_SEMICOLON))
 				{
 					return std::make_shared<AST::NullStatement>();
 				}
@@ -23,12 +23,12 @@ namespace Flaner
 
 			std::shared_ptr<AST::Declaration> parseVariableDeclaration(TokenList tokenList)
 			{
-				Lex::Token now = tokenList->now();
-				Lex::Token forward = tokenList->forward();
+				std::shared_ptr<Lex::Token> now = tokenList->now();
+				std::shared_ptr<Lex::Token> forward = tokenList->forward();
 
-				if (now == Lex::TOKEN_LET)
+				if (now->noteq(Lex::TOKEN_LET))
 				{
-					if (forward != Lex::TOKEN_ID)
+					if (forward->noteq(Lex::TOKEN_ID))
 					{
 						unexpected_token_syntax_error(forward);
 					}
@@ -36,7 +36,7 @@ namespace Flaner
 					declaration->kind = AST::Declaration::Variable;
 
 					std::shared_ptr<AST::Identifier> id;
-					id->name = forward.value;
+					id->name = forward->value;
 					declaration->identifier = id;
 
 					tokenList->forward();
@@ -51,12 +51,12 @@ namespace Flaner
 
 			std::shared_ptr<AST::Declaration> parseConstantDeclaration(TokenList tokenList)
 			{
-				Lex::Token now = tokenList->now();
-				Lex::Token forward = tokenList->forward();
+				std::shared_ptr<Lex::Token> now = tokenList->now();
+				std::shared_ptr<Lex::Token> forward = tokenList->forward();
 
-				if (now == Lex::TOKEN_CONST)
+				if (now->noteq(Lex::TOKEN_CONST))
 				{
-					if (forward != Lex::TOKEN_ID)
+					if (forward->noteq(Lex::TOKEN_ID))
 					{
 						unexpected_token_syntax_error(forward);
 					}
@@ -65,7 +65,7 @@ namespace Flaner
 					declaration->kind = AST::Declaration::Variable;
 
 					std::shared_ptr<AST::Identifier> id;
-					id->name = forward.value;
+					id->name = forward->value;
 					declaration->identifier = id;
 
 					tokenList->forward();
@@ -90,10 +90,17 @@ namespace Flaner
 				return std::shared_ptr<AST::Declaration>();
 			}
 
-
+			
 			std::shared_ptr<AST::Identifier> parseIdentifier(TokenList tokenList)
 			{
-				std::shared_ptr<AST::Identifier> identifier = std::make_shared<AST::Identifier>(tokenList->now());
+				std::shared_ptr<Lex::Token> token = tokenList->now();
+				if (token->noteq(Lex::TOKEN_ID))
+				{
+					return nullptr;
+				}
+
+				std::shared_ptr<AST::Identifier> identifier;
+				identifier->name = token->value;
 
 				return identifier;
 			}
@@ -111,12 +118,12 @@ namespace Flaner
 			{
 				std::shared_ptr<AST::UnaryExpression> unaryExpression;
 
-				Lex::Token token = tokenList->now();
+				std::shared_ptr<Lex::Token> token = tokenList->now();
 
 				// 检测当前 token 是否为 unary operator
 				// TODO...
 				std::shared_ptr<AST::UnaryOperator> unaryOperator;
-				unaryOperator->name = std::make_shared<Lex::Token>(token);
+				unaryOperator->name = std::make_shared<std::shared_ptr<Lex::Token>(token);
 
 				tokenList->forward();
 
@@ -146,7 +153,7 @@ namespace Flaner
 				// TODO...
 
 				// 使用大括号包裹的块语句，解析到对应的最后一个 '}'
-				if (tokenList->now() == Lex::TOKEN_BRACE_BEGIN)
+				if (tokenList->now()->noteq( Lex::TOKEN_BRACE_BEGIN))
 				{
 
 				}
@@ -163,12 +170,12 @@ namespace Flaner
 
 			std::shared_ptr<AST::IfStatement> parseIfStatement(TokenList tokenList)
 			{
-				if (tokenList->now() != Lex::TOKEN_IF)
+				if (tokenList->now()->noteq(Lex::TOKEN_IF))
 				{
 					return nullptr;
 				}
 
-				if (tokenList->forward() != Lex::TOKEN_PAREN_BEGIN)
+				if (tokenList->forward()->noteq(Lex::TOKEN_PAREN_BEGIN))
 				{
 					unexpected_token_syntax_error(tokenList->now())
 				}
@@ -184,8 +191,8 @@ namespace Flaner
 				// 条件解析完毕，如果条件括号后的第一个 token 是起始括号以外的标点符号，
 				// 说明混入了奇奇怪怪的东西
 
-				Lex::Token next = tokenList->next();
-				if (Scanner::isPunctuation(next.raw_value()) && !Scanner::isBeginPunctuation(next.raw_value()))
+				std::shared_ptr<Lex::Token> next = tokenList->next();
+				if (Scanner::isPunctuation(next->raw_value()) && !Scanner::isBeginPunctuation(next->raw_value()))
 				{
 					unexpected_token_syntax_error(next)
 				}
@@ -204,10 +211,10 @@ namespace Flaner
 
 			std::shared_ptr<AST::SwitchClause> parseCaseClause(TokenList tokenList)
 			{
-				Lex::Token token = tokenList->now();
+				std::shared_ptr<Lex::Token> token = tokenList->now();
 
 				// 如果关键字不是 case，那么它可能为 default 子句
-				if (token != Lex::TOKEN_CASE)
+				if (token->noteq(Lex::TOKEN_CASE))
 				{
 					return nullptr;
 				}
@@ -218,7 +225,7 @@ namespace Flaner
 				std::shared_ptr<AST::Expression> expression = parseExpression(tokenList);
 				
 				token = tokenList->now();
-				if (token != Lex::TOKEN_COLON)
+				if (token->noteq(Lex::TOKEN_COLON))
 				{
 					unexpected_token_syntax_error(token);
 				}
@@ -236,17 +243,17 @@ namespace Flaner
 			
 			std::shared_ptr<AST::SwitchClause> parseDefaultClause(TokenList tokenList)
 			{
-				Lex::Token token = tokenList->now();
+				std::shared_ptr<Lex::Token> token = tokenList->now();
 
 				// 如果不是 defualt，那么必然也不是 case，在 parseSwitchClause 中将产生错误
-				if (token != Lex::TOKEN_DEFAULT)
+				if (token->noteq(Lex::TOKEN_DEFAULT))
 				{
 					return nullptr;
 				}
 
 				token = tokenList->forward();
 
-				if (token != Lex::TOKEN_COLON)
+				if (token->noteq(Lex::TOKEN_COLON))
 				{
 					unexpected_token_syntax_error(token)
 				}
@@ -285,9 +292,9 @@ namespace Flaner
 
 			std::shared_ptr<AST::SwitchClauseList> parseSwitchClauseList(TokenList tokenList)
 			{
-				Lex::Token token = tokenList->now();
+				std::shared_ptr<Lex::Token> token = tokenList->now();
 
-				if (token != Lex::TOKEN_BRACE_BEGIN)
+				if (token->noteq(Lex::TOKEN_BRACE_BEGIN))
 				{
 					unexpected_token_syntax_error(token)
 				}
@@ -308,7 +315,7 @@ namespace Flaner
 
 				token = tokenList->forward();
 
-				if (token != Lex::TOKEN_BRACE_END)
+				if (token->noteq(Lex::TOKEN_BRACE_END))
 				{
 					unexpected_token_syntax_error(token)
 				}
@@ -319,27 +326,27 @@ namespace Flaner
 
 			std::shared_ptr<AST::SwitchStatement> parseSwitchStatement(TokenList tokenList)
 			{
-				if (tokenList->now() != Lex::TOKEN_SWITCH)
+				if (tokenList->now()->noteq(Lex::TOKEN_SWITCH))
 				{
 					return nullptr;
 				}
 
 				std::shared_ptr<AST::SwitchStatement> switchStatement;
 
-				Lex::Token now = tokenList->forward();
+				std::shared_ptr<Lex::Token> now = tokenList->forward();
 
 				// 如果关键字后不是小括号
-				if (now != Lex::TOKEN_PAREN_BEGIN)
+				if (now->noteq(Lex::TOKEN_PAREN_BEGIN))
 				{
-					syntax_error("Invalid or unexpected token '" + now.value);
+					syntax_error("Invalid or unexpected token '" + now->value);
 				}
 
 				std::shared_ptr<AST::Expression> expression = parseExpression(tokenList);
 
 				// 如果关键字后不是大括号
-				if (now != Lex::TOKEN_BRACE_BEGIN)
+				if (now->noteq(Lex::TOKEN_BRACE_BEGIN))
 				{
-					syntax_error("Invalid or unexpected token '" + now.value);
+					syntax_error("Invalid or unexpected token '" + now->value);
 				}
 
 				tokenList->forward();

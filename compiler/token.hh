@@ -89,12 +89,23 @@ namespace Flaner
 				{
 					return type != t;
 				}
+
+				inline bool eq(TokenType t)
+				{
+					return *this == t;
+				}
+
+				inline bool noteq(TokenType t)
+				{
+					return *this != t;
+				}
 			};
 
 
 			class TokenList
 			{
-				std::vector<Token> tokens;
+				std::vector<std::shared_ptr<Token>> tokens;
+				unsigned int cursor;
 			public:
 
 				/*
@@ -104,39 +115,39 @@ namespace Flaner
 				*/
 
 				// 在末尾移入一个 token
-				void push(Token token);
+				void push(std::shared_ptr<Token> token);
 
 				// 移出并得到最后一个 token
-				Token pop();
+				std::shared_ptr<Token> pop();
 
 				// 设置游标位置
-				void reset(int n = 0);
+				void reset(unsigned int n = 0);
 
 				// 获取当前游标位置
 				int pos();
 
 				// 获取上一个 token，游标不变
-				Token last();
+				std::shared_ptr<Token> last();
 
 				// 获取当前 token
-				Token now();
+				std::shared_ptr<Token> now();
 
-				// 获取一个 token，游标不变
-				Token next();
+				// 获取下一个 token，游标不变
+				std::shared_ptr<Token> next();
 
 				// 将游标向前移动 n 个位置，并得到当前 token
-				Token forward(int n);
-				Token forward();
+				std::shared_ptr<Token> forward(unsigned int n);
+				std::shared_ptr<Token> forward();
 
 				// 将游标后前移动 n 个位置，并得到当前 token
-				Token backward(int n);
-				Token backward();
+				std::shared_ptr<Token> backward(unsigned int n);
+				std::shared_ptr<Token> backward();
 
 				// 获取第一个 token
-				Token first();
+				std::shared_ptr<Token> first();
 
 				// 获取最后一个 token
-				Token end();
+				std::shared_ptr<Token> end();
 				
 			};
 		};
