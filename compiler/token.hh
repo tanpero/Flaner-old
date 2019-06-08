@@ -61,6 +61,8 @@ namespace Flaner
 				TokenType type;
 				std::string value;
 
+				Token(TokenType _type, std::string _value) : type(_type), value(_value) {}
+
 				inline char raw_value()
 				{
 					return value.data()[0];
@@ -107,6 +109,8 @@ namespace Flaner
 				std::vector<std::shared_ptr<Token>> tokens;
 				unsigned int cursor;
 			public:
+
+				TokenList() : tokens(std::vector<std::shared_ptr<Token>>()), cursor(0) {}
 
 				/*
 				*  ı”Ô∂®“Â
