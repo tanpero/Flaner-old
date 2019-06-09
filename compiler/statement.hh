@@ -57,25 +57,21 @@ namespace Flaner
 					name = token.value;
 				}
 
-				inline std::shared_ptr<Identifier> operator=(Lex::Token token)
-				{
-					name = token.value;
-					return std::make_shared<Identifier>(token);
-				}
+				Identifier() : name("") {}
 			};
 
 			class Declaration : public Statement
 			{
 			public:
-				enum Kind
+				enum Kind : int
 				{
-					Variable,
-					Constant
+					Variable = 0,
+					Constant = 1
 				};
 
 			public:
 				Kind kind;
-				std::shared_ptr<Identifier> identifier;
+				Identifier identifier;
 			};
 
 

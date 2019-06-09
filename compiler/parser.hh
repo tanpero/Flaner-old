@@ -17,7 +17,7 @@ namespace Flaner
 		namespace Parser
 		{
 
-			using TokenList = std::shared_ptr<Lex::TokenList>;
+			using TokenList = Lex::TokenList;
 
 			std::shared_ptr<AST::NullStatement> parseNullStatement(TokenList tokenList);
 

@@ -47,6 +47,8 @@ namespace Flaner
 				TOKEN_BRACE_END,
 
 				TOKEN_ASSIGN,
+				TOKEN_PLUS,
+				TOKEN_MINUS,
 
 				TOKEN_COLON,
 				TOKEN_COMMA,
@@ -106,11 +108,12 @@ namespace Flaner
 
 			class TokenList
 			{
+			public:
 				std::vector<std::shared_ptr<Token>> tokens;
 				unsigned int cursor;
 			public:
 
-				TokenList() : tokens(std::vector<std::shared_ptr<Token>>()), cursor(0) {}
+				TokenList() : cursor(0) {}
 
 				/*
 				*  ı”Ô∂®“Â

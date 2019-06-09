@@ -37,13 +37,13 @@ namespace Flaner
 				{
 					return nullptr;
 				}
-				return *(tokens.begin() + cursor - 1);
+				return tokens.at(cursor - 1);
 			}
 
 			// 获取当前 token
 			std::shared_ptr<Token> TokenList::now()
 			{
-				return *(tokens.begin() + cursor);
+				return tokens.at(cursor);
 			}
 
 			// 获取下一个 token，游标不变
@@ -53,7 +53,7 @@ namespace Flaner
 				{
 					return nullptr;
 				}
-				return *(tokens.begin() + cursor + 1);
+				return tokens.at(cursor + 1);
 			}
 
 			// 将游标向前移动 n 个位置，并得到当前 token
@@ -69,7 +69,7 @@ namespace Flaner
 					cursor += n;
 				}
 
-				return *(tokens.begin() + cursor);
+				return tokens.at(cursor);
 			}
 
 			std::shared_ptr<Token> TokenList::forward()
@@ -90,7 +90,7 @@ namespace Flaner
 					cursor -= n;
 				}
 
-				return *(tokens.begin() + cursor);
+				return tokens.at(cursor);
 			}
 
 			std::shared_ptr<Token> TokenList::backward()
