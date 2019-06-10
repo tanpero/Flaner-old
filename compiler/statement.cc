@@ -31,7 +31,7 @@ namespace Flaner
 			}
 
 
-			void StatementSequence::insert(Statement statement)
+			void StatementSequence::insert(std::shared_ptr<Statement> statement)
 			{
 			}
 

@@ -17,7 +17,7 @@ namespace Flaner
 		namespace Parser
 		{
 
-			using TokenList = Lex::TokenList;
+			using TokenList = std::shared_ptr<Lex::TokenList>;
 
 			std::shared_ptr<AST::NullStatement> parseNullStatement(TokenList tokenList);
 
@@ -35,10 +35,18 @@ namespace Flaner
 			// 调用此函数时，当前 token 是 '(' 或 identifier
 			std::shared_ptr<AST::Value> parseValue(TokenList tokenList);
 
+			// 解析否定表达式
+			std::shared_ptr<bool> parseNegation(TokenList tokenList);
+
+			// 解析一个块（包含在块语句内）
+			std::shared_ptr<AST::StatementSequence> parseBlock(TokenList tokenList);
+			std::shared_ptr<AST::BlockStatement> parseBlockStatement(TokenList tokenList);
+
 			std::shared_ptr<AST::UnaryExpression> parseUnaryExpression(TokenList tokenList);
 
 			std::shared_ptr<AST::Expression> parseExpression(TokenList tokenList);
 
+			std::shared_ptr<AST::Statement> parseStatement(TokenList tokenList);
 
 			std::shared_ptr<AST::BlockStatement> parseBlockStatement(TokenList tokenList);
 

@@ -60,6 +60,13 @@ namespace Flaner
 	} \
 	while (false); 
 
+#define unexpected_end_of_input_syntax_error(begin_token) \
+	do \
+	{ \
+		syntax_error("Unexpected end of input (after " + begin_token->value + ")") \
+	} \
+	while (false);
+
 #define compiler_warn(info) \
 	do \
 	{ \

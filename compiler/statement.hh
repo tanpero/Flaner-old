@@ -30,7 +30,7 @@ namespace Flaner
 			public:
 				std::shared_ptr<Statement> get();
 				bool next();
-				void insert(Statement statement);
+				void insert(std::shared_ptr<Statement> statement);
 
 			};
 
