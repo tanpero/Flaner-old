@@ -12,7 +12,8 @@ int main()
 	
 	//IO::File file();	
 
-	std::cout << "Tanpero Flaner Compiler 1.0.0" << std::endl;
+	std::cout << "\nTanpero Flaner Compiler 1.0.0" << 
+		"\n------------\n\n" << std::endl;
 
 	try
 	{
@@ -28,15 +29,10 @@ int main()
 		list.push(t2);
 		list.push(t3);
 		list.push(t4);
-
-		std::cout << list.first()->value << std::endl;
-
-
+		
 		std::shared_ptr<AST::Declaration> declaration = Parser::parseConstantDeclaration(list);
-		std::cout << "1234" << std::endl;
-		declaration->identifier.name.data();
-		//std::cout << declaration->identifier.name << std::endl;
-		std::cout << "5678" << std::endl;
+		std::cout << "kind is " << list.first()->value << std::endl;
+		std::cout << "value is " << declaration->identifier.name << std::endl;
 	}
 	catch (const std::exception& e)
 	{

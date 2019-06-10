@@ -54,8 +54,6 @@ namespace Flaner
 				std::shared_ptr<Lex::Token> now = tokenList.now();
 				std::shared_ptr<Lex::Token> forward = tokenList.forward();
 
-				std::cout << "this token is " << now->value << std::endl;
-
 				if (now->noteq(Lex::TOKEN_CONST))
 				{
 					return nullptr;
@@ -66,21 +64,10 @@ namespace Flaner
 					unexpected_token_syntax_error(forward);
 				}
 
+				std::shared_ptr<AST::Declaration> declaration = std::make_shared<AST::Declaration>();
 
-				std::cout << "2 this token is " << now->value << std::endl;
-
-				std::shared_ptr<AST::Declaration> declaration;
-
-				std::cout << "3 this token is " << now->value << std::endl;
-				declaration->kind;
-				
-				std::cout << "4 this token is " << now->value << std::endl;
-				AST::Declaration::Constant;
-				std::cout << "4 this token is " << now->value << std::endl;
 				declaration->kind = AST::Declaration::Constant;
 
-
-				std::cout << "5 this token is " << now->value << std::endl;
 				AST::Identifier id;
 				id.name = forward->value;
 				declaration->identifier = id;
