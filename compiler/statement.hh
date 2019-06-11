@@ -75,6 +75,13 @@ namespace Flaner
 			};
 
 
+			class Instantiation : Statement
+			{
+			public:
+				Identifier className;
+			};
+
+
 			class Expression : public Statement
 			{
 			public:

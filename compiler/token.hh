@@ -38,6 +38,9 @@ namespace Flaner
 				TOKEN_CONTINUE,
 				TOKEN_BREAK,
 				TOKEN_RETURN,
+				TOKEN_AS,
+				TOKEN_IMPORT,
+				TOKEN_EXPORT,
 				
 				TOKEN_PAREN_BEGIN,
 				TOKEN_PAREN_END,

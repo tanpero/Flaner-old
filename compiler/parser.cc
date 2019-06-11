@@ -79,6 +79,29 @@ namespace Flaner
 			}
 
 
+			std::shared_ptr<AST::Instantiation> parseInstantiation(TokenList tokenList)
+			{
+				if (tokenList->now()->noteq(Lex::TOKEN_AS))
+				{
+					return nullptr;
+				}
+
+				std::shared_ptr<Lex::Token> id = tokenList->forward();
+				if (id->noteq(Lex::TOKEN_ID))
+				{
+					unexpected_token_syntax_error(id)
+				}
+				
+				AST::Identifier className;
+				className.name = id->value;
+
+				std::shared_ptr<AST::Instantiation> instantiation = std::make_shared<AST::Instantiation>();
+				instantiation->className = className;
+
+				return instantiation;
+			}
+
+
 			std::shared_ptr<AST::Declaration> parseVariableDefintion(TokenList tokenList)
 			{
 				// TODO...
