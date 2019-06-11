@@ -213,7 +213,8 @@ namespace Flaner
 			public:
 				Declaration::Kind kind;
 				Identifier identifier;
-				Value initialized;
+				std::shared_ptr<Value> initializedValue;
+				std::shared_ptr<Instantiation> instantiation;
 			};
 
 

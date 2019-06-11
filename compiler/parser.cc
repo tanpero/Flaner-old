@@ -28,24 +28,22 @@ namespace Flaner
 
 				if (now->noteq(Lex::TOKEN_LET))
 				{
-					if (forward->noteq(Lex::TOKEN_ID))
-					{
-						unexpected_token_syntax_error(forward);
-					}
-					std::shared_ptr<AST::Declaration> declaration;
-					declaration->kind = AST::Declaration::Variable;
-
-					AST::Identifier id;
-					id.name = forward->value;
-					declaration->identifier = id;
-
-					tokenList->forward();
-					return declaration;
-				}
-				else
-				{
 					return nullptr;
 				}
+
+				if (forward->noteq(Lex::TOKEN_ID))
+				{
+					unexpected_token_syntax_error(forward);
+				}
+				std::shared_ptr<AST::Declaration> declaration;
+				declaration->kind = AST::Declaration::Variable;
+
+				AST::Identifier id;
+				id.name = forward->value;
+				declaration->identifier = id;
+
+				tokenList->forward();
+				return declaration;
 			}
 
 
@@ -98,20 +96,52 @@ namespace Flaner
 				std::shared_ptr<AST::Instantiation> instantiation = std::make_shared<AST::Instantiation>();
 				instantiation->className = className;
 
+				tokenList->forward();
+
 				return instantiation;
 			}
 
 
-			std::shared_ptr<AST::Declaration> parseVariableDefintion(TokenList tokenList)
+			std::shared_ptr<AST::DefintionStatement> parseVariableDefintion(TokenList tokenList)
 			{
-				// TODO...
-				return std::shared_ptr<AST::Declaration>();
+				std::shared_ptr<AST::Declaration> declaration = parseVariableDeclaration(tokenList);
+
+				// 不是一个变量声明
+				if (!declaration)
+				{
+					return nullptr;
+				}
+
+				// 如果 instantiation 为 nullptr，则省略
+				std::shared_ptr<AST::Instantiation> instantiation = parseInstantiation(tokenList);
+
+				std::shared_ptr<AST::Value> initializedValue = std::make_shared<AST::Value>();
+				
+				// 如果接下来没有赋值操作，初始值为 nullptr
+				if (tokenList->now()->noteq(Lex::TOKEN_ASSIGN))
+				{
+					initializedValue = nullptr;
+					goto end;
+				}
+				
+				tokenList->forward();
+
+				initializedValue = parseValue(tokenList);
+
+			end:
+				std::shared_ptr<AST::DefintionStatement> defintionStatement = std::make_shared<AST::DefintionStatement>();
+				defintionStatement->kind = declaration->kind;
+				defintionStatement->identifier = declaration->identifier;
+				defintionStatement->instantiation = instantiation;
+				defintionStatement->initializedValue = initializedValue;
+
+				return defintionStatement;				
 			}
 
 
-			std::shared_ptr<AST::Declaration> parseConstantDefintion(TokenList tokenList)
+			std::shared_ptr<AST::DefintionStatement> parseConstantDefintion(TokenList tokenList)
 			{
-				return std::shared_ptr<AST::Declaration>();
+				return std::shared_ptr<AST::DefintionStatement>();
 			}
 
 			

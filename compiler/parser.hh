@@ -29,8 +29,8 @@ namespace Flaner
 			std::shared_ptr<AST::Instantiation> parseInstantiation(TokenList tokenList);
 
 			// 声明 + 赋值语句
-			std::shared_ptr<AST::Declaration> parseVariableDefintion(TokenList tokenList);
-			std::shared_ptr<AST::Declaration> parseConstantDefintion(TokenList tokenList);
+			std::shared_ptr<AST::DefintionStatement> parseVariableDefintion(TokenList tokenList);
+			std::shared_ptr<AST::DefintionStatement> parseConstantDefintion(TokenList tokenList);
 
 			//  调用时此函数时，当前 token 已经是 identifier
 			std::shared_ptr<AST::Identifier> parseIdentifier(TokenList tokenList);
