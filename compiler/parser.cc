@@ -113,6 +113,11 @@ namespace Flaner
 				return std::shared_ptr<AST::Value>();
 			}
 
+			std::shared_ptr<bool> parseNegationExpression(TokenList tokenList)
+			{
+				return std::shared_ptr<bool>();
+			}
+
 			// TODO...
 			/*
 			std::shared_ptr<AST::UnaryExpression> parseUnaryExpression(TokenList tokenList)
@@ -146,6 +151,11 @@ namespace Flaner
 			std::shared_ptr<AST::Expression> parseExpression(TokenList tokenList)
 			{
 				return std::shared_ptr<AST::Expression>();
+			}
+
+			std::shared_ptr<AST::Statement> parseStatement(TokenList tokenList)
+			{
+				return std::shared_ptr<AST::Statement>();
 			}
 
 
@@ -197,6 +207,11 @@ namespace Flaner
 				}
 
 				return std::shared_ptr<AST::BlockStatement>();
+			}
+
+			std::shared_ptr<AST::UnaryExpression> parseUnaryExpression(TokenList tokenList)
+			{
+				return std::shared_ptr<AST::UnaryExpression>();
 			}
 
 

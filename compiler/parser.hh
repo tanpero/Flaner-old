@@ -36,9 +36,9 @@ namespace Flaner
 			std::shared_ptr<AST::Value> parseValue(TokenList tokenList);
 
 			// 解析否定表达式
-			std::shared_ptr<bool> parseNegation(TokenList tokenList);
+			std::shared_ptr<bool> parseNegationExpression(TokenList tokenList);
 
-			// 解析一个块（包含在块语句内）
+			// 解析一个块（包含在块语句内）·
 			std::shared_ptr<AST::StatementSequence> parseBlock(TokenList tokenList);
 			std::shared_ptr<AST::BlockStatement> parseBlockStatement(TokenList tokenList);
 
