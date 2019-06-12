@@ -20,6 +20,14 @@ namespace Flaner
 				}
 			}
 
+			void checkWithSemicolon(TokenList tokenList)
+			{
+				if (tokenList->next()->noteq(Lex::TOKEN_SEMICOLON))
+				{
+					missing_semicolon_after_statement_syntax_error()
+				}
+			}
+
 
 			std::shared_ptr<AST::Declaration> parseVariableDeclaration(TokenList tokenList)
 			{
@@ -135,6 +143,8 @@ namespace Flaner
 				defintionStatement->instantiation = instantiation;
 				defintionStatement->initializer = initializer;
 
+				checkWithSemicolon(tokenList);
+
 				return defintionStatement;				
 			}
 
@@ -169,6 +179,8 @@ namespace Flaner
 				defintionStatement->identifier = declaration->identifier;
 				defintionStatement->instantiation = instantiation;
 				defintionStatement->initializer = initializer;
+
+				checkWithSemicolon(tokenList);
 
 				return defintionStatement;
 			}

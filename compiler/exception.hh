@@ -72,7 +72,14 @@ namespace Flaner
 	{ \
 		syntax_error("Missing initializer in const declaration (for constant " + identifier.name + ")") \
 	} \
-	while (true);
+	while (false);
+
+#define missing_semicolon_after_statement_syntax_error() \
+	do \
+	{ \
+		syntax_error("Missing semicolon after statement") \
+	} \
+	while (false);
 
 #define compiler_warn(info) \
 	do \

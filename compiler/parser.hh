@@ -21,6 +21,8 @@ namespace Flaner
 
 			std::shared_ptr<AST::NullStatement> parseNullStatement(TokenList tokenList);
 
+			void checkWithSemicolon(TokenList tokenList);
+
 			// 仅为声明
 			std::shared_ptr<AST::Declaration> parseVariableDeclaration(TokenList tokenList);
 			std::shared_ptr<AST::Declaration> parseConstantDeclaration(TokenList tokenList);
@@ -31,6 +33,10 @@ namespace Flaner
 			// 声明 + 赋值语句
 			std::shared_ptr<AST::DefintionStatement> parseVariableDefintion(TokenList tokenList);
 			std::shared_ptr<AST::DefintionStatement> parseConstantDefintion(TokenList tokenList);
+
+			// 函数参数列表
+			std::shared_ptr<AST::ParamsList> parseParameterList(TokenList tokenList);
+			std::shared_ptr<AST::ParamsList> parseParameterListDeclaration(TokenList tokenList);
 
 			//  调用时此函数时，当前 token 已经是 identifier
 			std::shared_ptr<AST::Identifier> parseIdentifier(TokenList tokenList);
