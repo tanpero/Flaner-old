@@ -309,6 +309,11 @@ namespace Flaner
 				return paramsList;
 			}
 
+			std::shared_ptr<AST::FunctionValue> parseFunctionDefintion(TokenList tokenList)
+			{
+				return std::shared_ptr<AST::FunctionValue>();
+			}
+
 			
 			std::shared_ptr<AST::Identifier> parseIdentifier(TokenList tokenList)
 			{

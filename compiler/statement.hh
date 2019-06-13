@@ -156,6 +156,9 @@ namespace Flaner
 				std::shared_ptr<Expression> defaultValueExpr;
 				std::shared_ptr<Identifier> id;
 
+				Param()
+					: hasDefaultValue(false), isRest(false), defaultValueExpr(nullptr), id(nullptr) {}
+
 				Param(std::shared_ptr<Identifier> id) 
 					: hasDefaultValue(false), isRest(false), defaultValueExpr(nullptr), id(id) {}
 

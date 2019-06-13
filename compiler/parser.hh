@@ -38,6 +38,9 @@ namespace Flaner
 			std::shared_ptr<AST::ParamsList> parseParameterList(TokenList tokenList);
 			std::shared_ptr<AST::ParamsList> parseParameterListDeclaration(TokenList tokenList);
 
+			// 函数
+			std::shared_ptr<AST::FunctionValue> parseFunctionDefintion(TokenList tokenList);
+
 			//  调用时此函数时，当前 token 已经是 identifier
 			std::shared_ptr<AST::Identifier> parseIdentifier(TokenList tokenList);
 
