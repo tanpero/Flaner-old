@@ -151,13 +151,13 @@ namespace Flaner
 			class Param
 			{
 			public:
-				bool hasDefaultValue();
-				bool isRest();
-				std::shared_ptr<Value> defaultValue;
+				bool hasDefaultValue;
+				bool isRest;
+				std::shared_ptr<Expression> defaultValueExpr;
 				std::shared_ptr<Identifier> id;
 
-				Param(std::shared_ptr<Identifier> _id, std::shared_ptr<Value> _defaultValue = false)
-					: id(_id), defaultValue(_defaultValue) {}
+				Param(std::shared_ptr<Identifier> id) 
+					: hasDefaultValue(false), isRest(false), defaultValueExpr(nullptr), id(id) {}
 
 			};
 
@@ -174,6 +174,11 @@ namespace Flaner
 				inline list::iterator end()
 				{
 					return params.end();
+				}
+
+				inline void insert(std::shared_ptr<Param> param)
+				{
+					params.push_back(param);
 				}
 
 				unsigned int getLength();

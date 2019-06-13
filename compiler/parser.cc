@@ -185,6 +185,111 @@ namespace Flaner
 				return defintionStatement;
 			}
 
+			std::shared_ptr<AST::ParamsList> parseParameterList(TokenList tokenList)
+			{
+
+				// 一旦开始出现默认参数，那么其后的参数必须都是默认参数
+				bool hasDefaultParam = false;
+				std::shared_ptr<AST::ParamsList> paramsList = std::make_shared<AST::ParamsList>();
+				std::shared_ptr<AST::Identifier> name = parseIdentifier(tokenList);
+
+				// 如果是一个标识符
+				if (name)
+				{
+					while (true)
+					{
+
+						std::shared_ptr<Lex::Token> forward = tokenList->forward();
+						if (forward->eq(Lex::TOKEN_COMMA))
+						{
+							// 默认实参后只能跟随默认实参
+							if (hasDefaultParam)
+							{
+								syntax_error("After the default parameter can only follow the default parameter")
+							}
+
+							std::shared_ptr<AST::Param> param = std::make_shared<AST::Param>(name);
+							paramsList->insert(param);
+
+							tokenList->forward();
+							name = parseIdentifier(tokenList);
+						}
+
+						// 是一个默认实参
+						else if (forward->eq(Lex::TOKEN_ASSIGN))
+						{
+
+							// 接下来应为表达式
+							std::shared_ptr<Lex::Token> testToken = tokenList->forward();
+							std::shared_ptr<AST::Expression> expr = parseExpression(tokenList);
+
+							hasDefaultParam = true;
+
+							// 引发错误
+							if (!expr)
+							{
+								unexpected_token_syntax_error(testToken)
+							}
+
+							std::shared_ptr<AST::Param> param = std::make_shared<AST::Param>(name);
+							param->hasDefaultValue = true;
+							param->defaultValueExpr = expr;
+							param->isRest = false;
+
+							paramsList->insert(param);
+
+							tokenList->forward();
+							name = parseIdentifier(tokenList);
+						}
+
+						break;
+
+					}
+				}
+
+				if (tokenList->backward()->eq(Lex::TOKEN_DOT_DOT_DOT))
+				{
+					std::shared_ptr<AST::Param> param = std::make_shared<AST::Param>();
+
+					param->isRest = true;
+
+					tokenList->forward();
+
+					std::shared_ptr<AST::Identifier> id = parseIdentifier(tokenList);
+
+					if (tokenList->next()->noteq(Lex::TOKEN_PAREN_END))
+					{
+						if (tokenList->next()->eq(Lex::TOKEN_ASSIGN))
+						{
+							syntax_error("Rest parameter may not have a default initializer")
+						}
+						else
+						{
+							syntax_error("Rest parameter must be last formal parameter")
+						}
+					}
+
+					if (!id)
+					{
+						unexpected_token_syntax_error(tokenList->next())
+					}
+
+					param->id = id;
+
+					paramsList->insert(param);
+
+					// rest 参数后不允许接受其他参数，也不允许为默认参数
+					return paramsList;
+				}
+					
+				else
+				{
+					unexpected_token_syntax_error(tokenList->now())
+				}
+
+				return paramsList;
+			}
+
 			
 			std::shared_ptr<AST::Identifier> parseIdentifier(TokenList tokenList)
 			{
