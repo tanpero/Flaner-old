@@ -81,6 +81,13 @@ namespace Flaner
 	} \
 	while (false);
 
+#define unclosing_parentheses_syntax_error() \
+	do \
+	{ \
+		syntax_error("Unclosing parentheses") \
+	} \
+	while (false);
+
 #define compiler_warn(info) \
 	do \
 	{ \

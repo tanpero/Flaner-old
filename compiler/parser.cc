@@ -290,6 +290,25 @@ namespace Flaner
 				return paramsList;
 			}
 
+			std::shared_ptr<AST::ParamsList> parseParameterListDeclaration(TokenList tokenList)
+			{
+				if (tokenList->now()->noteq(Lex::TOKEN_PAREN_BEGIN))
+				{
+					return nullptr;
+				}
+
+				tokenList->forward();
+
+				std::shared_ptr<AST::ParamsList> paramsList = parseParameterList(tokenList);
+
+				if (tokenList->forward()->noteq(Lex::TOKEN_PAREN_END))
+				{
+					unclosing_parentheses_syntax_error()
+				}
+				
+				return paramsList;
+			}
+
 			
 			std::shared_ptr<AST::Identifier> parseIdentifier(TokenList tokenList)
 			{
