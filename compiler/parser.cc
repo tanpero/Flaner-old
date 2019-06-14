@@ -409,23 +409,21 @@ namespace Flaner
 
 			std::shared_ptr<AST::BlockStatement> parseBlockStatement(TokenList tokenList)
 			{
-				// TODO...
+
+				std::shared_ptr<AST::BlockStatement> blockStatement = std::make_shared<AST::BlockStatement>();
 
 				// 使用大括号包裹的块语句，解析到对应的最后一个 '}'
 				if (tokenList->now()->eq(Lex::TOKEN_BRACE_BEGIN))
 				{
-					std::shared_ptr<AST::BlockStatement> blockStatement = std::make_shared<AST::BlockStatement>();
 					blockStatement->body = parseBlock(tokenList);
-					return blockStatement;
+
+					if (!blockStatement)
+					{
+						return nullptr;
+					}
 				}
 
-				// 解析到第一个分号
-				else
-				{
-
-				}
-
-				return std::shared_ptr<AST::BlockStatement>();
+				return nullptr;
 			}
 
 			std::shared_ptr<AST::UnaryExpression> parseUnaryExpression(TokenList tokenList)
