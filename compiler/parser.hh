@@ -30,6 +30,9 @@ namespace Flaner
 			// 对象类型实例化说明
 			std::shared_ptr<AST::Instantiation> parseInstantiation(TokenList tokenList);
 
+			// 初始化
+			std::shared_ptr<AST::Expression> parseEqualInitializer(TokenList tokenList);
+
 			// 声明 + 赋值语句
 			std::shared_ptr<AST::DefintionStatement> parseVariableDefintion(TokenList tokenList);
 			std::shared_ptr<AST::DefintionStatement> parseConstantDefintion(TokenList tokenList);

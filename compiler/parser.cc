@@ -109,6 +109,18 @@ namespace Flaner
 				return instantiation;
 			}
 
+			std::shared_ptr<AST::Expression> parseEqualInitializer(TokenList tokenList)
+			{
+				if (tokenList->now()->noteq(Lex::TOKEN_ASSIGN))
+				{
+					return nullptr;
+				}
+
+				tokenList->forward();
+
+				return parseExpression(tokenList);
+			}
+
 
 			std::shared_ptr<AST::DefintionStatement> parseVariableDefintion(TokenList tokenList)
 			{
@@ -123,20 +135,11 @@ namespace Flaner
 				// 如果 instantiation 为 nullptr，则省略
 				std::shared_ptr<AST::Instantiation> instantiation = parseInstantiation(tokenList);
 
-				std::shared_ptr<AST::Value> initializer = std::make_shared<AST::Value>();
+				std::shared_ptr<AST::Expression> initializer = std::make_shared<AST::Expression>();
 				
 				// 如果接下来没有赋值操作，初始值为 nullptr
-				if (tokenList->now()->noteq(Lex::TOKEN_ASSIGN))
-				{
-					initializer = nullptr;
-					goto end;
-				}
-				
-				tokenList->forward();
+				initializer = parseEqualInitializer(tokenList);
 
-				initializer = parseValue(tokenList);
-
-			end:
 				std::shared_ptr<AST::DefintionStatement> defintionStatement = std::make_shared<AST::DefintionStatement>();
 				defintionStatement->kind = declaration->kind;
 				defintionStatement->identifier = declaration->identifier;
@@ -172,7 +175,7 @@ namespace Flaner
 
 				tokenList->forward();
 
-				initializer = parseValue(tokenList);
+				initializer = parseExpression(tokenList);
 
 				std::shared_ptr<AST::DefintionStatement> defintionStatement = std::make_shared<AST::DefintionStatement>();
 				defintionStatement->kind = declaration->kind;

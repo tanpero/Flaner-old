@@ -225,7 +225,7 @@ namespace Flaner
 			public:
 				Declaration::Kind kind;
 				Identifier identifier;
-				std::shared_ptr<Value> initializer;
+				std::shared_ptr<Expression> initializer;
 				std::shared_ptr<Instantiation> instantiation;
 			};
 
