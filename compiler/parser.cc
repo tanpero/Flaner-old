@@ -213,6 +213,7 @@ namespace Flaner
 
 							tokenList->forward();
 							name = parseIdentifier(tokenList);
+							paramsList->insert(std::make_shared<AST::Param>(name));
 						}
 
 						// 是一个默认实参
@@ -247,7 +248,7 @@ namespace Flaner
 					}
 				}
 
-				if (tokenList->backward()->eq(Lex::TOKEN_DOT_DOT_DOT))
+				if (tokenList->forward()->eq(Lex::TOKEN_DOT_DOT_DOT))
 				{
 					std::shared_ptr<AST::Param> param = std::make_shared<AST::Param>();
 
@@ -280,11 +281,6 @@ namespace Flaner
 
 					// rest 参数后不允许接受其他参数，也不允许为默认参数
 					return paramsList;
-				}
-					
-				else
-				{
-					unexpected_token_syntax_error(tokenList->now())
 				}
 
 				return paramsList;
@@ -323,8 +319,8 @@ namespace Flaner
 					return nullptr;
 				}
 
-				std::shared_ptr<AST::Identifier> identifier;
-				identifier->name = token->value;
+				std::shared_ptr<AST::Identifier> identifier =
+					std::make_shared<AST::Identifier>(token->value);
 
 				return identifier;
 			}

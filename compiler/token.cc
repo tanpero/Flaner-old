@@ -109,6 +109,6 @@ namespace Flaner
 			{
 				return tokens.back();
 			}
-		}
-	}
-}
+		};
+	};
+};

@@ -116,7 +116,7 @@ namespace Flaner
 				unsigned int cursor;
 			public:
 
-				TokenList() : cursor(0) {}
+				TokenList() noexcept : cursor(0) {}
 
 				/*
 				*  ı”Ô∂®“Â

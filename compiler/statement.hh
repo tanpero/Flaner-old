@@ -58,6 +58,7 @@ namespace Flaner
 				}
 
 				Identifier() : name("") {}
+				Identifier(std::string name) : name(name) {}
 			};
 
 			class Declaration : public Statement
@@ -184,7 +185,10 @@ namespace Flaner
 					params.push_back(param);
 				}
 
-				unsigned int getLength();
+				inline unsigned int getLength()
+				{
+					return params.size();
+				}
 			};
 
 			class FunctionValue : public Value
