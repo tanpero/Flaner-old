@@ -501,6 +501,28 @@ namespace Flaner
 			}
 
 
+			std::shared_ptr<AST::ElseClause> parseElseBranch(TokenList tokenList)
+			{
+				if (tokenList->now()->noteq(Lex::TOKEN_ELSE))
+				{
+					return nullptr;
+				}
+
+				tokenList->forward();
+
+				std::shared_ptr<AST::BlockStatement> block = parseBlockStatement(tokenList);
+
+				if (!block)
+				{
+					unexpected_end_of_input_syntax_error(tokenList->now)
+				}
+				
+				std::shared_ptr<AST::ElseClause> clause = std::make_shared<AST::ElseClause>();
+				clause->body = block;
+
+				return clause;
+			}
+
 			std::shared_ptr<AST::IfStatement> parseIfStatement(TokenList tokenList)
 			{
 				if (tokenList->now()->noteq(Lex::TOKEN_IF))

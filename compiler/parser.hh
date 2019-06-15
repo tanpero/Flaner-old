@@ -68,6 +68,7 @@ namespace Flaner
 
 			std::shared_ptr<AST::BlockStatement> parseBlockStatement(TokenList tokenList);
 
+			std::shared_ptr<AST::ElseClause>  parseElseBranch(TokenList tokenList);
 			std::shared_ptr<AST::IfStatement> parseIfStatement(TokenList tokenList);
 
 			std::shared_ptr<AST::SwitchClause> parseCaseClause(TokenList tokenList);
