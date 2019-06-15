@@ -42,7 +42,7 @@ namespace Flaner
 				Bigint operator*(long long v) const;
 
 			public:
-				int size();
+				size_t digits();
 				Bigint operator ^ (const Bigint &v);
 				std::string toString();
 				std::string toString(int base);
@@ -103,7 +103,6 @@ namespace Flaner
 			public:
 				Bigint maxValue();
 				Bigint MinValue();
-
 			};
 		};
 	};

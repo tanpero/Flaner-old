@@ -143,7 +143,7 @@ namespace Flaner
 			}
 
 
-			int Bigint::size()
+			int Bigint::digits()
 			{
 				if (a.empty())return 0;
 				int ans = (a.size() - 1)*base_digits;
@@ -671,6 +671,11 @@ namespace Flaner
 			Bigint Bigint::MinValue()
 			{
 				return -maxValue();
+			}
+
+			size_t Bigint::digits()
+			{
+				return a.size();
 			}
 
 };
