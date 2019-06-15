@@ -512,7 +512,7 @@ namespace Flaner
 
 				if (!block)
 				{
-					unexpected_end_of_input_syntax_error(tokenList->now)
+					unexpected_end_of_input_syntax_error(tokenList->now())
 				}
 				
 				std::shared_ptr<AST::ElseClause> clause = std::make_shared<AST::ElseClause>();
@@ -796,30 +796,28 @@ namespace Flaner
 
 
 			std::shared_ptr<AST::ForInitializer> parseForInitializer(TokenList tokenList)
-			{/*
+			{
 				std::shared_ptr<AST::ForInitializer> initializer;
-				initializer = parseNullStatement(tokenList);
+				initializer = std::make_shared<AST::ForInitializer>(parseNullStatement(tokenList));
 				if (initializer)
 				{
 					return initializer;
 				}
 
-				initializer = parseVariableDefintion(tokenList);
+				initializer = std::make_shared<AST::ForInitializer>(parseVariableDefintion(tokenList));
 				if (initializer)
 				{
 					return initializer;
 				}
 
-				initializer = parseConstantDefintion(tokenList);
+				initializer = std::make_shared<AST::ForInitializer>(parseConstantDefintion(tokenList));
 				if (initializer)
 				{
 					return initializer;
 				}
 
-				initializer = parseExpression(tokenList);
-				return initializer;*/
-				return std::shared_ptr<AST::ForInitializer>();
-
+				initializer = std::make_shared<AST::ForInitializer>(parseExpression(tokenList));
+				return initializer;
 			}
 
 

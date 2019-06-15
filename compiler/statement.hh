@@ -233,6 +233,7 @@ namespace Flaner
 				std::shared_ptr<Instantiation> instantiation;
 			};
 
+			class ElseClause;
 
 			class IfStatement : public Statement
 			{
@@ -274,11 +275,9 @@ namespace Flaner
 				using Expression    = std::shared_ptr<AST::Expression>;
 			public:
 				std::variant<NullStatement, Defintion, Expression> body;
-				std::shared_ptr<ForInitializer> operator=
-					(std::variant<NullStatement, Defintion, Expression> initializer)
-				{
-					body = initializer;
-				}
+				ForInitializer(NullStatement s) : body(s) {}
+				ForInitializer(Defintion s) : body(s) {}
+				ForInitializer(Expression s) : body(s) {}
 			};
 
 			class ForStatement : public Statement
