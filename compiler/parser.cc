@@ -559,7 +559,11 @@ namespace Flaner
 
 				ifStatement->condition = expression;
 				ifStatement->body = body;
+
+				tokenList->forward();
+				ifStatement->branch = parseElseBranch(tokenList);
 				
+				tokenList->forward();
 				return ifStatement;
 			}
 
