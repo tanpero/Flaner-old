@@ -364,7 +364,19 @@ namespace Flaner
 
 			std::shared_ptr<AST::Statement> parseExpressionStatement(TokenList tokenList)
 			{
-				return std::shared_ptr<AST::Statement>();
+				std::shared_ptr<AST::Expression> expr = parseExpression(tokenList);
+
+				if (!expr)
+				{
+					return nullptr;
+				}
+
+				// 回到分号位置的前一个 token 处
+				tokenList->backward();
+				checkWithSemicolon(tokenList);
+
+				// 现在跳过分号
+				tokenList->forward(2);
 			}
 
 			
