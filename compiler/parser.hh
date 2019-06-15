@@ -44,6 +44,9 @@ namespace Flaner
 			// 函数
 			std::shared_ptr<AST::FunctionValue> parseFunctionDefintion(TokenList tokenList);
 
+			// 带分号的表达式语句
+			std::shared_ptr<AST::Statement> parseExpressionStatement(TokenList tokenList);
+
 			//  调用时此函数时，当前 token 已经是 identifier
 			std::shared_ptr<AST::Identifier> parseIdentifier(TokenList tokenList);
 

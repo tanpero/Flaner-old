@@ -218,7 +218,7 @@ namespace Flaner
 				}
 
 				return output;
-			
+
 			}
 
 
@@ -453,8 +453,8 @@ namespace Flaner
 					*this = 0;
 					return;
 				}
-				
-				Bigint value = 0;				
+
+				Bigint value = 0;
 				bool isNegative = (s[0] == '-');
 				int startIndex = s.length() - 1;
 				int endIndex = isNegative ? 1 : 0;
@@ -672,12 +672,6 @@ namespace Flaner
 			{
 				return -maxValue();
 			}
-
-			size_t Bigint::digits()
-			{
-				return a.size();
-			}
-
-};
+		};
 	};
 };

@@ -175,7 +175,7 @@ namespace Flaner
 
 				tokenList->forward();
 
-				initializer = parseExpression(tokenList);
+				initializer->form = parseExpression(tokenList);
 
 				std::shared_ptr<AST::DefintionStatement> defintionStatement = std::make_shared<AST::DefintionStatement>();
 				defintionStatement->kind = declaration->kind;
@@ -334,10 +334,37 @@ namespace Flaner
 
 				if (tokenList->forward()->eq(Lex::TOKEN_BRACE_BEGIN))
 				{
-					std::shared_ptr<AST::BlockStatement> block = std::make_shared<AST::BlockStatement>();
-					block->body = parseBlockStatement(tokenList);
-					function->body = block;
+					std::shared_ptr<AST::BlockStatement> block = parseBlockStatement(tokenList);
+					std::shared_ptr<AST::StatementSequence> body = std::make_shared<AST::StatementSequence>();
+					body->insert(block);
+					function->body = body;
 				}
+
+				else
+				{
+					std::shared_ptr<AST::Expression> expr = parseExpression(tokenList);
+
+					if (!expr)
+					{
+						unexpected_token_syntax_error(tokenList->now())
+					}
+
+					std::shared_ptr<AST::ReturnStatement> returnStatement = std::make_shared<AST::ReturnStatement>();
+					std::shared_ptr<AST::Value> value = std::make_shared<AST::Value>(expr);
+					returnStatement->value = value;
+
+					std::shared_ptr<AST::StatementSequence> body = std::make_shared<AST::StatementSequence>();
+					body->insert(returnStatement);
+					function->body = body;
+				}
+
+				function->paramsList = parameterList;
+				return function;
+			}
+
+			std::shared_ptr<AST::Statement> parseExpressionStatement(TokenList tokenList)
+			{
+				return std::shared_ptr<AST::Statement>();
 			}
 
 			

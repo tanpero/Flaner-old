@@ -146,6 +146,8 @@ namespace Flaner
 			class Value : public Expression
 			{
 			public:
+				Value() : form(std::make_shared<Expression>()) {}
+				Value(std::shared_ptr<Expression> expr) : form(expr) {}
 				std::shared_ptr<Expression> form;
 			};
 
