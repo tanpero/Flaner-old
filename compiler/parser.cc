@@ -820,6 +820,42 @@ namespace Flaner
 				return initializer;
 			}
 
+			std::shared_ptr<AST::ForComplementTriplet> parseForComplementTriplet(TokenList tokenList)
+			{
+				std::shared_ptr<AST::ForInitializer> initializer = parseForInitializer(tokenList);
+				if (tokenList->now()->noteq(Lex::TOKEN_SEMICOLON))
+				{
+					unexpected_token_syntax_error(tokenList->now())
+				}
+
+				std::shared_ptr<AST::Expression> condition = parseExpression(tokenList);
+				if (tokenList->now()->noteq(Lex::TOKEN_SEMICOLON))
+				{
+					unexpected_token_syntax_error(tokenList->now())
+				}
+
+				std::shared_ptr<AST::Expression> increment = parseExpression(tokenList);
+
+				if (tokenList->now()->noteq(Lex::TOKEN_PAREN_END))
+				{
+					unexpected_token_syntax_error(tokenList->now())
+				}
+
+				std::shared_ptr<AST::BlockStatement> block = parseBlockStatement(tokenList);
+				if (!block)
+				{
+					unexpected_end_of_input_syntax_error(tokenList->now())
+				}
+
+				std::shared_ptr<AST::ForComplementTriplet> triplet = std::make_shared<AST::ForComplementTriplet>();
+				triplet->initializer = initializer;
+				triplet->condition = condition;
+				triplet->increment = increment;
+				triplet->body = block;
+
+				return triplet;
+			}
+
 
 			std::shared_ptr<AST::ForStatement> parseForStatement(TokenList tokenList)
 			{

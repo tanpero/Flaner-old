@@ -280,6 +280,15 @@ namespace Flaner
 				ForInitializer(Expression s) : body(s) {}
 			};
 
+			class ForComplementTriplet : public Statement
+			{
+			public:
+				std::shared_ptr<ForInitializer> initializer;
+				std::shared_ptr<Expression> condition;
+				std::shared_ptr<Expression> increment;
+				std::shared_ptr<BlockStatement> body;
+			};
+
 			class ForStatement : public Statement
 			{
 			public:

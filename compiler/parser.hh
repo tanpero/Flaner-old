@@ -85,6 +85,7 @@ namespace Flaner
 
 
 			std::shared_ptr<AST::ForInitializer> parseForInitializer(TokenList tokenList);
+			std::shared_ptr<AST::ForComplementTriplet> parseForComplementTriplet(TokenList tokenList);
 			std::shared_ptr<AST::ForStatement> parseForStatement(TokenList tokenList);
 
 			std::shared_ptr<AST::ContinueStatement> parseContinueStatement(TokenList tokenList);
