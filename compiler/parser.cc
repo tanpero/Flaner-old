@@ -20,9 +20,10 @@ namespace Flaner
 				}
 			}
 
+			// 检查当前 token 或下一个 token 是否为分号
 			void checkWithSemicolon(TokenList tokenList)
 			{
-				if (tokenList->next()->noteq(Lex::TOKEN_SEMICOLON))
+				if (tokenList->now()->noteq(Lex::TOKEN_SEMICOLON) && tokenList->next()->noteq(Lex::TOKEN_SEMICOLON))
 				{
 					missing_semicolon_after_statement_syntax_error()
 				}
@@ -371,12 +372,9 @@ namespace Flaner
 					return nullptr;
 				}
 
-				// 回到分号位置的前一个 token 处
-				tokenList->backward();
 				checkWithSemicolon(tokenList);
 
-				// 现在跳过分号
-				tokenList->forward(2);
+				tokenList->forward();
 			}
 
 			
@@ -719,6 +717,56 @@ namespace Flaner
 					oneCase = parseCaseClause(tokenList);
 				} while (oneCase != nullptr);
 
+			}
+
+			std::shared_ptr<AST::DoWhileStatement> parseDoWhileStatement(TokenList tokenList)
+			{
+
+				if (tokenList->now()->noteq(Lex::TOKEN_DO))
+				{
+					return nullptr;
+				}
+
+				tokenList->forward();
+
+				std::shared_ptr<AST::BlockStatement> block = parseBlockStatement(tokenList);
+
+				if (!block)
+				{
+					unexpected_end_of_input_syntax_error(tokenList->last())
+				}
+
+				if (tokenList->now()->noteq(Lex::TOKEN_WHILE))
+				{
+					return nullptr;
+				}
+
+				if (tokenList->forward()->noteq(Lex::TOKEN_PAREN_BEGIN))
+				{
+					unexpected_token_syntax_error(tokenList->now())
+				}
+				
+				std::shared_ptr<AST::Expression> cond = parseExpression(tokenList);
+
+				if (!cond)
+				{
+					unexpected_token_syntax_error(tokenList->last())
+				}
+				
+				checkWithSemicolon(tokenList);
+
+				tokenList->forward();
+
+				std::shared_ptr<AST::DoWhileStatement> doWhileStatement = std::make_shared<AST::DoWhileStatement>();
+				doWhileStatement->condition = cond;
+				doWhileStatement->body = block;
+
+				return doWhileStatement;
+			}
+
+			std::shared_ptr<AST::WhileStatement> parseWhileStatement(TokenList tokenList)
+			{
+				return std::shared_ptr<AST::WhileStatement>();
 			}
 
 

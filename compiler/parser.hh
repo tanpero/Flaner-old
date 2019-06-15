@@ -80,6 +80,7 @@ namespace Flaner
 
 			std::shared_ptr<AST::SwitchStatement> parseSwitchStatement(TokenList tokenList);			
 
+			std::shared_ptr<AST::DoWhileStatement> parseDoWhileStatement(TokenList tokenList);
 			std::shared_ptr<AST::WhileStatement> parseWhileStatement(TokenList tokenList);
 
 
