@@ -766,7 +766,32 @@ namespace Flaner
 
 			std::shared_ptr<AST::WhileStatement> parseWhileStatement(TokenList tokenList)
 			{
-				return std::shared_ptr<AST::WhileStatement>();
+				if (tokenList->now()->noteq(Lex::TOKEN_WHILE))
+				{
+					return nullptr;
+				}
+				
+				tokenList->forward();
+
+				std::shared_ptr<AST::Expression> cond = parseExpression(tokenList);
+
+				if (!cond)
+				{
+					unexpected_token_syntax_error(tokenList->last())
+				}
+
+				std::shared_ptr<AST::BlockStatement> block = parseBlockStatement(tokenList);
+
+				if (!block)
+				{
+					unexpected_end_of_input_syntax_error(tokenList->now())
+				}
+
+				std::shared_ptr<AST::WhileStatement> whileStatement = std::make_shared<AST::WhileStatement>();
+				whileStatement->condition = cond;
+				whileStatement->body = block;
+
+				return whileStatement;
 			}
 
 
