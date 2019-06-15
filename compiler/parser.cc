@@ -305,12 +305,39 @@ namespace Flaner
 					unclosing_parentheses_syntax_error()
 				}
 				
+				tokenList->forward();
+				
 				return paramsList;
 			}
 
+			/*
+			*
+			* (a, b = false) => doSomething(a, b);
+			* 
+			* (...args) => {
+			*     print(args.max);
+			* };
+			*
+			*/
 			std::shared_ptr<AST::FunctionValue> parseFunctionDefintion(TokenList tokenList)
 			{
-				return std::shared_ptr<AST::FunctionValue>();
+				std::shared_ptr<AST::FunctionValue> function = std::shared_ptr<AST::FunctionValue>();
+				
+				// 若 parameterList 为 nullptr，说明形参列表为空
+				std::shared_ptr<AST::ParamsList> parameterList = parseParameterListDeclaration(tokenList);
+								
+				if (tokenList->now()->noteq(Lex::TOKEN_FUNCTION_ARROW))
+				{
+					// 可能是括号包裹的表达式
+					return nullptr;
+				}
+
+				if (tokenList->forward()->eq(Lex::TOKEN_BRACE_BEGIN))
+				{
+					std::shared_ptr<AST::BlockStatement> block = std::make_shared<AST::BlockStatement>();
+					block->body = parseBlockStatement(tokenList);
+					function->body = block;
+				}
 			}
 
 			

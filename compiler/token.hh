@@ -53,6 +53,8 @@ namespace Flaner
 				TOKEN_PLUS,
 				TOKEN_MINUS,
 
+				TOKEN_FUNCTION_ARROW,
+
 				TOKEN_COLON,
 				TOKEN_COMMA,
 				TOKEN_DOT,

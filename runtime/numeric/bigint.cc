@@ -630,6 +630,12 @@ namespace Flaner
 				}
 			}
 
+			Bigint Bigint::pow(int n) const
+			{
+				Bigint value = n;
+				return pow(value);
+			}
+
 			Bigint Bigint::operator++()
 			{
 				*this += 1;
@@ -654,6 +660,17 @@ namespace Flaner
 				Bigint self = *this;
 				*this += 1;
 				return self;
+			}
+
+			Bigint Bigint::maxValue()
+			{
+				Bigint value = 10;
+				return value.pow(a.max_size());
+			}
+
+			Bigint Bigint::MinValue()
+			{
+				return -maxValue();
 			}
 
 };

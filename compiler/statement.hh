@@ -199,9 +199,11 @@ namespace Flaner
 					COMMON,
 					GENERATOR
 				};
-				std::shared_ptr<Identifier> name;
+				FunctionKind kind;
 				std::shared_ptr<ParamsList> paramsList;
 				std::shared_ptr<StatementSequence> body;
+
+				FunctionValue() : kind(COMMON) {}
 			};
 
 			class ObjectMember

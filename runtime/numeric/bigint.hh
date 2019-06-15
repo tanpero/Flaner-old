@@ -17,7 +17,7 @@ namespace Flaner
 		namespace numeric
 		{
 
-			const int base = 1000000000;
+			const int base = 10e9;
 			const int base_digits = 9;
 
 			class Bigint
@@ -88,6 +88,7 @@ namespace Flaner
 				Bigint operator*(const Bigint &v) const;
 
 				Bigint pow(Bigint& n) const;
+				Bigint pow(int n) const;
 
 				Bigint operator&(Bigint n) const;
 				Bigint operator|(Bigint n) const;
@@ -98,6 +99,10 @@ namespace Flaner
 				Bigint operator++(int);
 				Bigint operator--();
 				Bigint operator--(int);
+
+			public:
+				Bigint maxValue();
+				Bigint MinValue();
 
 			};
 		};
