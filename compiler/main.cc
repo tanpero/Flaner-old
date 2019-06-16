@@ -34,7 +34,7 @@ int main()
 		
 		std::shared_ptr<AST::Declaration> declaration = Parser::parseConstantDeclaration(list);
 		std::cout << "kind is " << list->first()->value << std::endl;
-		std::cout << "identifier is " << declaration->identifier.name << std::endl;
+		std::cout << "identifier is " << declaration->identifier->name << std::endl;
 		std::cout << "------------------\n" << std::endl;
 
 		std::shared_ptr<Lex::TokenList> list2 = std::make_shared<Lex::TokenList>();

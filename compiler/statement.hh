@@ -228,7 +228,7 @@ namespace Flaner
 			{
 			public:
 				Declaration::Kind kind;
-				Identifier identifier;
+				std::shared_ptr<Identifier> identifier;
 				std::shared_ptr<Expression> initializer;
 				std::shared_ptr<Instantiation> instantiation;
 			};
@@ -304,6 +304,8 @@ namespace Flaner
 				std::shared_ptr<Expression> target;
 				std::shared_ptr<BlockStatement> body;
 			};
+
+			using ForComplement = std::variant<ForComplementTriplet, ForInStatement, ForOfStatement>;
 
 			class ForStatement : public Statement
 			{

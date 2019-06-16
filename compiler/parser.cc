@@ -47,8 +47,8 @@ namespace Flaner
 				std::shared_ptr<AST::Declaration> declaration;
 				declaration->kind = AST::Declaration::Variable;
 
-				AST::Identifier id;
-				id.name = forward->value;
+				std::shared_ptr<AST::Identifier> id;
+				id->name = forward->value;
 				declaration->identifier = id;
 
 				tokenList->forward();
@@ -75,8 +75,8 @@ namespace Flaner
 
 				declaration->kind = AST::Declaration::Constant;
 
-				AST::Identifier id;
-				id.name = forward->value;
+				std::shared_ptr<AST::Identifier> id = std::make_shared<AST::Identifier>();
+				id->name = forward->value;
 				declaration->identifier = id;
 
 				tokenList->forward();
@@ -99,8 +99,8 @@ namespace Flaner
 					unexpected_token_syntax_error(id)
 				}
 				
-				AST::Identifier className;
-				className.name = id->value;
+				std::shared_ptr<AST::Identifier> className;
+				className->name = id->value;
 
 				std::shared_ptr<AST::Instantiation> instantiation = std::make_shared<AST::Instantiation>();
 				instantiation->className = className;
@@ -957,7 +957,7 @@ namespace Flaner
 					binding->identifier = id;
 				}
 
-				// 没有使用 in 关键字
+				// 没有使用 of 关键字
 				if (tokenList->now()->noteq(Lex::TOKEN_OF))
 				{
 					return nullptr;
@@ -989,6 +989,11 @@ namespace Flaner
 
 				return forOfStatement;
 				
+			}
+
+			std::shared_ptr<AST::ForComplement> parseForComplement(TokenList tokenList)
+			{
+				return std::shared_ptr<AST::ForComplement>();
 			}
 
 		};

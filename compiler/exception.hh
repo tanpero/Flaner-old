@@ -70,7 +70,7 @@ namespace Flaner
 #define missing_initializer_in_const_declaration_syntax_error(identifier) \
 	do \
 	{ \
-		syntax_error("Missing initializer in const declaration (for constant " + identifier.name + ")") \
+		syntax_error("Missing initializer in const declaration (for constant " + identifier->name + ")") \
 	} \
 	while (false);
 
