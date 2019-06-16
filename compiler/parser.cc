@@ -389,6 +389,8 @@ namespace Flaner
 				std::shared_ptr<AST::Identifier> identifier =
 					std::make_shared<AST::Identifier>(token->value);
 
+				tokenList->forward();
+
 				return identifier;
 			}
 
@@ -860,6 +862,69 @@ namespace Flaner
 			std::shared_ptr<AST::ForStatement> parseForStatement(TokenList tokenList)
 			{
 				return std::shared_ptr<AST::ForStatement>();
+			}
+
+			std::shared_ptr<AST::ForInStatement> parseForInStatement(TokenList tokenList)
+			{
+				if (tokenList->now()->noteq(Lex::TOKEN_FOR))
+				{
+					return nullptr;
+				}
+
+				if (tokenList->forward()->noteq(Lex::TOKEN_PAREN_BEGIN))
+				{
+					unexpected_token_syntax_error(tokenList->now())
+				}
+
+				tokenList->forward();
+
+				std::shared_ptr<AST::Declaration> binding = parseVariableDeclaration(tokenList);
+
+				// 没有使用 let 声明，可能已经在外部声明过标识符
+				if (!binding)
+				{
+					std::shared_ptr<AST::Identifier> id = parseIdentifier(tokenList);
+
+					if (!id)
+					{
+						unexpected_token_syntax_error(tokenList->now())
+					}
+
+					binding->kind = binding->Variable;
+					binding->identifier = id;
+				}
+
+				// 没有使用 in 关键字
+				if (tokenList->now()->noteq(Lex::TOKEN_IN))
+				{
+					return nullptr;
+				}
+
+				std::shared_ptr<AST::Expression> expr = parseExpression(tokenList);
+				if (!expr)
+				{
+					unexpected_token_syntax_error(tokenList->now())
+				}
+
+				if (tokenList->now()->noteq(Lex::TOKEN_PAREN_BEGIN))
+				{
+					unclosing_parentheses_syntax_error()
+				}
+
+				std::shared_ptr<Lex::Token> braceBegin = tokenList->forward();
+
+				std::shared_ptr<AST::BlockStatement> body = parseBlockStatement(tokenList);
+				if (!body)
+				{
+					unexpected_end_of_input_syntax_error(braceBegin)
+				}
+
+				std::shared_ptr<AST::ForInStatement> forInStatement = std::make_shared<AST::ForInStatement>();
+				forInStatement->binding = binding;
+				forInStatement->target = expr;
+				forInStatement->body = body;
+
+				return forInStatement;
 			}
 
 		};

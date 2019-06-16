@@ -39,6 +39,8 @@ namespace Flaner
 				TOKEN_BREAK,
 				TOKEN_RETURN,
 				TOKEN_AS,
+				TOKEN_IN,
+				TOKEN_OF,
 				TOKEN_IMPORT,
 				TOKEN_EXPORT,
 				

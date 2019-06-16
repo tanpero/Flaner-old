@@ -72,14 +72,14 @@ namespace Flaner
 
 			public:
 				Kind kind;
-				Identifier identifier;
+				std::shared_ptr<Identifier> identifier;
 			};
 
 
 			class Instantiation : Statement
 			{
 			public:
-				Identifier className;
+				std::shared_ptr<Identifier> className;
 			};
 
 
@@ -286,6 +286,14 @@ namespace Flaner
 				std::shared_ptr<ForInitializer> initializer;
 				std::shared_ptr<Expression> condition;
 				std::shared_ptr<Expression> increment;
+				std::shared_ptr<BlockStatement> body;
+			};
+
+			class ForInStatement : public Statement
+			{
+			public:
+				std::shared_ptr<Declaration> binding;
+				std::shared_ptr<Expression> target;
 				std::shared_ptr<BlockStatement> body;
 			};
 
