@@ -43,6 +43,7 @@ namespace Flaner
 			class BlockStatement : public Statement
 			{
 			public:
+				BlockStatement(std::shared_ptr<StatementSequence> sequence) : body(sequence) {}
 				std::shared_ptr<StatementSequence> body;
 			};
 
@@ -80,6 +81,14 @@ namespace Flaner
 			{
 			public:
 				std::shared_ptr<Identifier> className;
+			};
+
+
+			class InstanceBinding : Statement
+			{
+			public:
+				std::shared_ptr<Declaration> declaration;
+				std::shared_ptr<Instantiation> type;
 			};
 
 
@@ -347,9 +356,9 @@ namespace Flaner
 			class TryCatchStatement : public Statement
 			{
 			public:
-				struct CatchStatement
+				struct CatchClause
 				{
-					std::shared_ptr<Identifier> bindingId;
+					std::shared_ptr<InstanceBinding> binding;
 					std::shared_ptr<BlockStatement> body;
 				};
 

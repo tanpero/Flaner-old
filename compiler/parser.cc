@@ -1152,6 +1152,90 @@ namespace Flaner
 			}
 
 
+			std::shared_ptr<AST::TryCatchStatement::CatchClause> parseCatchClause(TokenList tokenList)
+			{
+				if (tokenList->now()->noteq(Lex::TOKEN_CATCH))
+				{
+					return nullptr;
+				}
+
+				std::shared_ptr<AST::TryCatchStatement::CatchClause> clause = std::shared_ptr<AST::TryCatchStatement::CatchClause>();
+				
+				std::shared_ptr<Lex::Token> token = tokenList->forward();
+
+				// 绑定标识符
+				if (token->eq(Lex::TOKEN_PAREN_BEGIN))
+				{
+
+					if (tokenList->forward()->noteq(Lex::TOKEN_ID))
+					{
+						unexpected_token_syntax_error(tokenList->now())
+					}
+
+					std::shared_ptr<AST::InstanceBinding> binding = std::make_shared<AST::InstanceBinding>();
+
+					binding->declaration = std::shared_ptr<AST::Declaration>();
+					binding->declaration->kind = binding->declaration->Constant;
+					binding->declaration->identifier = parseIdentifier(tokenList);
+					
+					binding->type = parseInstantiation(tokenList);
+
+					clause->binding = binding;
+				}
+				else
+				{
+					unexpected_token_syntax_error(token)
+				}
+
+				if (tokenList->now()->noteq(Lex::TOKEN_PAREN_END))
+				{
+					unclosing_parentheses_syntax_error()
+				}
+
+				if (tokenList->forward()->noteq(Lex::TOKEN_BRACE_BEGIN))
+				{
+					unexpected_token_syntax_error(tokenList->now())
+				}
+				std::shared_ptr<AST::BlockStatement> body = std::make_shared<AST::BlockStatement>(parseBlock(tokenList));
+
+				clause->body = body;
+				return clause;
+			}
+
+
+			std::shared_ptr<AST::TryCatchStatement> parseTryCatchStatement(TokenList tokenList)
+			{
+				if (tokenList->now()->noteq(Lex::TOKEN_TRY))
+				{
+					return nullptr;
+				}
+
+				std::shared_ptr<Lex::Token> tokenAfterTry = tokenList->forward();
+
+				// try 子句必须是一个块
+				std::shared_ptr<AST::BlockStatement> tryBlock = std::make_shared<AST::BlockStatement>(parseBlock(tokenList));
+				if (!tryBlock)
+				{
+					unexpected_token_syntax_error(tokenAfterTry)
+				}
+
+				if (tokenList->now()->noteq(Lex::TOKEN_CATCH) && tokenList->now()->noteq(Lex::TOKEN_FINALLY))
+				{
+					syntax_error("Missing catch or finally after try")
+				}
+
+				std::vector<std::shared_ptr<AST::TryCatchStatement::CatchClause>> catchClauseSequence;
+				std::shared_ptr<AST::TryCatchStatement::CatchClause> catchClause = parseCatchClause(tokenList);
+				while (catchClause)
+				{
+					catchClauseSequence.push_back(catchClause);
+					catchClause = parseCatchClause(tokenList);
+				}
+
+				// TODO...
+
+			}
+
 
 		};
 	};
