@@ -422,13 +422,13 @@ namespace Flaner
 			class ReturnStatement : public Statement
 			{
 			public:
-				std::shared_ptr<Value> value;
+				std::shared_ptr<Expression> expression;
 			};
 
 			class YieldStatement : public Statement
 			{
 			public:
-				std::shared_ptr<Value> value;
+				std::shared_ptr<Expression> expression;
 			};
 
 		};

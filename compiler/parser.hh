@@ -98,6 +98,8 @@ namespace Flaner
 
 			std::shared_ptr<AST::ThrowStatement> parseThrowStatement(TokenList tokenList);
 
+			std::shared_ptr<AST::ReturnStatement> parseReturnStatement(TokenList tokenList);
+
 		}
 	};
 };

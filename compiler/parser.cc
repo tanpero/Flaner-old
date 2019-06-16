@@ -1102,6 +1102,32 @@ namespace Flaner
 				return throwStatement;
 			}
 
+			std::shared_ptr<AST::ReturnStatement> parseReturnStatement(TokenList tokenList)
+			{
+				if (tokenList->now()->noteq(Lex::TOKEN_RETURN))
+				{
+					return nullptr;
+				}
+
+				std::shared_ptr<AST::ReturnStatement> returnStatement = std::make_shared<AST::ReturnStatement>();
+
+				std::shared_ptr<Lex::Token> token = tokenList->forward();
+				if (token->eq(Lex::TOKEN_SEMICOLON))
+				{
+					returnStatement->expression = nullptr;
+					return returnStatement;
+				}
+
+				std::shared_ptr<AST::Expression> expr = parseExpression(tokenList);
+				if (!expr)
+				{
+					unexpected_token_syntax_error(token)
+				}
+
+				returnStatement->expression = expr;
+				return returnStatement;
+			}
+
 
 
 		};
