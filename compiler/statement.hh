@@ -297,6 +297,14 @@ namespace Flaner
 				std::shared_ptr<BlockStatement> body;
 			};
 
+			class ForOfStatement : public Statement
+			{
+			public:
+				std::shared_ptr<Declaration> binding;
+				std::shared_ptr<Expression> target;
+				std::shared_ptr<BlockStatement> body;
+			};
+
 			class ForStatement : public Statement
 			{
 			public:
