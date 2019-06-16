@@ -721,6 +721,7 @@ namespace Flaner
 
 			}
 
+
 			std::shared_ptr<AST::DoWhileStatement> parseDoWhileStatement(TokenList tokenList)
 			{
 
@@ -765,6 +766,7 @@ namespace Flaner
 
 				return doWhileStatement;
 			}
+
 
 			std::shared_ptr<AST::WhileStatement> parseWhileStatement(TokenList tokenList)
 			{
@@ -822,6 +824,7 @@ namespace Flaner
 				return initializer;
 			}
 
+
 			std::shared_ptr<AST::ForComplementTriplet> parseForComplementTriplet(TokenList tokenList)
 			{
 				std::shared_ptr<AST::ForInitializer> initializer = parseForInitializer(tokenList);
@@ -859,25 +862,8 @@ namespace Flaner
 			}
 
 
-			std::shared_ptr<AST::ForStatement> parseForStatement(TokenList tokenList)
-			{
-				return std::shared_ptr<AST::ForStatement>();
-			}
-
 			std::shared_ptr<AST::ForInStatement> parseForInStatement(TokenList tokenList)
 			{
-				if (tokenList->now()->noteq(Lex::TOKEN_FOR))
-				{
-					return nullptr;
-				}
-
-				if (tokenList->forward()->noteq(Lex::TOKEN_PAREN_BEGIN))
-				{
-					unexpected_token_syntax_error(tokenList->now())
-				}
-
-				tokenList->forward();
-
 				std::shared_ptr<AST::Declaration> binding = parseVariableDeclaration(tokenList);
 
 				// 没有使用 let 声明，可能已经在外部声明过标识符
@@ -927,20 +913,9 @@ namespace Flaner
 				return forInStatement;
 			}
 
+
 			std::shared_ptr<AST::ForOfStatement> parseForOfStatement(TokenList tokenList)
 			{
-				if (tokenList->now()->noteq(Lex::TOKEN_FOR))
-				{
-					return nullptr;
-				}
-
-				if (tokenList->forward()->noteq(Lex::TOKEN_PAREN_BEGIN))
-				{
-					unexpected_token_syntax_error(tokenList->now())
-				}
-
-				tokenList->forward();
-
 				std::shared_ptr<AST::Declaration> binding = parseVariableDeclaration(tokenList);
 
 				// 没有使用 let 声明，可能已经在外部声明过标识符
@@ -991,6 +966,7 @@ namespace Flaner
 				
 			}
 
+
 			std::shared_ptr<AST::Statement> parseForComplement(TokenList tokenList)
 			{
 				auto complement = parseForComplementTriplet(tokenList);
@@ -1013,6 +989,34 @@ namespace Flaner
 
 				return nullptr;
 			}
+
+
+			std::shared_ptr<AST::Statement> parseForStatement(TokenList tokenList)
+			{
+
+				if (tokenList->now()->noteq(Lex::TOKEN_FOR))
+				{
+					return nullptr;
+				}
+
+				if (tokenList->forward()->noteq(Lex::TOKEN_PAREN_BEGIN))
+				{
+					unexpected_token_syntax_error(tokenList->now())
+				}
+
+				tokenList->forward();
+
+				std::shared_ptr<AST::Statement> complement = parseForComplement(tokenList);
+
+				if (!complement)
+				{
+					unexpected_token_syntax_error(tokenList->forward())
+				}
+
+				return complement;
+			}
+
+
 
 		};
 	};
