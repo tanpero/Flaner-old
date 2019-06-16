@@ -1033,11 +1033,13 @@ namespace Flaner
 					return breakStatement;
 				}
 
-				std::shared_ptr<AST::LabelStatement> label = parseLabelStatement(tokenList);
-				if (!label)
+				std::shared_ptr<AST::Identifier> name = parseIdentifier(tokenList);
+				if (!name)
 				{
 					unexpected_token_syntax_error(tokenList->now())
 				}
+
+				std::shared_ptr<AST::LabelStatement> label = std::make_shared<AST::LabelStatement>(name);
 
 				breakStatement->label = label;
 				return breakStatement;
@@ -1061,14 +1063,43 @@ namespace Flaner
 					return continueStatement;
 				}
 
-				std::shared_ptr<AST::LabelStatement> label = parseLabelStatement(tokenList);
-				if (!label)
+				std::shared_ptr<AST::Identifier> name = parseIdentifier(tokenList);
+				if (!name)
 				{
 					unexpected_token_syntax_error(tokenList->now())
 				}
 
+				std::shared_ptr<AST::LabelStatement> label = std::make_shared<AST::LabelStatement>(name);
+
 				continueStatement->label = label;
 				return continueStatement;
+			}
+
+			std::shared_ptr<AST::ThrowStatement> parseThrowStatement(TokenList tokenList)
+			{
+				if (tokenList->now()->noteq(Lex::TOKEN_THROW))
+				{
+					return nullptr;
+				}
+
+				std::shared_ptr<AST::ThrowStatement> throwStatement = std::make_shared<AST::ThrowStatement>();
+					
+				std::shared_ptr<Lex::Token> token = tokenList->forward();
+
+				if (token->eq(Lex::TOKEN_SEMICOLON))
+				{
+					throwStatement->expression = nullptr;
+					return throwStatement;
+				}
+
+				std::shared_ptr<AST::Expression> expr = parseExpression(tokenList);
+				if (!expr)
+				{
+					unexpected_token_syntax_error(token)
+				}
+
+				throwStatement->expression = expr;
+				return throwStatement;
 			}
 
 

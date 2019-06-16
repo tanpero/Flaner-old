@@ -96,6 +96,8 @@ namespace Flaner
 			std::shared_ptr<AST::BreakStatement> parseBreakStatement(TokenList tokenList);
 			std::shared_ptr<AST::ContinueStatement> parseContinueStatement(TokenList tokenList);
 
+			std::shared_ptr<AST::ThrowStatement> parseThrowStatement(TokenList tokenList);
+
 		}
 	};
 };

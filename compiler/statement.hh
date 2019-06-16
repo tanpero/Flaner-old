@@ -362,6 +362,7 @@ namespace Flaner
 			class LabelStatement : public Statement
 			{
 			public:
+				LabelStatement(std::shared_ptr<Identifier> name) : name(name->name) {}
 				std::string name;
 			};
 
@@ -400,7 +401,7 @@ namespace Flaner
 			class ThrowStatement : public Statement
 			{
 			public:
-				Value value;
+				std::shared_ptr<Expression> expression;
 			};
 
 			class ImportStatement : public Statement

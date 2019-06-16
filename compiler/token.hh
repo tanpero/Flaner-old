@@ -38,6 +38,7 @@ namespace Flaner
 				TOKEN_CONTINUE,
 				TOKEN_BREAK,
 				TOKEN_RETURN,
+				TOKEN_THROW,
 				TOKEN_AS,
 				TOKEN_IN,
 				TOKEN_OF,
