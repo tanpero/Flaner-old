@@ -1046,7 +1046,29 @@ namespace Flaner
 
 			std::shared_ptr<AST::ContinueStatement> parseContinueStatement(TokenList tokenList)
 			{
-				return std::shared_ptr<AST::ContinueStatement>();
+				if (tokenList->now()->noteq(Lex::TOKEN_CONTINUE))
+				{
+					return nullptr;
+				}
+
+				tokenList->forward();
+
+				std::shared_ptr<AST::ContinueStatement> continueStatement = std::make_shared<AST::ContinueStatement>();
+
+				if (tokenList->now()->eq(Lex::TOKEN_SEMICOLON))
+				{
+					continueStatement->label = nullptr;
+					return continueStatement;
+				}
+
+				std::shared_ptr<AST::LabelStatement> label = parseLabelStatement(tokenList);
+				if (!label)
+				{
+					unexpected_token_syntax_error(tokenList->now())
+				}
+
+				continueStatement->label = label;
+				return continueStatement;
 			}
 
 
