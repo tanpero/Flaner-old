@@ -991,9 +991,27 @@ namespace Flaner
 				
 			}
 
-			std::shared_ptr<AST::ForComplement> parseForComplement(TokenList tokenList)
+			std::shared_ptr<AST::Statement> parseForComplement(TokenList tokenList)
 			{
-				return std::shared_ptr<AST::ForComplement>();
+				auto complement = parseForComplementTriplet(tokenList);
+				if (complement)
+				{
+					return complement;
+				}
+
+				complement = parseForInStatement(tokenList);
+				if (complement)
+				{
+					return complement;
+				}
+
+				complement = parseForOfStatement(tokenList);
+				if (complement)
+				{
+					return complement;
+				}
+
+				return nullptr;
 			}
 
 		};

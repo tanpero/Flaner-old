@@ -89,7 +89,7 @@ namespace Flaner
 			std::shared_ptr<AST::ForStatement> parseForStatement(TokenList tokenList);
 			std::shared_ptr<AST::ForInStatement> parseForInStatement(TokenList tokenList);
 			std::shared_ptr<AST::ForOfStatement> parseForOfStatement(TokenList tokenList);
-			std::shared_ptr<AST::ForComplement> parseForComplement(TokenList tokenList);
+			std::shared_ptr<AST::Statement> parseForComplement(TokenList tokenList);
 
 			std::shared_ptr<AST::LabelStatement> parseLabelStatement(TokenList tokenList);
 

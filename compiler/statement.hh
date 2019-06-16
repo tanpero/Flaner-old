@@ -305,8 +305,6 @@ namespace Flaner
 				std::shared_ptr<BlockStatement> body;
 			};
 
-			using ForComplement = std::variant<ForComplementTriplet, ForInStatement, ForOfStatement>;
-
 			class ForStatement : public Statement
 			{
 			public:
