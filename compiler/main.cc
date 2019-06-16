@@ -55,6 +55,8 @@ int main()
 
 		std::cout << "------------" << std::endl;
 		std::cout << paramsList->getLength() << std::endl;
+
+
 	}
 	catch (const std::exception& e)
 	{

@@ -1016,6 +1016,39 @@ namespace Flaner
 				return complement;
 			}
 
+			std::shared_ptr<AST::BreakStatement> parseBreakStatement(TokenList tokenList)
+			{
+				if (tokenList->now()->noteq(Lex::TOKEN_BREAK))
+				{
+					return nullptr;
+				}
+
+				tokenList->forward();
+
+				std::shared_ptr<AST::BreakStatement> breakStatement = std::make_shared<AST::BreakStatement>();
+				
+				if (tokenList->now()->eq(Lex::TOKEN_SEMICOLON))
+				{
+					breakStatement->label = nullptr;
+					return breakStatement;
+				}
+
+				std::shared_ptr<AST::LabelStatement> label = parseLabelStatement(tokenList);
+				if (!label)
+				{
+					unexpected_token_syntax_error(tokenList->now())
+				}
+
+				breakStatement->label = label;
+				return breakStatement;
+
+			}
+
+			std::shared_ptr<AST::ContinueStatement> parseContinueStatement(TokenList tokenList)
+			{
+				return std::shared_ptr<AST::ContinueStatement>();
+			}
+
 
 
 		};
