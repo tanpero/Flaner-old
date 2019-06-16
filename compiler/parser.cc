@@ -1016,6 +1016,25 @@ namespace Flaner
 				return complement;
 			}
 
+
+			std::shared_ptr<AST::LabelStatement> parseLabelStatement(TokenList tokenList)
+			{
+				std::shared_ptr<AST::Identifier> name = parseIdentifier(tokenList);
+				if (!name)
+				{
+					return nullptr;
+				}
+
+				if (tokenList->now()->noteq(Lex::TOKEN_COLON))
+				{
+					unexpected_token_syntax_error(tokenList->now)
+				}
+
+				std::shared_ptr<AST::LabelStatement> label = std::make_shared<AST::LabelStatement>(name);
+				return label;
+			}
+
+
 			std::shared_ptr<AST::BreakStatement> parseBreakStatement(TokenList tokenList)
 			{
 				if (tokenList->now()->noteq(Lex::TOKEN_BREAK))
@@ -1098,6 +1117,8 @@ namespace Flaner
 					unexpected_token_syntax_error(token)
 				}
 
+				checkWithSemicolon(tokenList);
+
 				throwStatement->expression = expr;
 				return throwStatement;
 			}
@@ -1123,6 +1144,8 @@ namespace Flaner
 				{
 					unexpected_token_syntax_error(token)
 				}
+
+				checkWithSemicolon(tokenList);
 
 				returnStatement->expression = expr;
 				return returnStatement;
