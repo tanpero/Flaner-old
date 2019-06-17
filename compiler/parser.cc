@@ -1232,11 +1232,27 @@ namespace Flaner
 					catchClause = parseCatchClause(tokenList);
 				}
 
-				// TODO...
+				std::shared_ptr<AST::BlockStatement> finallyBody = nullptr;
 
+				if (tokenList->now()->eq(Lex::TOKEN_FINALLY))
+				{
+					std::shared_ptr<Lex::Token> finallyToken = tokenList->forward();
+					finallyBody = parseBlock(tokenList);
+
+					if (!finallyBody)
+					{
+						unexpected_end_of_input_syntax_error(finallyToken);
+					}
+				}
+
+				std::shared_ptr<AST::TryCatchStatement> tryCatchStatement = std::make_shared<AST::TryCatchStatement>();
+				tryCatchStatement->tryBody = tryBlock;
+				tryCatchStatement->catchBodies = catchClauseSequence;
+				tryCatchStatement->finallyBody = finallyBody;
+
+				return tryCatchStatement;
 			}
-
-
+			
 		};
 	};
 };
