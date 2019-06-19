@@ -119,7 +119,7 @@ namespace Flaner
 
 			class TokenList
 			{
-			public:
+			private:
 				std::vector<std::shared_ptr<Token>> tokens;
 				unsigned int cursor;
 			public:

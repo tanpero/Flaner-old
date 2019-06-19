@@ -351,8 +351,7 @@ namespace Flaner
 					}
 
 					std::shared_ptr<AST::ReturnStatement> returnStatement = std::make_shared<AST::ReturnStatement>();
-					std::shared_ptr<AST::Value> value = std::make_shared<AST::Value>(expr);
-					returnStatement->value = value;
+					returnStatement->expression = expr;
 
 					std::shared_ptr<AST::StatementSequence> body = std::make_shared<AST::StatementSequence>();
 					body->insert(returnStatement);
@@ -443,7 +442,84 @@ namespace Flaner
 
 			std::shared_ptr<AST::Statement> parseStatement(TokenList tokenList)
 			{
-				return std::shared_ptr<AST::Statement>();
+					// nonblock-statement ::=
+					//   null-statement |
+					//   variable-definition | immutable-variable-definition | function-definition |
+					//   expression-statement |
+					//   if-statement | switch-statement | do-while-statement | while-statement | for-statement |
+					//   break-statement | continue-statement | throw-statement | return-statement | assert-statement |
+					//   try-statement
+
+					
+					/*
+
+					auto qstmt = do_accept_null_statement_opt(tstrm);
+					if (qstmt) {
+						return qstmt;
+					}
+					qstmt = do_accept_variable_definition_opt(tstrm);
+					if (qstmt) {
+						return qstmt;
+					}
+					qstmt = do_accept_immutable_variable_definition_opt(tstrm);
+					if (qstmt) {
+						return qstmt;
+					}
+					qstmt = do_accept_function_definition_opt(tstrm);
+					if (qstmt) {
+						return qstmt;
+					}
+					qstmt = do_accept_expression_statement_opt(tstrm);
+					if (qstmt) {
+						return qstmt;
+					}
+					qstmt = do_accept_if_statement_opt(tstrm);
+					if (qstmt) {
+						return qstmt;
+					}
+					qstmt = do_accept_switch_statement_opt(tstrm);
+					if (qstmt) {
+						return qstmt;
+					}
+					qstmt = do_accept_do_while_statement_opt(tstrm);
+					if (qstmt) {
+						return qstmt;
+					}
+					qstmt = do_accept_while_statement_opt(tstrm);
+					if (qstmt) {
+						return qstmt;
+					}
+					qstmt = do_accept_for_statement_opt(tstrm);
+					if (qstmt) {
+						return qstmt;
+					}
+					qstmt = do_accept_break_statement_opt(tstrm);
+					if (qstmt) {
+						return qstmt;
+					}
+					qstmt = do_accept_continue_statement_opt(tstrm);
+					if (qstmt) {
+						return qstmt;
+					}
+					qstmt = do_accept_throw_statement_opt(tstrm);
+					if (qstmt) {
+						return qstmt;
+					}
+					qstmt = do_accept_return_statement_opt(tstrm);
+					if (qstmt) {
+						return qstmt;
+					}
+					qstmt = do_accept_assert_statement_opt(tstrm);
+					if (qstmt) {
+						return qstmt;
+					}
+					qstmt = do_accept_try_statement_opt(tstrm);
+					if (qstmt) {
+						return qstmt;
+					}
+					return qstmt;
+			*/
+				return std::make_shared<AST::Statement>();
 			}
 
 
@@ -473,7 +549,7 @@ namespace Flaner
 					unexpected_end_of_input_syntax_error(first);
 				}
 
-
+				return sequence;
 			}
 
 			std::shared_ptr<AST::BlockStatement> parseBlockStatement(TokenList tokenList)
@@ -969,7 +1045,7 @@ namespace Flaner
 
 			std::shared_ptr<AST::Statement> parseForComplement(TokenList tokenList)
 			{
-				auto complement = parseForComplementTriplet(tokenList);
+				std::shared_ptr<AST::Statement> complement = parseForComplementTriplet(tokenList);
 				if (complement)
 				{
 					return complement;
@@ -1027,7 +1103,7 @@ namespace Flaner
 
 				if (tokenList->now()->noteq(Lex::TOKEN_COLON))
 				{
-					unexpected_token_syntax_error(tokenList->now)
+					unexpected_token_syntax_error(tokenList->now())
 				}
 
 				std::shared_ptr<AST::LabelStatement> label = std::make_shared<AST::LabelStatement>(name);
@@ -1237,7 +1313,7 @@ namespace Flaner
 				if (tokenList->now()->eq(Lex::TOKEN_FINALLY))
 				{
 					std::shared_ptr<Lex::Token> finallyToken = tokenList->forward();
-					finallyBody = parseBlock(tokenList);
+					finallyBody = std::make_shared<AST::BlockStatement>(parseBlock(tokenList));
 
 					if (!finallyBody)
 					{
@@ -1251,6 +1327,19 @@ namespace Flaner
 				tryCatchStatement->finallyBody = finallyBody;
 
 				return tryCatchStatement;
+			}
+
+			std::shared_ptr<AST::Statement> parseNonBlockStatement(TokenList tokenList)
+			{
+				int cursor = tokenList->pos();
+
+				std::shared_ptr<AST::NullStatement> nullStatement = parseNullStatement(tokenList);
+				if (nullStatement)
+				{
+					return nullStatement;
+				}
+
+
 			}
 			
 		};

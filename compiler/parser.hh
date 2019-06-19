@@ -103,6 +103,8 @@ namespace Flaner
 			std::shared_ptr<AST::TryCatchStatement::CatchClause> parseCatchClause(TokenList tokenList);
 			std::shared_ptr<AST::TryCatchStatement> parseTryCatchStatement(TokenList tokenList);
 
+			std::shared_ptr<AST::Statement> parseNonBlockStatement(TokenList tokenList);
+
 		}
 	};
 };

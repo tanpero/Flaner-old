@@ -43,6 +43,7 @@ namespace Flaner
 			class BlockStatement : public Statement
 			{
 			public:
+				BlockStatement() : body(std::make_shared<AST::StatementSequence>()) {}
 				BlockStatement(std::shared_ptr<StatementSequence> sequence) : body(sequence) {}
 				std::shared_ptr<StatementSequence> body;
 			};
@@ -363,9 +364,9 @@ namespace Flaner
 				};
 
 			public:
-				std::shared_ptr<BlockStatement> tryBlockStatement;
-				std::vector<std::shared_ptr<CatchStatement>> catchBodies;
-				std::shared_ptr<BlockStatement> finallyBlockStatement;
+				std::shared_ptr<BlockStatement> tryBody;
+				std::vector<std::shared_ptr<CatchClause>> catchBodies;
+				std::shared_ptr<BlockStatement> finallyBody;
 			};
 
 			class LabelStatement : public Statement
