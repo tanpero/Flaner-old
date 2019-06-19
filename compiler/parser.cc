@@ -1338,84 +1338,98 @@ namespace Flaner
 				{
 					return nullStatement;
 				}
+				tokenList->reset(cursor);
 
 				std::shared_ptr<AST::DefintionStatement> defintionStatement = parseVariableDefintion(tokenList);
 				if (defintionStatement)
 				{
 					return defintionStatement;
 				}
+				tokenList->reset(cursor);
 
 				defintionStatement = parseConstantDefintion(tokenList);
 				if (defintionStatement)
 				{
 					return defintionStatement;
 				}
+				tokenList->reset(cursor);
 
 				std::shared_ptr<AST::Statement> expressionStatement = parseExpressionStatement(tokenList);
 				if (expressionStatement)
 				{
 					return expressionStatement;
 				}
+				tokenList->reset(cursor);
 
 				std::shared_ptr<AST::IfStatement> ifStatement = parseIfStatement(tokenList);
 				if (ifStatement)
 				{
 					return ifStatement;
 				}
+				tokenList->reset(cursor);
 
 				std::shared_ptr<AST::SwitchStatement> switchStatement = parseSwitchStatement(tokenList);
 				if (switchStatement)
 				{
 					return switchStatement;
 				}
+				tokenList->reset(cursor);
 
 				std::shared_ptr<AST::DoWhileStatement> doWhileStatement = parseDoWhileStatement(tokenList);
 				if (doWhileStatement)
 				{
 					return doWhileStatement;
 				}
+				tokenList->reset(cursor);
 
 				std::shared_ptr<AST::WhileStatement> whileStatement = parseWhileStatement(tokenList);
 				if (whileStatement)
 				{
 					return whileStatement;
 				}
+				tokenList->reset(cursor);
 
 				std::shared_ptr<AST::Statement> forStatement = parseForStatement(tokenList);
 				if (forStatement)
 				{
 					return forStatement;
 				}
+				tokenList->reset(cursor);
 
 				std::shared_ptr<AST::BreakStatement> breakStatement = parseBreakStatement(tokenList);
 				if (breakStatement)
 				{
 					return breakStatement;
 				}
+				tokenList->reset(cursor);
 
 				std::shared_ptr<AST::ContinueStatement> continueStatement = parseContinueStatement(tokenList);
 				if (continueStatement)
 				{
 					return continueStatement;
 				}
+				tokenList->reset(cursor);
 
 				std::shared_ptr<AST::ThrowStatement> throwStatement = parseThrowStatement(tokenList);
 				if (throwStatement)
 				{
 					return throwStatement;
 				}
+				tokenList->reset(cursor);
 
 				std::shared_ptr<AST::ReturnStatement> returnStatement = parseReturnStatement(tokenList);
 				if (returnStatement)
 				{
 					return returnStatement;
 				}
+				tokenList->reset(cursor);
 
 				std::shared_ptr<AST::TryCatchStatement> tryCatchStatement = parseTryCatchStatement(tokenList);
 				if (tryCatchStatement)
 				{
 					return tryCatchStatement;
 				}
+				tokenList->reset(cursor);
 
 			}
 			
