@@ -1339,6 +1339,83 @@ namespace Flaner
 					return nullStatement;
 				}
 
+				std::shared_ptr<AST::DefintionStatement> defintionStatement = parseVariableDefintion(tokenList);
+				if (defintionStatement)
+				{
+					return defintionStatement;
+				}
+
+				defintionStatement = parseConstantDefintion(tokenList);
+				if (defintionStatement)
+				{
+					return defintionStatement;
+				}
+
+				std::shared_ptr<AST::Statement> expressionStatement = parseExpressionStatement(tokenList);
+				if (expressionStatement)
+				{
+					return expressionStatement;
+				}
+
+				std::shared_ptr<AST::IfStatement> ifStatement = parseIfStatement(tokenList);
+				if (ifStatement)
+				{
+					return ifStatement;
+				}
+
+				std::shared_ptr<AST::SwitchStatement> switchStatement = parseSwitchStatement(tokenList);
+				if (switchStatement)
+				{
+					return switchStatement;
+				}
+
+				std::shared_ptr<AST::DoWhileStatement> doWhileStatement = parseDoWhileStatement(tokenList);
+				if (doWhileStatement)
+				{
+					return doWhileStatement;
+				}
+
+				std::shared_ptr<AST::WhileStatement> whileStatement = parseWhileStatement(tokenList);
+				if (whileStatement)
+				{
+					return whileStatement;
+				}
+
+				std::shared_ptr<AST::Statement> forStatement = parseForStatement(tokenList);
+				if (forStatement)
+				{
+					return forStatement;
+				}
+
+				std::shared_ptr<AST::BreakStatement> breakStatement = parseBreakStatement(tokenList);
+				if (breakStatement)
+				{
+					return breakStatement;
+				}
+
+				std::shared_ptr<AST::ContinueStatement> continueStatement = parseContinueStatement(tokenList);
+				if (continueStatement)
+				{
+					return continueStatement;
+				}
+
+				std::shared_ptr<AST::ThrowStatement> throwStatement = parseThrowStatement(tokenList);
+				if (throwStatement)
+				{
+					return throwStatement;
+				}
+
+				std::shared_ptr<AST::ReturnStatement> returnStatement = parseReturnStatement(tokenList);
+				if (returnStatement)
+				{
+					return returnStatement;
+				}
+
+				std::shared_ptr<AST::TryCatchStatement> tryCatchStatement = parseTryCatchStatement(tokenList);
+				if (tryCatchStatement)
+				{
+					return tryCatchStatement;
+				}
 
 			}
 			
