@@ -422,6 +422,12 @@ namespace Flaner
 				std::string rename;
 			};
 
+			class ExportStatement : public Statement
+			{
+			public:
+				std::shared_ptr<AST::Statement> target;
+			};
+
 			class WithStatement : public Statement
 			{
 			public:
@@ -439,6 +445,12 @@ namespace Flaner
 			{
 			public:
 				std::shared_ptr<Expression> expression;
+			};
+
+			class DecoratorStatement : public Statement
+			{
+			public:
+				std::shared_ptr<Identifier> id;
 			};
 
 		};
