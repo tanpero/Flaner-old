@@ -1329,6 +1329,11 @@ namespace Flaner
 				return tryCatchStatement;
 			}
 
+			std::shared_ptr<AST::WithStatement> parseWithStatement(TokenList tokenList)
+			{
+				return std::shared_ptr<AST::WithStatement>();
+			}
+
 			std::shared_ptr<AST::Statement> parseNonBlockStatement(TokenList tokenList)
 			{
 				int cursor = tokenList->pos();
