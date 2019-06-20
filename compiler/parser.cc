@@ -8,11 +8,11 @@ namespace Flaner
 	{
 		namespace Parser
 		{
-			std::shared_ptr<AST::NullStatement> parseNullStatement(TokenList tokenList)
+			std::shared_ptr<AST::EmptyStatement> parseEmptyStatement(TokenList tokenList)
 			{
 				if (tokenList->now()->noteq(Lex::TOKEN_SEMICOLON))
 				{
-					return std::make_shared<AST::NullStatement>();
+					return std::make_shared<AST::EmptyStatement>();
 				}
 				else
 				{
@@ -442,84 +442,18 @@ namespace Flaner
 
 			std::shared_ptr<AST::Statement> parseStatement(TokenList tokenList)
 			{
-					// nonblock-statement ::=
-					//   null-statement |
-					//   variable-definition | immutable-variable-definition | function-definition |
-					//   expression-statement |
-					//   if-statement | switch-statement | do-while-statement | while-statement | for-statement |
-					//   break-statement | continue-statement | throw-statement | return-statement | assert-statement |
-					//   try-statement
+				std::shared_ptr<AST::Statement> statement = parseBlockStatement(tokenList);
+				if (statement)
+				{
+					return statement;
+				}
 
-					
-					/*
+				statement = parseNonBlockStatement(tokenList);
+				if (statement)
+				{
+					return statement;
+				}
 
-					auto qstmt = do_accept_null_statement_opt(tstrm);
-					if (qstmt) {
-						return qstmt;
-					}
-					qstmt = do_accept_variable_definition_opt(tstrm);
-					if (qstmt) {
-						return qstmt;
-					}
-					qstmt = do_accept_immutable_variable_definition_opt(tstrm);
-					if (qstmt) {
-						return qstmt;
-					}
-					qstmt = do_accept_function_definition_opt(tstrm);
-					if (qstmt) {
-						return qstmt;
-					}
-					qstmt = do_accept_expression_statement_opt(tstrm);
-					if (qstmt) {
-						return qstmt;
-					}
-					qstmt = do_accept_if_statement_opt(tstrm);
-					if (qstmt) {
-						return qstmt;
-					}
-					qstmt = do_accept_switch_statement_opt(tstrm);
-					if (qstmt) {
-						return qstmt;
-					}
-					qstmt = do_accept_do_while_statement_opt(tstrm);
-					if (qstmt) {
-						return qstmt;
-					}
-					qstmt = do_accept_while_statement_opt(tstrm);
-					if (qstmt) {
-						return qstmt;
-					}
-					qstmt = do_accept_for_statement_opt(tstrm);
-					if (qstmt) {
-						return qstmt;
-					}
-					qstmt = do_accept_break_statement_opt(tstrm);
-					if (qstmt) {
-						return qstmt;
-					}
-					qstmt = do_accept_continue_statement_opt(tstrm);
-					if (qstmt) {
-						return qstmt;
-					}
-					qstmt = do_accept_throw_statement_opt(tstrm);
-					if (qstmt) {
-						return qstmt;
-					}
-					qstmt = do_accept_return_statement_opt(tstrm);
-					if (qstmt) {
-						return qstmt;
-					}
-					qstmt = do_accept_assert_statement_opt(tstrm);
-					if (qstmt) {
-						return qstmt;
-					}
-					qstmt = do_accept_try_statement_opt(tstrm);
-					if (qstmt) {
-						return qstmt;
-					}
-					return qstmt;
-			*/
-				return std::make_shared<AST::Statement>();
 			}
 
 
@@ -878,7 +812,7 @@ namespace Flaner
 			std::shared_ptr<AST::ForInitializer> parseForInitializer(TokenList tokenList)
 			{
 				std::shared_ptr<AST::ForInitializer> initializer;
-				initializer = std::make_shared<AST::ForInitializer>(parseNullStatement(tokenList));
+				initializer = std::make_shared<AST::ForInitializer>(parseEmptyStatement(tokenList));
 				if (initializer)
 				{
 					return initializer;
@@ -1338,7 +1272,7 @@ namespace Flaner
 			{
 				int cursor = tokenList->pos();
 
-				std::shared_ptr<AST::NullStatement> nullStatement = parseNullStatement(tokenList);
+				std::shared_ptr<AST::EmptyStatement> nullStatement = parseEmptyStatement(tokenList);
 				if (nullStatement)
 				{
 					return nullStatement;
