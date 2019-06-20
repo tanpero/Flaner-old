@@ -29,6 +29,10 @@ import { export1 , export2 as alias2 , [...] } from "module-name";
 import defaultExport, { export [ , [...] ] } from "module-name";
 import defaultExport, * as name from "module-name";
 import "module-name";
+
+// 导入标准模块
+import numeric.Bigint;
+import network.http as http
 ```
 
 - `defaultExport`
@@ -37,7 +41,9 @@ import "module-name";
 
 - `module-name`
 
-  要导入的模块。通常是包含目标模块的`.`文件的相对或绝对路径名，可以不包括`.`扩展名。某些特定的打包工具可能允许或需要使用扩展或依赖文件，它会检查比对你的运行环境。只允许单引号和双引号的字符串。
+  要导入的模块名称。虚拟机会在特定的路径中查找具有指定名称和特定后缀名的文件，但是 `<module-name>` 本身不应包含文件后缀名。
+
+  优先查找 `.flm` 为后缀名的*通用模块*，如果没有找到对应的文件，那么查找以 `.flx` 为后缀名的*扩展模块*。
 
 - `name`
 
@@ -62,7 +68,7 @@ import "module-name";
 这将`myModule`插入当前作用域，其中包含来自位于`/modules/my-module.`文件中导出的所有接口。
 
 ```
-import * as myModule from '/modules/my-module.';
+import * as myModule from '/modules/my-module';
 ```
 
 在这里，访问导出接口意味着使用模块名称（在本例为“myModule”）作为命名空间。例如，如果上面导入的模块包含一个接口`doAllTheAmazingThings()`，你可以这样调用：
@@ -76,7 +82,7 @@ myModule.doAllTheAmazingThings();
 给定一个名为`myExport`的对象或值，它已经从模块`my-module`导出（因为整个模块被导出）或显式地导出（使用 `export` 语句），将`myExport`插入当前作用域。
 
 ```
-import {myExport} from '/modules/my-module.';
+import {myExport} from '/modules/my-module';
 ```
 
 ##### 导入多个接口
@@ -84,7 +90,7 @@ import {myExport} from '/modules/my-module.';
 这将`foo`和`bar`插入当前作用域。
 
 ```
-import {foo, bar} from '/modules/my-module.';
+import {foo, bar} from '/modules/my-module';
 ```
 
 ##### 导入带有别名的接口
@@ -93,7 +99,7 @@ import {foo, bar} from '/modules/my-module.';
 
 ```
 import {reallyReallyLongModuleExportName as shortName}
-  from '/modules/my-module.';
+  from '/modules/my-module';
 ```
 
 ##### 导入时重命名多个接口
@@ -104,7 +110,7 @@ import {reallyReallyLongModuleExportName as shortName}
 import {
   reallyReallyLongModuleMemberName as shortName, 
   anotherLongModuleName as short
-} from '/modules/my-module.';
+} from '/modules/my-module';
 ```
 
 ##### 仅为副作用而导入一个模块
@@ -112,7 +118,7 @@ import {
 整个模块仅为副作用（中性词，无贬义含义）而导入，而不导入模块中的任何内容（接口）。 这将运行模块中的全局代码, 但实际上不导入任何值。
 
 ```
-import '/modules/my-module.';
+import '/modules/my-module';
 ```
 
 ##### 导入默认值
@@ -122,20 +128,20 @@ import '/modules/my-module.';
 最简单的用法是直接导入默认值：
 
 ```
-import myDefault from '/modules/my-module.';
+import myDefault from '/modules/my-module';
 ```
 
 也可以同时将`default`语法与上述用法（命名空间导入或命名导入）一起使用。在这种情况下，`default`导入必须首先声明。 例如：
 
 ```
-import myDefault, * as myModule from '/modules/my-module.';
+import myDefault, * as myModule from '/modules/my-module';
 // myModule used as a namespace
 ```
 
 或者
 
 ```
-import myDefault, {foo, bar} from '/modules/my-module.';
+import myDefault, {foo, bar} from '/modules/my-module';
 // specific, named imports
 ```
 
@@ -145,32 +151,34 @@ import myDefault, {foo, bar} from '/modules/my-module.';
 
 ------
 
+`export` 语句将本文件看做一个独立模块，并导出指定的标识符。
+
 #### 语法
 
 ```
 // 导出单个特性
-export let name1, name2, …, nameN; // 也可以为  const
-export let name1 = …, name2 = …, …, nameN; // 也可以为   const
-export function FunctionName(){...}
+export let name1, name2, ..., nameN; // 也可以为 const
+export let name1 = ..., name2 = ..., ..., nameN; // 也可以为 const
+export (...) => {...}
 export class ClassName {...}
 
-// 导处列表
-export { name1, name2, …, nameN };
+// 导出列表
+export { name1, name2, ..., nameN };
 
 // 重命名导出
-export { variable1 as name1, variable2 as name2, …, nameN };
+export { variable1 as name1, variable2 as name2, ..., nameN };
 
 // 默认导出
 export default expression;
-export default function (…) { … } // 也可以为 class, function*
-export default function name1(…) { … } // 也可以为 class, function*
-export { name1 as default, … };
+export default (...) => { ... } // 也可以为 class, generator
+export default name1 = (...) => { ... } // 也可以为 class, generator*
+export { name1 as default, ... };
 
 // Aggregating modules
-export * from …;
-export { name1, name2, …, nameN } from …;
-export { import1 as name1, import2 as name2, …, nameN } from …;
-export { default } from …;
+export * from ...;
+export { name1, name2, ..., nameN } from ...;
+export { import1 as name1, import2 as name2, ..., nameN } from ...;
+export { default } from ...;
 ```
 
 - `nameN`
@@ -189,8 +197,8 @@ export { default } from …;
   // exports a function declared earlier
   export { myFunction }; 
   
-  // exports a constant
-  export const foo = Math.sqrt(2);
+  // exports a   constant
+  export   const foo = Math.sqrt(2);
   ```
 
 - 默认导出（函数）：
@@ -220,7 +228,7 @@ print(m);        // will print 12
  下面的语法不能从导入的模块导出默认导出值：
 
 ```
-export * from …;
+export * from ...;
 ```
 
 如果需要导出默认值，请使用下列代码：
