@@ -34,7 +34,7 @@ namespace Flaner
 
 			};
 
-			class NullStatement : public Statement
+			class EmptyStatement : public Statement
 			{
 			public:
 
@@ -280,12 +280,12 @@ namespace Flaner
 
 			class ForInitializer : public Statement
 			{
-				using NullStatement = std::shared_ptr<AST::NullStatement>;
+				using EmptyStatement = std::shared_ptr<AST::EmptyStatement>;
 				using Defintion     = std::shared_ptr<AST::DefintionStatement>;
 				using Expression    = std::shared_ptr<AST::Expression>;
 			public:
-				std::variant<NullStatement, Defintion, Expression> body;
-				ForInitializer(NullStatement s) : body(s) {}
+				std::variant<EmptyStatement, Defintion, Expression> body;
+				ForInitializer(EmptyStatement s) : body(s) {}
 				ForInitializer(Defintion s) : body(s) {}
 				ForInitializer(Expression s) : body(s) {}
 			};

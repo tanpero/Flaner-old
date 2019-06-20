@@ -4,6 +4,7 @@
 #include <token.hh>
 #include <scanner.hh>
 #include <statement.hh>
+#include <operator.hh>
 
 /*
 * File: parser.hh
@@ -18,6 +19,7 @@ namespace Flaner
 		{
 
 			using TokenList = std::shared_ptr<Lex::TokenList>;
+			using OperatorUnits = std::shared_ptr<std::vector<std::shared_ptr<Op::Operator>>>;
 
 			std::shared_ptr<AST::EmptyStatement> parseEmptyStatement(TokenList tokenList);
 
@@ -56,28 +58,29 @@ namespace Flaner
 			// 解析否定表达式
 			std::shared_ptr<bool> parseNegationExpression(TokenList tokenList);
 
-			// 解析一个块（包含在块语句内）
-			std::shared_ptr<AST::StatementSequence> parseBlock(TokenList tokenList);
 
 			std::shared_ptr<AST::UnaryExpression> parseUnaryExpression(TokenList tokenList);
 
 			std::shared_ptr<AST::Expression> parseExpression(TokenList tokenList);
 
+
+			// 解析一个块（包含在块语句内）
+			std::shared_ptr<AST::StatementSequence> parseBlock(TokenList tokenList);
+			std::shared_ptr<AST::BlockStatement> parseBlockStatement(TokenList tokenList);
+			std::shared_ptr<AST::Statement> parseNonBlockStatement(TokenList tokenList);
 			std::shared_ptr<AST::Statement> parseStatement(TokenList tokenList);
 
-			std::shared_ptr<AST::BlockStatement> parseBlockStatement(TokenList tokenList);
 
 			std::shared_ptr<AST::ElseClause>  parseElseBranch(TokenList tokenList);
 			std::shared_ptr<AST::IfStatement> parseIfStatement(TokenList tokenList);
 
-			std::shared_ptr<AST::SwitchClause> parseCaseClause(TokenList tokenList);
-			std::shared_ptr<AST::SwitchClause> parseDefaultClause(TokenList tokenList);
-			
-			std::shared_ptr<AST::SwitchClause> parseSwitchClause(TokenList tokenList);
-			
-			std::shared_ptr<AST::SwitchClauseList> parseSwitchClauseList(TokenList);
 
+			std::shared_ptr<AST::SwitchClause> parseCaseClause(TokenList tokenList);
+			std::shared_ptr<AST::SwitchClause> parseDefaultClause(TokenList tokenList);			
+			std::shared_ptr<AST::SwitchClause> parseSwitchClause(TokenList tokenList);			
+			std::shared_ptr<AST::SwitchClauseList> parseSwitchClauseList(TokenList);
 			std::shared_ptr<AST::SwitchStatement> parseSwitchStatement(TokenList tokenList);			
+
 
 			std::shared_ptr<AST::DoWhileStatement> parseDoWhileStatement(TokenList tokenList);
 			std::shared_ptr<AST::WhileStatement> parseWhileStatement(TokenList tokenList);
@@ -90,13 +93,12 @@ namespace Flaner
 			std::shared_ptr<AST::Statement> parseForComplement(TokenList tokenList);
 			std::shared_ptr<AST::Statement> parseForStatement(TokenList tokenList);
 
-			std::shared_ptr<AST::LabelStatement> parseLabelStatement(TokenList tokenList);
 
+			std::shared_ptr<AST::LabelStatement> parseLabelStatement(TokenList tokenList);
 			std::shared_ptr<AST::BreakStatement> parseBreakStatement(TokenList tokenList);
 			std::shared_ptr<AST::ContinueStatement> parseContinueStatement(TokenList tokenList);
 
 			std::shared_ptr<AST::ThrowStatement> parseThrowStatement(TokenList tokenList);
-
 			std::shared_ptr<AST::ReturnStatement> parseReturnStatement(TokenList tokenList);
 
 			std::shared_ptr<AST::TryCatchStatement::CatchClause> parseCatchClause(TokenList tokenList);
@@ -111,7 +113,7 @@ namespace Flaner
 			std::shared_ptr<AST::YieldStatement> parseYieldStatement(TokenList tokenList);
 
 
-			std::shared_ptr<AST::Statement> parseNonBlockStatement(TokenList tokenList);
+			bool acceptPrefixOperator(OperatorUnits units, TokenList tokenList);
 
 		}
 	};
