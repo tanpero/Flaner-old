@@ -490,19 +490,27 @@ namespace Flaner
 			{
 
 				std::shared_ptr<AST::BlockStatement> blockStatement = std::make_shared<AST::BlockStatement>();
+				std::shared_ptr<Lex::Token> begin = tokenList->now();
 
 				// 使用大括号包裹的块语句，解析到对应的最后一个 '}'
-				if (tokenList->now()->eq(Lex::TOKEN_BRACE_BEGIN))
+				if (begin->eq(Lex::TOKEN_BRACE_BEGIN))
 				{
 					blockStatement->body = parseBlock(tokenList);
-
-					if (!blockStatement)
+				}
+				else
+				{
+					std::shared_ptr<AST::Statement> nonBlockStatement = parseNonBlockStatement(tokenList);
+					if (!nonBlockStatement)
 					{
-						return nullptr;
+						unexpected_end_of_input_syntax_error(begin);
 					}
+
+					std::shared_ptr<AST::StatementSequence> sequence = std::shared_ptr<AST::StatementSequence>();
+					sequence->insert(nonBlockStatement);
+					blockStatement->body = sequence;
 				}
 
-				return nullptr;
+				return blockStatement;
 			}
 
 			std::shared_ptr<AST::UnaryExpression> parseUnaryExpression(TokenList tokenList)
