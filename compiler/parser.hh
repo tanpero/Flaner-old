@@ -113,7 +113,7 @@ namespace Flaner
 			std::shared_ptr<AST::YieldStatement> parseYieldStatement(TokenList tokenList);
 
 
-			bool acceptPrefixOperator(OperatorUnits units, TokenList tokenList);
+			bool acceptPrefixOperator(OperatorUnits& units, TokenList tokenList);
 
 		}
 	};

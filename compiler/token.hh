@@ -47,6 +47,8 @@ namespace Flaner
 				TOKEN_OF,
 				TOKEN_IMPORT,
 				TOKEN_EXPORT,
+
+				TOKEN_TYPEOF,
 				
 				TOKEN_PAREN_BEGIN,
 				TOKEN_PAREN_END,
@@ -58,6 +60,10 @@ namespace Flaner
 				TOKEN_ASSIGN,
 				TOKEN_PLUS,
 				TOKEN_MINUS,
+				TOKEN_MULTI,
+				TOKEN_DEVIDE,
+				TOKEN_LOGIC_NOT,
+				TOKEN_BIT_NOT,
 
 				TOKEN_FUNCTION_ARROW,
 

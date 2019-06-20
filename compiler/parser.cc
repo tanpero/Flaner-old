@@ -1,6 +1,8 @@
 #include <parser.hh>
 #include <scanner.hh>
 #include <exception.hh>
+#include <algorithm>
+#include <iterator>
 
 namespace Flaner
 {
@@ -1271,10 +1273,12 @@ namespace Flaner
 				return tryCatchStatement;
 			}
 
+
 			std::shared_ptr<AST::WithStatement> parseWithStatement(TokenList tokenList)
 			{
 				return std::shared_ptr<AST::WithStatement>();
 			}
+
 
 			std::shared_ptr<AST::Statement> parseNonBlockStatement(TokenList tokenList)
 			{
@@ -1380,6 +1384,36 @@ namespace Flaner
 
 			}
 			
+
+			bool acceptPrefixOperator(OperatorUnits & units, TokenList tokenList)
+			{
+				struct TokenToOperator
+				{
+					Lex::TokenType token;
+					Op::Operator op;
+				}
+				static constexpr table[] = {
+					{ Lex::TOKEN_PLUS, Op::prefix_plus },
+					{ Lex::TOKEN_MINUS, Op::prefix_minus },
+					{ Lex::TOKEN_LOGIC_NOT, Op::prefix_negate },
+					{ Lex::TOKEN_BIT_NOT, Op::prefix_reserve },
+					{ Lex::TOKEN_TYPEOF, Op::prefix_typeof },
+				};
+
+				Lex::TokenType tokenType = tokenList->now()->type;
+
+				auto op = std::find_if(std::begin(table), std::end(table), [&](const TokenToOperator& r) {
+					return tokenType == r.token;
+				});
+
+				if (op == std::end(table))
+				{
+					return false;
+				}
+
+
+			}
+
 		};
 	};
 };
