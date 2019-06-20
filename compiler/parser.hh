@@ -19,7 +19,7 @@ namespace Flaner
 
 			using TokenList = std::shared_ptr<Lex::TokenList>;
 
-			std::shared_ptr<AST::NullStatement> parseNullStatement(TokenList tokenList);
+			std::shared_ptr<AST::EmptyStatement> parseEmptyStatement(TokenList tokenList);
 
 			void checkWithSemicolon(TokenList tokenList);
 
