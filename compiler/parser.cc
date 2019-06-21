@@ -31,6 +31,11 @@ namespace Flaner
 				}
 			}
 
+			std::shared_ptr<AST::Value> parseLiteralValue(TokenList tokenList)
+			{
+				return std::shared_ptr<AST::Value>();
+			}
+
 
 			std::shared_ptr<AST::Declaration> parseVariableDeclaration(TokenList tokenList)
 			{
@@ -1415,6 +1420,7 @@ namespace Flaner
 				return true;
 			}
 
+
 			bool acceptThis(OperatorUnits & units, TokenList tokenList)
 			{
 				if (tokenList->now()->noteq(Lex::TOKEN_THIS))
@@ -1424,6 +1430,71 @@ namespace Flaner
 
 				units->push_back(std::make_shared<Op::Operator>(Op::value_this));
 				return true;
+			}
+
+
+			static bool acceptElementList(OperatorUnits& units, TokenList tokenList)
+			{
+				std::shared_ptr<AST::Expression> expr = parseExpression(tokenList);
+				if (!expr)
+				{
+					// TODO...
+				}
+
+				if (tokenList->now()->eq(Lex::TOKEN_COMMA))
+				{
+
+				}
+			}
+
+
+			static bool acceptElementListOptional(OperatorUnits& units, TokenList tokenList)
+			{
+				
+			}
+
+
+			bool acceptListLiteral(OperatorUnits & units, TokenList tokenList)
+			{
+				if (tokenList->now()->noteq(Lex::TOKEN_BRACKET_BEGIN))
+				{
+					return false;
+				}
+
+				tokenList->forward();
+
+		/*
+		// unnamed-array ::=
+        //   "[" array-element-list-opt "]"
+        // array-element-list-opt ::=
+        //   array-element-list | ""
+        // array-element-list ::=
+        //   expression ( "," array-element-list-opt | "" )
+        auto kpunct = do_accept_punctuator_opt(tstrm, { Token::punctuator_bracket_op });
+        if(!kpunct) {
+          return false;
+        }
+        std::size_t nelems = 0;
+        for(;;) {
+          bool succ = do_accept_expression(units, tstrm);
+          if(!succ) {
+            break;
+          }
+          nelems += 1;
+          // Look for the separator.
+          kpunct = do_accept_punctuator_opt(tstrm, { Token::punctuator_comma, Token::punctuator_semicol });
+          if(!kpunct) {
+            break;
+          }
+        }
+        kpunct = do_accept_punctuator_opt(tstrm, { Token::punctuator_bracket_cl });
+        if(!kpunct) {
+          throw do_make_parser_error(tstrm, Parser_Error::code_closed_bracket_expected);
+        }
+        Xprunit::S_unnamed_array xunit = { nelems };
+        units.emplace_back(rocket::move(xunit));
+        return true;*/
+				return false;
 			}
 
 		};

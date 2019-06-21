@@ -25,6 +25,8 @@ namespace Flaner
 
 			void checkWithSemicolon(TokenList tokenList);
 
+			std::shared_ptr<AST::Value> parseLiteralValue(TokenList tokenList);
+
 			// ½öÎªÉùÃ÷
 			std::shared_ptr<AST::Declaration> parseVariableDeclaration(TokenList tokenList);
 			std::shared_ptr<AST::Declaration> parseConstantDeclaration(TokenList tokenList);
@@ -116,6 +118,7 @@ namespace Flaner
 			bool acceptPrefixOperator(OperatorUnits& units, TokenList tokenList);
 
 			bool acceptThis(OperatorUnits& units, TokenList tokenList);
+			bool acceptListLiteral(OperatorUnits& units, TokenList tokenList);
 
 		}
 	};
