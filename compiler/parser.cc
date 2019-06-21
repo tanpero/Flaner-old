@@ -1395,14 +1395,14 @@ namespace Flaner
 				struct TokenToOperator
 				{
 					Lex::TokenType token;
-					Op::Operator op;
+					Meta::Operator op;
 				}
 				static constexpr table[] = {
-					{ Lex::TOKEN_PLUS, Op::prefix_plus },
-					{ Lex::TOKEN_MINUS, Op::prefix_minus },
-					{ Lex::TOKEN_LOGIC_NOT, Op::prefix_negate },
-					{ Lex::TOKEN_BIT_NOT, Op::prefix_reserve },
-					{ Lex::TOKEN_TYPEOF, Op::prefix_typeof },
+					{ Lex::TOKEN_PLUS, Meta::prefix_plus },
+					{ Lex::TOKEN_MINUS, Meta::prefix_minus },
+					{ Lex::TOKEN_LOGIC_NOT, Meta::prefix_negate },
+					{ Lex::TOKEN_BIT_NOT, Meta::prefix_reserve },
+					{ Lex::TOKEN_TYPEOF, Meta::prefix_typeof },
 				};
 
 				Lex::TokenType tokenType = tokenList->now()->type;
@@ -1416,7 +1416,7 @@ namespace Flaner
 					return false;
 				}
 				
-				units->push_back(std::make_shared<Op::Operator>(op->op));
+				units->push_back(std::make_shared<Meta::Operator>(op->op));
 				return true;
 			}
 
@@ -1428,7 +1428,7 @@ namespace Flaner
 					return false;
 				}
 
-				units->push_back(std::make_shared<Op::Operator>(Op::value_this));
+				units->push_back(std::make_shared<Meta::Operator>(Meta::value_this));
 				return true;
 			}
 
@@ -1443,7 +1443,8 @@ namespace Flaner
 
 				if (tokenList->now()->eq(Lex::TOKEN_COMMA))
 				{
-
+					tokenList->forward();
+					return acceptElementListOptional(tokenList);
 				}
 			}
 
@@ -1462,39 +1463,36 @@ namespace Flaner
 				}
 
 				tokenList->forward();
+				if (tokenList->now()->noteq(Lex::TOKEN_BRACE_BEGIN))
+				{
+					return false;
+				}
 
-		/*
-		// unnamed-array ::=
-        //   "[" array-element-list-opt "]"
-        // array-element-list-opt ::=
-        //   array-element-list | ""
-        // array-element-list ::=
-        //   expression ( "," array-element-list-opt | "" )
-        auto kpunct = do_accept_punctuator_opt(tstrm, { Token::punctuator_bracket_op });
-        if(!kpunct) {
-          return false;
-        }
-        std::size_t nelems = 0;
-        for(;;) {
-          bool succ = do_accept_expression(units, tstrm);
-          if(!succ) {
-            break;
-          }
-          nelems += 1;
-          // Look for the separator.
-          kpunct = do_accept_punctuator_opt(tstrm, { Token::punctuator_comma, Token::punctuator_semicol });
-          if(!kpunct) {
-            break;
-          }
-        }
-        kpunct = do_accept_punctuator_opt(tstrm, { Token::punctuator_bracket_cl });
-        if(!kpunct) {
-          throw do_make_parser_error(tstrm, Parser_Error::code_closed_bracket_expected);
-        }
-        Xprunit::S_unnamed_array xunit = { nelems };
-        units.emplace_back(rocket::move(xunit));
-        return true;*/
-				return false;
+				std::size_t elems = 0;
+
+				while (true)
+				{
+					bool isSuccess = acceptExpression(units, tokenList);
+					if (!isSuccess)
+					{
+						break;
+					}
+
+					elems += 1;
+
+					if (tokenList->forward()->noteq(Lex::TOKEN_COMMA))
+					{
+						break;
+					}
+				}
+
+				if (tokenList->forward()->noteq(Lex::TOKEN_BRACKET_BEGIN))
+				{
+					unclosing_parentheses_syntax_error()
+				}
+
+				// TODO...
+				return true;
 			}
 
 		};

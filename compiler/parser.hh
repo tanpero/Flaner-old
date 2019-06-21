@@ -4,7 +4,7 @@
 #include <token.hh>
 #include <scanner.hh>
 #include <statement.hh>
-#include <operator.hh>
+#include <meta.hh>
 
 /*
 * File: parser.hh
@@ -19,7 +19,7 @@ namespace Flaner
 		{
 
 			using TokenList = std::shared_ptr<Lex::TokenList>;
-			using OperatorUnits = std::shared_ptr<std::vector<std::shared_ptr<Op::Operator>>>;
+			using OperatorUnits = std::shared_ptr<std::vector<std::shared_ptr<Meta::Operator>>>;
 
 			std::shared_ptr<AST::EmptyStatement> parseEmptyStatement(TokenList tokenList);
 
