@@ -1402,7 +1402,7 @@ namespace Flaner
 
 				Lex::TokenType tokenType = tokenList->now()->type;
 
-				auto op = std::find_if(std::begin(table), std::end(table), [&](const TokenToOperator& r) {
+				const TokenToOperator* op = std::find_if(std::begin(table), std::end(table), [&](const TokenToOperator& r) {
 					return tokenType == r.token;
 				});
 
@@ -1410,8 +1410,9 @@ namespace Flaner
 				{
 					return false;
 				}
-
-
+				
+				units->push_back(std::make_shared<Op::Operator>(op->op));
+				return true;
 			}
 
 		};
