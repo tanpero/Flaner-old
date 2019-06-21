@@ -20,18 +20,202 @@ namespace Flaner
 				INDEX_NULL,
 				INDEX_BOOLEAN,
 				INDEX_NUMERIC,
+				INDEX_BIGINT,
 				INDEX_STRING,
 				INDEX_OBJECT,
 				INDEX_LIST,
+				INDEX_FUNCTION,
 				INDEX_SYMBOL,
 				INDEX_REGEXP,
 			};
 
-			class NullValue
+			class AbstractValue
 			{
 			public:
+				ValueKindIndex kindIndex;
+			};
+
+			class NullValue : AbstractValue
+			{
+			public:
+				NullValue() : kindIndex(ValueKindIndex::INDEX_NULL) {}
+			};
+
+			class BooleanValue : AbstractValue
+			{
+			public:
+				BooleanValue() : kindIndex(ValueKindIndex::INDEX_BOOLEAN) {}
+			};
+
+			class NumericValue : AbstractValue
+			{
+			public:
+				NumericValue() : kindIndex(ValueKindIndex::INDEX_NUMERIC) {}
+				NumericValue(Numeric _value) : kindIndex(ValueKindIndex::INDEX_NUMERIC), value(_value) {}
+				Numeric value;
+			};
+			
+			class BigintValue : AbstractValue
+			{
+			public:
+				BigintValue() : kindIndex(ValueKindIndex::INDEX_BIGINT) {}
+			};
+
+			class StringValue : AbstractValue
+			{
+			public:
+				StringValue() : kindIndex(ValueKindIndex::INDEX_STRING) {}
+			};
+
+			class ListValue : AbstractValue
+			{
+			public:
+				ListValue() : kindIndex(ValueKindIndex::INDEX_LIST) {}
+			};
+
+			class ObjectValue : AbstractValue
+			{
+			public:
+				ListValue() : kindIndex(ValueKindIndex::INDEX_OBJECT) {}
+			};
+
+			class FunctionValue : AbstractValue
+			{
+			public:
+				FunctionValue : kindIndex(ValueKindIndex::INDEX_FUNCTION) {}
+			};
+
+			
+
+
+			class UnaryOperator
+			{
+			public:
+				std::shared_ptr<Lex::Token> name;
+			};
+
+			class BinaryOperator
+			{
+			public:
+				enum Kind
+				{
+					PLUS,
+					MINUS,
+					MULTI,
+					DEVIDE,
+					POWER,
+					MOD,
+					LOGIC_AND,
+					LOGIC_OR,
+					BIT_AND,
+					BIT_OR,
+					BIT_XOR
+				};
+
+				Kind kind;
+				BinaryOperator(std::string op);
+				BinaryOperator(Lex::TokenType token);
+			};
+			
+			class Param
+			{
+			public:
+				bool hasDefaultValue;
+				bool isRest;
+				std::shared_ptr<Expression> defaultValueExpr;
+				std::shared_ptr<Identifier> id;
+
+				Param()
+					: hasDefaultValue(false), isRest(false), defaultValueExpr(nullptr), id(nullptr) {}
+
+				Param(std::shared_ptr<Identifier> id)
+					: hasDefaultValue(false), isRest(false), defaultValueExpr(nullptr), id(id) {}
 
 			};
+			
+			class ParamsList
+			{
+				using list = std::vector<std::shared_ptr<Param>>;
+				list params;
+			public:
+				inline list::iterator begin()
+				{
+					return params.begin();
+				}
+
+				inline list::iterator end()
+				{
+					return params.end();
+				}
+
+				inline void insert(std::shared_ptr<Param> param)
+				{
+					params.push_back(param);
+				}
+
+				inline unsigned int getLength()
+				{
+					return params.size();
+				}
+			};
+			
+			class Value : AbstractValue
+			{
+			public:
+				enum FunctionKind
+				{
+					COMMON,
+					GENERATOR
+				};
+				FunctionKind kind;
+				std::shared_ptr<ParamsList> paramsList;
+				std::shared_ptr<StatementSequence> body;
+
+				FunctionValue() : kind(COMMON),  {}
+			};
+
+
+			class ObjectMember
+			{
+			public:
+				struct CommonMemberValue
+				{
+					std::shared_ptr<Value> value;
+				};
+				struct DescribedMemberValue
+				{
+					std::shared_ptr<FunctionValue> getter;
+					std::shared_ptr<FunctionValue> setter;
+				};
+				std::variant<CommonMemberValue, DescribedMemberValue> value;
+			};
+			
+
+
+			class UnaryExpression : public Expression
+			{
+			public:
+				std::shared_ptr<Value> right;
+				std::shared_ptr<UnaryOperator> op;
+			};
+
+			class BinaryExpreesion : public Expression
+			{
+			public:
+				std::shared_ptr<Expression> left;
+				std::shared_ptr<Expression> right;
+				std::shared_ptr<BinaryOperator> op;
+			};
+
+			class TernaryExpression : public Expression
+			{
+			public:
+				std::shared_ptr<Expression> condition;
+				std::shared_ptr<Expression> yes;
+				std::shared_ptr<Expression> no;
+			};
+
+
 
 			class ExpressionElementNode
 			{
