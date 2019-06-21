@@ -48,6 +48,10 @@ namespace Flaner
 				TOKEN_IMPORT,
 				TOKEN_EXPORT,
 
+				TOKEN_THIS,
+				TOKEN_NULL,
+				TOKEN_TRUE,
+				TOKEN_FALSE,
 				TOKEN_TYPEOF,
 				
 				TOKEN_PAREN_BEGIN,

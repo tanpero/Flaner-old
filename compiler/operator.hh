@@ -13,7 +13,9 @@ namespace Flaner
 				prefix_minus,
 				prefix_negate,
 				prefix_reserve,
-				prefix_typeof
+				prefix_typeof,
+
+				value_this,
 			};
 		}
 	}

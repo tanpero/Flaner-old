@@ -115,6 +115,8 @@ namespace Flaner
 
 			bool acceptPrefixOperator(OperatorUnits& units, TokenList tokenList);
 
+			bool acceptThis(OperatorUnits& units, TokenList tokenList);
+
 		}
 	};
 };

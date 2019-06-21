@@ -1415,6 +1415,17 @@ namespace Flaner
 				return true;
 			}
 
+			bool acceptThis(OperatorUnits & units, TokenList tokenList)
+			{
+				if (tokenList->now()->noteq(Lex::TOKEN_THIS))
+				{
+					return false;
+				}
+
+				units->push_back(std::make_shared<Op::Operator>(Op::value_this));
+				return true;
+			}
+
 		};
 	};
 };
