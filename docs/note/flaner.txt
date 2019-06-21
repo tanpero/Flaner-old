@@ -1,0 +1,19 @@
+
+List ::= '[' ListElementArray ']'
+
+ListElementArray ::= ListElement | ''
+
+ListElement ::= Expression ((',' ?) | (',' ListElementArray))
+
+
+Object ::= '{' ObjectMemberArray '}'
+
+ObjectMemberArray ::= ObjectMember | ''
+
+ObjectMember ::= (ObjectKey ':' ObjectValue | ObjectKeyValue) ((',' ?) | (',' ObjectMemberArray))
+
+ObjectKey ::= '[' Expression ']' | Identifier
+
+ObjectValue ::= Expression
+
+ObjectKeyValue ::= Identifier
