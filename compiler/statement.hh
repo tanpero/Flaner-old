@@ -183,33 +183,6 @@ namespace Flaner
 				std::shared_ptr<BlockStatement> body;
 			};
 
-			class ForStatement : public Statement
-			{
-			public:
-				struct CommonHeader
-				{
-					std::shared_ptr<Expression> initialization;
-					std::shared_ptr<Expression> condition;
-					std::shared_ptr<Expression> increment;
-				};
-
-				// 保留 for...in 和 for...of 语句的循环头定义
-				struct InHeader
-				{
-
-				};
-
-				struct OfHeader
-				{
-
-				};
-
-				using Header = std::variant<CommonHeader, InHeader, OfHeader>;
-
-			public:
-				Header header;
-				std::shared_ptr<BlockStatement> body;
-			};
 
 			// 若表达式指针为 nullptr，则该子句为 default 子句，否则为 case 子句
 			using SwitchClause = std::pair<std::shared_ptr<Expression>, std::shared_ptr<BlockStatement>>;

@@ -2,7 +2,6 @@ AST (struct)
     -> std::vector<Statement*> statements
 
 StatementKind (enum class)
-    -> Declaration
     -> Expression
     -> If
 	-> Switch
@@ -24,12 +23,3 @@ StatementKind (enum class)
 	-> Yield
 	
 
-Statement (struct)
-    -> StatementKind kind
-
-Declaration : Statement (struct)
-    -> std::string type
-    -> std::vector<Statement*> body
-Expression : Statement (struct)
-    -> std::string name
-    -> Function* called

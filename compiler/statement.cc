@@ -7,18 +7,6 @@ namespace Flaner
 		namespace AST
 		{
 
-			std::string IfStatement::type()
-			{
-				return "if";
-			}
-
-
-			void IfStatement::walk()
-			{
-
-			}
-
-
 			std::shared_ptr<Statement> StatementSequence::get()
 			{
 				return std::shared_ptr<Statement>();

@@ -5,6 +5,7 @@
 #include <stack>
 #include <vector>
 #include <memory>
+#include <variant>
 
 namespace Flaner
 {
@@ -14,6 +15,7 @@ namespace Flaner
 		{
 
 			using Numeric = double;
+			using Boolean = bool;
 
 			enum class ValueKindIndex : uint8_t
 			{
@@ -44,8 +46,25 @@ namespace Flaner
 			class BooleanValue : AbstractValue
 			{
 			public:
-				BooleanValue() : kindIndex(ValueKindIndex::INDEX_BOOLEAN) {}
+				BooleanValue() : kindIndex(ValueKindIndex::INDEX_BOOLEAN), value(true) {}
+				BooleanValue(Boolean _value) : kindIndex(ValueKindIndex::INDEX_BOOLEAN), value(_value) {}
+				Boolean value;
 			};
+
+			inline Boolean doOperatorLogicNot(Boolean value)
+			{
+				return !value;
+			}
+
+			inline Boolean doOperatorLogicAnd(Boolean lhs, Boolean rhs)
+			{
+				return lhs && rhs;
+			}
+
+			inline Boolean doOperatorLogicOr(Boolean lhs, Boolean rhs)
+			{
+				return lhs || rhs;
+			}
 
 			class NumericValue : AbstractValue
 			{
@@ -85,19 +104,40 @@ namespace Flaner
 				FunctionValue : kindIndex(ValueKindIndex::INDEX_FUNCTION) {}
 			};
 
-			
+			class SymbolValue : AbstractValue
+			{
+			public:
+				SymbolValue : kindIndex(ValueKindIndex::INDEX_SYMBOL) {}
+			};
+
+			class RegExpValue : AbstractValue
+			{
+			public:
+				RegExpValue : kindIndex(ValueKindIndex::INDEX_REGEXP) {}
+			};
+
+			using NativeValue = std::variant<NullValue, BooleanValue, NumericValue,
+				BigintValue, StringValue, ListValue, ObjectValue, FunctionValue, SymbolValue, RegExpValue>;
 
 
 			class UnaryOperator
 			{
 			public:
-				std::shared_ptr<Lex::Token> name;
+				enum class Kind : uint8_t
+				{
+					LOGIC_NOT,
+					BIT_NOT,
+					NEGATIVE,
+					TYPEOF,
+				};
+
+				Kind kind;
 			};
 
 			class BinaryOperator
 			{
 			public:
-				enum Kind
+				enum class Kind : uint8_t
 				{
 					PLUS,
 					MINUS,
@@ -109,12 +149,10 @@ namespace Flaner
 					LOGIC_OR,
 					BIT_AND,
 					BIT_OR,
-					BIT_XOR
+					BIT_XOR,
 				};
 
 				Kind kind;
-				BinaryOperator(std::string op);
-				BinaryOperator(Lex::TokenType token);
 			};
 			
 			class Param
@@ -159,7 +197,9 @@ namespace Flaner
 				}
 			};
 			
-			class Value : AbstractValue
+			class StatementSequence;
+
+			class Function : AbstractValue
 			{
 			public:
 				enum FunctionKind
@@ -171,7 +211,7 @@ namespace Flaner
 				std::shared_ptr<ParamsList> paramsList;
 				std::shared_ptr<StatementSequence> body;
 
-				FunctionValue() : kind(COMMON),  {}
+				FunctionValue() : kind(COMMON), kindIndex(ValueKindIndex::INDEX_FUNCTION) {}
 			};
 
 
@@ -192,22 +232,21 @@ namespace Flaner
 			
 
 
-			class UnaryExpression : public Expression
+			class UnaryExpressionNode : public Expression
 			{
 			public:
 				std::shared_ptr<Value> right;
 				std::shared_ptr<UnaryOperator> op;
 			};
 
-			class BinaryExpreesion : public Expression
+			class BinaryExpreesionNode : public Expression
 			{
 			public:
 				std::shared_ptr<Expression> left;
 				std::shared_ptr<Expression> right;
 				std::shared_ptr<BinaryOperator> op;
 			};
-
-			class TernaryExpression : public Expression
+			class TernaryExpressionNode : public Expression
 			{
 			public:
 				std::shared_ptr<Expression> condition;
@@ -215,266 +254,9 @@ namespace Flaner
 				std::shared_ptr<Expression> no;
 			};
 
+			
 
-
-			class ExpressionElementNode
-			{
-			public:
-				virtual double value() = 0; // Return the value of this node.
-			};
-
-			class NumericElementNode : public ExpressionElementNode
-			{
-
-			private:
-				FlanerNumeric number;
-				NumericElementNode(const NumericElementNode& n);
-				NumericElementNode();
-				NumericElementNode&operator=(const NumericElementNode& n);
-			public:
-
-				NumericElementNode(double val);
-				virtual double value();
-			};
-
-			inline NumericElementNode::NumericElementNode(double val) :
-				number(val)
-			{
-			}
-
-			inline double NumericElementNode::value()
-			{
-				return number;
-			}
-
-			class BinaryOperationNode : public ExpressionElementNode
-			{
-
-			private:
-
-				char binary_op;
-
-				ExpressionElementNode *left;
-				ExpressionElementNode *right;
-
-				BinaryOperationNode(const BinaryOperationNode& n);
-				BinaryOperationNode();
-				BinaryOperationNode &operator=(const BinaryOperationNode& n);
-
-			public:
-				BinaryOperationNode(char op, ExpressionElementNode *l,
-					ExpressionElementNode *r);
-
-				virtual double value();
-			};
-
-			inline BinaryOperationNode::BinaryOperationNode(char op,
-				ExpressionElementNode *l, ExpressionElementNode *r) :
-				binary_op(op), left(l), right(r)
-			{
-			}
-			double BinaryOperationNode::value()
-			{
-				// To get the value, compute the value of the left and
-				// right operands, and combine them with the operator.
-				double leftVal = left->value();
-
-				double rightVal = right->value();
-
-				double result;
-
-				switch (binary_op)
-				{
-
-				case '+':
-					result = leftVal + rightVal;
-					break;
-
-				case '-':
-					result = leftVal - rightVal;
-					break;
-
-				case '*':
-					result = leftVal * rightVal;
-					break;
-
-				case '/':
-					result = leftVal / rightVal;
-					break;
-				}
-
-				return result;
-			}
-			class ExpressionElementNode;
-			class BinaryOperationNode;
-
-			class BinaryExpressionBuilder
-			{
-
-			private:
-				// holds either (, +, -, /, or *
-				std::stack<char> operatorStack;
-
-				// operandStack is made up of BinaryOperationNodes and NumericElementNode
-				std::stack<ExpressionElementNode *> operandStack;
-
-				void processOperator(char op);
-				void processRightParenthesis();
-
-				void doBinary(char op);
-
-				int precedence(char op);
-
-			public:
-
-				class NotWellFormed : public std::exception
-				{
-
-				public:
-					virtual const char* what() const throw ()
-					{
-						return "The expression is not valid";
-					}
-				};
-
-				BinaryOperationNode *parse(std::string& istr) throw (NotWellFormed);
-			};
-			int BinaryExpressionBuilder::precedence(char op)
-			{
-				enum
-				{
-					lowest, mid, highest
-				};
-
-				switch (op)
-				{
-
-				case '+':
-				case '-':
-					return mid;
-
-				case '/':
-				case '*':
-					return highest;
-
-				default:
-					return lowest;
-				}
-			}
-
-			// Input: +, -, /, or *
-			// creates BinaryOperationNode's from all preceding
-			BinaryOperationNode *BinaryExpressionBuilder::parse(std::string& str)
-				throw (NotWellFormed)
-			{
-				istringstream istr(str);
-				char token;
-
-				while (istr >> token)
-				{
-
-					switch (token)
-					{
-
-					case '+':
-					case '-':
-					case '*':
-					case '/':
-						processOperator(token);
-						break;
-
-					case ')':
-						processRightParenthesis();
-						break;
-
-					case '(':
-						operatorStack.push(token);
-						break;
-
-					default:
-						// If it is not an operator, it must be a number.
-						// Since token is only a char in width, we put it back,
-						// and get the complete number as a double.
-						istr.putback(token);
-						double number;
-
-						istr >> number;
-
-						NumericElementNode *newNode = new NumericElementNode(number);
-						operandStack.push(newNode);
-
-						continue;
-					} // end switch
-				} // end while
-
-				while (!operatorStack.empty())
-				{
-
-					doBinary(operatorStack.top());
-					operatorStack.pop();
-				}
-
-				// Invariant: At this point the operandStack should have only one element
-				//     operandStack.size() == 1
-				// otherwise, the expression is not well formed.
-				if (operandStack.size() != 1)
-				{
-
-					throw NotWellFormed();
-				}
-
-				ExpressionElementNode *p = operandStack.top();
-
-				return static_cast<BinaryOperationNode *> (p);
-			}
-
-			void BinaryExpressionBuilder::processOperator(char op)
-			{
-				// pop operators with higher precedence and create their BinaryOperationNode
-				int opPrecedence = precedence(op);
-
-				while ((!operatorStack.empty()) && (opPrecedence <= precedence(
-					operatorStack.top())))
-				{
-
-					doBinary(operatorStack.top());
-					operatorStack.pop();
-				}
-
-				// lastly push the operator passed onto the operatorStack
-				operatorStack.push(op);
-			}
-
-			void BinaryExpressionBuilder::processRightParenthesis()
-			{
-				while (!operatorStack.empty() && operatorStack.top() != '(')
-				{
-
-					doBinary(operatorStack.top());
-					operatorStack.pop();
-				}
-
-				operatorStack.pop(); // remove '('
-			}
-
-			// Creates a BinaryOperationNode from the top two operands on operandStack
-			// These top two operands are removed (poped), and the new BinaryOperation
-			// takes their place on the top of the stack.
-			void BinaryExpressionBuilder::doBinary(char op)
-			{
-				ExpressionElementNode *right = operandStack.top();
-
-				operandStack.pop();
-
-				ExpressionElementNode *left = operandStack.top();
-
-				operandStack.pop();
-
-				BinaryOperationNode *p = new BinaryOperationNode(operatorStack.top(), left,
-					right);
-
-				operandStack.push(p);
-			}
+	
 		}
 	}
 }
