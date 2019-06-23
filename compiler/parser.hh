@@ -5,6 +5,7 @@
 #include <scanner.hh>
 #include <statement.hh>
 #include <meta.hh>
+#include <expression.hh>
 
 /*
 * File: parser.hh
@@ -25,6 +26,7 @@ namespace Flaner
 
 			void checkWithSemicolon(TokenList tokenList);
 
+			//std::shared_ptr<Expression::NumericValue> parseNumeric(TokenList tokenList);
 			std::shared_ptr<AST::Value> parseLiteralValue(TokenList tokenList);
 
 			// ½öÎªÉùÃ÷
@@ -115,7 +117,7 @@ namespace Flaner
 			std::shared_ptr<AST::YieldStatement> parseYieldStatement(TokenList tokenList);
 
 
-			bool acceptPrefixOperator(OperatorUnits& units, TokenList tokenList);
+			bool acceptPrefioperator(OperatorUnits& units, TokenList tokenList);
 
 			bool acceptThis(OperatorUnits& units, TokenList tokenList);
 			bool acceptListLiteral(OperatorUnits& units, TokenList tokenList);

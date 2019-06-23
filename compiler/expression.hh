@@ -2,10 +2,12 @@
 #define _FLANER_COMPILER_EXPRESSION_HH_
 
 #include <global.hh>
+#include <token.hh>
 #include <stack>
 #include <vector>
 #include <memory>
 #include <variant>
+#include <queue>
 
 namespace Flaner
 {
@@ -43,7 +45,7 @@ namespace Flaner
 				NullValue() : kindIndex(ValueKindIndex::INDEX_NULL) {}
 			};
 
-			class BooleanValue : AbstractValue
+			class BooleanValue : public AbstractValue
 			{
 			public:
 				BooleanValue() : kindIndex(ValueKindIndex::INDEX_BOOLEAN), value(true) {}
@@ -83,7 +85,9 @@ namespace Flaner
 			class StringValue : AbstractValue
 			{
 			public:
-				StringValue() : kindIndex(ValueKindIndex::INDEX_STRING) {}
+				StringValue() : kindIndex(ValueKindIndex::INDEX_STRING), value("") {}
+				StringValue(std::string value) : kindIndex(ValueKindIndex::INDEX_STRING), value(value) {}
+				std::string value;
 			};
 
 			class ListValue : AbstractValue
@@ -254,7 +258,21 @@ namespace Flaner
 				std::shared_ptr<Expression> no;
 			};
 
-			
+
+			using Unit = std::shared_ptr<std::variant<NativeValue, UnaryOperator, BinaryOperator>>;
+
+			// 从 tokenList 产生可以被接受的 unit
+			Unit makeUnit(std::shared_ptr<Lex::TokenList> tokenList);
+
+			// 从 tokenList 预处理构成表达式的 tokens，保证稍后构建表达式树时不会产生错误
+			class ExpressionQueue
+			{
+				std::queue<Unit> queue;
+			public:
+
+				// 向表达式队列插入 unit
+				bool push(Unit unigt);
+			};
 
 	
 		}

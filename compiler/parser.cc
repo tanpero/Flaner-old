@@ -1390,7 +1390,7 @@ namespace Flaner
 			}
 			
 
-			bool acceptPrefixOperator(OperatorUnits & units, TokenList tokenList)
+			bool acceptPrefioperator(OperatorUnits & units, TokenList tokenList)
 			{
 				struct TokenToOperator
 				{
