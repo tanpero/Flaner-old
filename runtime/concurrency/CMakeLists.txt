@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 include_directories(.)
 include_directories(..)
+include_directories(./detail)
 include_directories(../../global)
 
 add_library(flaner.numeric STATIC bigint.cc rational.cc)
