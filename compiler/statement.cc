@@ -2,36 +2,36 @@
 
 namespace Flaner
 {
-	namespace Compiler
-	{
-		namespace AST
-		{
+    namespace Compiler
+    {
+        namespace AST
+        {
 
-			std::shared_ptr<Statement> StatementSequence::get()
-			{
-				return std::shared_ptr<Statement>();
-			}
-
-
-			bool StatementSequence::next()
-			{
-				return false;
-			}
+            std::shared_ptr<Statement> StatementSequence::get()
+            {
+                return std::shared_ptr<Statement>();
+            }
 
 
-			void StatementSequence::insert(std::shared_ptr<Statement> statement)
-			{
-			}
+            bool StatementSequence::next()
+            {
+                return false;
+            }
 
-			std::string Statement::type()
-			{
-				return std::string();
-			}
 
-			void Statement::walk()
-			{
-			}
+            void StatementSequence::insert(std::shared_ptr<Statement> statement)
+            {
+            }
 
-		};
-	};
+            std::string Statement::type()
+            {
+                return std::string();
+            }
+
+            void Statement::walk()
+            {
+            }
+
+        };
+    };
 };

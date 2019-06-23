@@ -13,16 +13,16 @@
 
 namespace Flaner::Compiler
 {
-	class Source
-	{
-		std::string file;
-		size_t length;
-	public:
-		Source(std::string s);
-		~Source();
-		bool open(std::string s);
-		bool close();
-	};
+    class Source
+    {
+        std::string file;
+        size_t length;
+    public:
+        Source(std::string s);
+        ~Source();
+        bool open(std::string s);
+        bool close();
+    };
 };
 
 #endif // !_FLANER_COMPILER_SOURCE_HH_

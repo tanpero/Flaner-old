@@ -3,25 +3,25 @@
 
 namespace Flaner
 {
-	namespace Global
-	{ 
-	
-	};
+    namespace Global
+    { 
+    
+    };
 
-	namespace Compiler
-	{
+    namespace Compiler
+    {
 
-	};
+    };
 
-	namespace VM
-	{
+    namespace VM
+    {
 
-	};
+    };
 
-	namespace Runtime
-	{
+    namespace Runtime
+    {
 
-	};
+    };
 };
 
 #ifdef DEBUG
