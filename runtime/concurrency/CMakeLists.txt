@@ -8,6 +8,6 @@ include_directories(..)
 include_directories(./detail)
 include_directories(../../global)
 
-add_library(flaner.numeric STATIC bigint.cc rational.cc)
-add_executable(test-flaner.numeric bigint.cc rational.cc test-numeric.cc)
+#add_library(flaner.concurrency STATIC bigint.cc rational.cc)
+add_executable(test-flaner.concurrency test-concurrency.cc)
 

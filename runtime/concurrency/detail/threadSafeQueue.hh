@@ -29,6 +29,17 @@ namespace Flaner
 					std::shared_ptr<Node> tail;
 					std::condition_variable dataCond;
 
+				private:
+					Node* getTail();
+					std::unique_ptr<Node> popHead();
+					std::unique_lock<std::mutex> waitForData();
+					std::unique_ptr<Node> waitPopHead();
+					std::unique_ptr<Node> waitPopHead(T& value);
+
+				private:
+					std::unique_ptr<Node> tryPopHead();
+					std::unique_ptr<Node> tryPopHead(T& value);
+					
 				public:
 					ThreadSafeQueue() :
 						head(std::make_unique<Node>()), tail(head->get())
@@ -53,7 +64,8 @@ namespace Flaner
 				template<typename T>
 				inline bool ThreadSafeQueue<T>::tryPop(T & value)
 				{
-					return false;
+					std::unique_ptr<Node> oldHead = tryPopHead();
+					return oldHead ? oldHead->data : std::shared_ptr<T>();
 				}
 
 				template<typename T>
