@@ -1,3 +1,6 @@
+#include <detail/threadSafeQueue.hh>
+#include <detail/functionWrapper.hh>
+#include <detail/workStealingQueue.hh>
 #include <detail/threadPool.hh>
 #include <iostream>
 
