@@ -560,7 +560,7 @@ namespace Flaner
                     unexpected_token_syntax_error(tokenList->now())
                 }
 
-                std::shared_ptr<AST::Expression> expression = std::move(parseExpression(tokenList));
+                std::shared_ptr<AST::Expression> expression = parseExpression(tokenList);
                 
                 // Ìõ¼þÎª¿Õ
                 if (!expression)

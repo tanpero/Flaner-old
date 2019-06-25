@@ -2,6 +2,9 @@
 #define _FLANER_RUNTIME_CONCURRENCY_DETAIL_THREADPOOL_HH_
 
 #include <global.hh>
+#include <workStealingQueue.hh>
+#include <atomic>
+#include <vector>
 
 namespace Flaner
 {
@@ -13,7 +16,10 @@ namespace Flaner
             {
                 class ThreadPool
                 {
-
+					using TaskType = FunctionWrapper;
+					
+					std::atomic_bool done;
+					
                 };
             }
         }
