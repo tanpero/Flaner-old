@@ -3,6 +3,7 @@
 
 #include <global.hh>
 #include <workStealingQueue.hh>
+#include <threadSafeQueue.hh>
 #include <atomic>
 #include <vector>
 
@@ -19,6 +20,10 @@ namespace Flaner
 					using TaskType = FunctionWrapper;
 					
 					std::atomic_bool done;
+					ThreadSafeQueue<TaskType> pollWorkQueue;
+					std::vector<std::unique_ptr<WorkStealingQueue>> queues;
+					std::vector<std::thread> threads;
+
 					
                 };
             }
