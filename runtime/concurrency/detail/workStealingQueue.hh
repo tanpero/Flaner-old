@@ -16,9 +16,7 @@ namespace Flaner
             {
                 class WorkStealingQueue
                 {
-                    using DataType = FunctionWrapper;
-
-                    std::deque<DataType> theQueue;
+                    std::deque<FunctionWrapper> theQueue;
                     mutable std::mutex theMutex;
 
                 public:
@@ -29,7 +27,7 @@ namespace Flaner
                     WorkStealingQueue& operator=
                         (const WorkStealingQueue& other) = delete;
 
-                    void push(DataType data)
+                    void push(FunctionWrapper data)
                     {
                         std::lock_guard<std::mutex> lock(theMutex);
                         theQueue.push_front(std::move(data));
@@ -41,7 +39,7 @@ namespace Flaner
                         return theQueue.empty();
                     }
 
-                    bool tryPop(DataType& res)
+                    bool tryPop(FunctionWrapper& res)
                     {
                         std::lock_guard<std::mutex> lock(theMutex);
                         if (theQueue.empty())
@@ -53,7 +51,7 @@ namespace Flaner
                         return true;
                     }
 
-                    bool trySteal(DataType& res)
+                    bool trySteal(FunctionWrapper& res)
                     {
                         std::lock_guard<std::mutex> lock(theMutex);
                         if (theQueue.empty())

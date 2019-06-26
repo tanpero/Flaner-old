@@ -65,6 +65,16 @@ namespace Flaner
 					std::future<typename std::result_of<FunctionType()>::type> submit(FunctionType f);
 					void runPendingTask();
                 };
+
+				void ThreadPool::workThread(unsigned int _myIndex)
+				{
+					myIndex = _myIndex;
+					localWorkQueue = std::make_shared<WorkStealingQueue>(queues[myIndex].get());
+					while (!done)
+					{
+						runPendingTask();
+					}
+				}
             }
         }
     }
