@@ -29,7 +29,7 @@ namespace Flaner
 
                     void push(FunctionWrapper data)
                     {
-                        std::lock_guard<std::mutex> lock(theMutex);
+                       // std::lock_guard<std::mutex> lock(theMutex);
                         theQueue.push_front(std::move(data));
                     }
 

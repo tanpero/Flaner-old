@@ -22,7 +22,7 @@ namespace Flaner
 					using TaskType = FunctionWrapper;
 					
 					std::atomic_bool done;
-					ThreadSafeQueue<TaskType> pollWorkQueue;
+					ThreadSafeQueue<TaskType> poolWorkQueue;
 					std::vector<std::unique_ptr<WorkStealingQueue>> queues;
 					std::vector<std::thread> threads;
 					JoinThreads joiner;
@@ -75,7 +75,63 @@ namespace Flaner
 						runPendingTask();
 					}
 				}
-            }
+
+				inline bool ThreadPool::popTaskFromLocalQueue(TaskType & task)
+				{
+					return localWorkQueue && localWorkQueue->tryPop(task);
+				}
+
+				inline bool ThreadPool::popTaskFromPoolQueue(TaskType & task)
+				{
+					return poolWorkQueue.tryPop(task);
+				}
+
+				inline bool ThreadPool::popTaskFromOtherThreadQueue(TaskType & task)
+				{
+					for (unsigned int i = 0; i < queues.size(); i++)
+					{
+						const unsigned int index = (myIndex + i + 1) % queues.size();
+						if (queues[index]->trySteal(task))
+						{
+							return true;
+						}
+					}
+					return false;
+				}
+
+				inline void ThreadPool::runPendingTask()
+				{
+					TaskType task;
+					if (popTaskFromLocalQueue(task) ||
+						popTaskFromPoolQueue(task) ||
+						popTaskFromOtherThreadQueue(task))
+					{
+						task();
+					}
+					else
+					{
+						std::this_thread::yield();
+					}
+				}
+
+				template<typename FunctionType>
+				inline std::future<typename std::result_of<FunctionType()>::type> ThreadPool::submit(FunctionType f)
+				{
+					using ResultType = typename std::result_of<FunctionType()>::type;
+
+					std::packaged_task<ResultType()> task(f);
+					std::future<ResultType> res(task.get_future());
+					if (localWorkQueue)
+					{
+						localWorkQueue->push(std::move(task));
+					}
+					else
+					{
+						poolWorkQueue.push(std::move(tasl));
+					}
+					return res;
+				}
+			}
         }
     }
 }
