@@ -3,6 +3,7 @@
 
 #include <global.hh>
 #include <token.hh>
+#include <meta.hh>
 #include <stack>
 #include <vector>
 #include <memory>
@@ -13,7 +14,7 @@ namespace Flaner
 {
     namespace Compiler
     {
-        namespace Expression
+        namespace Expr
         {
 
             using Numeric = double;
@@ -33,21 +34,18 @@ namespace Flaner
                 INDEX_REGEXP,
             };
 
-            class AbstractValue
+            class NullValue
             {
             public:
-                ValueKindIndex kindIndex;
-            };
-
-            class NullValue : AbstractValue
-            {
-            public:
+				ValueKindIndex kindIndex;
                 NullValue() : kindIndex(ValueKindIndex::INDEX_NULL) {}
             };
 
-            class BooleanValue : public AbstractValue
+
+            class BooleanValue
             {
             public:
+				ValueKindIndex kindIndex;
                 BooleanValue() : kindIndex(ValueKindIndex::INDEX_BOOLEAN), value(true) {}
                 BooleanValue(Boolean _value) : kindIndex(ValueKindIndex::INDEX_BOOLEAN), value(_value) {}
                 Boolean value;
@@ -68,7 +66,7 @@ namespace Flaner
                 return lhs || rhs;
             }
 
-            class NumericValue : AbstractValue
+            class NumericValue
             {
             public:
                 NumericValue() : kindIndex(ValueKindIndex::INDEX_NUMERIC) {}
@@ -76,51 +74,57 @@ namespace Flaner
                 Numeric value;
             };
             
-            class BigintValue : AbstractValue
+            class BigintValue
             {
             public:
                 BigintValue() : kindIndex(ValueKindIndex::INDEX_BIGINT) {}
             };
 
-            class StringValue : AbstractValue
+            class StringValue
             {
             public:
+				ValueKindIndex kindIndex;
                 StringValue() : kindIndex(ValueKindIndex::INDEX_STRING), value("") {}
                 StringValue(std::string value) : kindIndex(ValueKindIndex::INDEX_STRING), value(value) {}
                 std::string value;
             };
 
-            class ListValue : AbstractValue
+            class ListValue
             {
             public:
+				ValueKindIndex kindIndex;
                 ListValue() : kindIndex(ValueKindIndex::INDEX_LIST) {}
             };
 
-            class ObjectValue : AbstractValue
+            class ObjectValue
             {
             public:
-                ListValue() : kindIndex(ValueKindIndex::INDEX_OBJECT) {}
+				ValueKindIndex kindIndex;
+                ObjectValue() : kindIndex(ValueKindIndex::INDEX_OBJECT) {}
             };
 
-            class FunctionValue : AbstractValue
+            class FunctionValue
             {
             public:
-                FunctionValue : kindIndex(ValueKindIndex::INDEX_FUNCTION) {}
+				ValueKindIndex kindIndex;
+                FunctionValue() : kindIndex(ValueKindIndex::INDEX_FUNCTION) {}
             };
 
-            class SymbolValue : AbstractValue
+            class SymbolValue
             {
             public:
-                SymbolValue : kindIndex(ValueKindIndex::INDEX_SYMBOL) {}
+				ValueKindIndex kindIndex;
+                SymbolValue() : kindIndex(ValueKindIndex::INDEX_SYMBOL) {}
             };
 
-            class RegExpValue : AbstractValue
+            class RegExpValue
             {
             public:
-                RegExpValue : kindIndex(ValueKindIndex::INDEX_REGEXP) {}
+				ValueKindIndex kindIndex;
+                RegExpValue() : kindIndex(ValueKindIndex::INDEX_REGEXP) {}
             };
 
-            using NativeValue = std::variant<NullValue, BooleanValue, NumericValue,
+            using Value = std::variant<NullValue, BooleanValue, NumericValue,
                 BigintValue, StringValue, ListValue, ObjectValue, FunctionValue, SymbolValue, RegExpValue>;
 
 
@@ -203,7 +207,7 @@ namespace Flaner
             
             class StatementSequence;
 
-            class Function : AbstractValue
+            class Function : public FunctionValue
             {
             public:
                 enum FunctionKind
@@ -215,7 +219,7 @@ namespace Flaner
                 std::shared_ptr<ParamsList> paramsList;
                 std::shared_ptr<StatementSequence> body;
 
-                FunctionValue() : kind(COMMON), kindIndex(ValueKindIndex::INDEX_FUNCTION) {}
+                Function() : kind(COMMON) {}
             };
 
 
@@ -234,23 +238,23 @@ namespace Flaner
                 std::variant<CommonMemberValue, DescribedMemberValue> value;
             };
             
-
-
-            class UnaryExpressionNode : public Expression
+			class Expression;
+			
+            class UnaryExpressionNode
             {
             public:
                 std::shared_ptr<Value> right;
                 std::shared_ptr<UnaryOperator> op;
             };
 
-            class BinaryExpreesionNode : public Expression
+            class BinaryExpreesionNode
             {
             public:
                 std::shared_ptr<Expression> left;
                 std::shared_ptr<Expression> right;
                 std::shared_ptr<BinaryOperator> op;
             };
-            class TernaryExpressionNode : public Expression
+            class TernaryExpressionNode
             {
             public:
                 std::shared_ptr<Expression> condition;
@@ -258,8 +262,11 @@ namespace Flaner
                 std::shared_ptr<Expression> no;
             };
 
+			using Expression = std::variant<std::shared_ptr<UnaryExpressionNode>,
+				std::shared_ptr<BinaryExpreesionNode>, std::shared_ptr<TernaryExpressionNode>>;
+			
 
-            using Unit = std::shared_ptr<std::variant<NativeValue, UnaryOperator, BinaryOperator>>;
+            using Unit = std::shared_ptr<std::variant<Value, UnaryOperator, BinaryOperator>>;
 
             // 从 tokenList 产生可以被接受的 unit
             Unit makeUnit(std::shared_ptr<Lex::TokenList> tokenList);
@@ -274,6 +281,13 @@ namespace Flaner
                 bool push(Unit unigt);
             };
 
+			using _OperatorQueue = std::vector<std::shared_ptr<Meta::Operation>>;
+			using OperatorQueue = std::shared_ptr<_OperatorQueue>;
+			using _ValueQueue = std::vector<std::shared_ptr<Value>>;
+			using ValueQueue = std::shared_ptr<_ValueQueue>;
+
+
+			std::shared_ptr<Expression> makeExpressionTree(OperatorQueue, ValueQueue);
     
         }
     }
