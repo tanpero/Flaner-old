@@ -8,74 +8,100 @@ namespace Flaner
     {
         namespace Meta
         {
+			enum Operator
+			{				
+				// 前缀运算符
+				op_prefix_neg,   // -
+				op_prefix_notb,  // ~
+				op_prefix_notl,  // !
+				op_prefix_typeof,
+				
+				// 后缀运算符
+				op_postfix_at,   // []
+				op_postfix_pow,  // **
+
+
+				// 逻辑运算符
+				op_infix_andl,  // &&
+				op_infix_orl,   // ||
+
+				// 管道运算符
+				op_infix_pipeline, // |>
+
+				// 关系运算符
+				op_infix_cmp_eq,    // ==
+				op_infix_cmp_ne,    // !=
+				op_infix_cmp_lt,    // <
+				op_infix_cmp_gt,    // >
+				op_infix_cmp_lte,   // <=
+				op_infix_cmp_gte,   // >=
+				op_infix_cmp_3way,  // <=>
+
+				// 通用运算符
+				op_infix_add,     // +
+				op_infix_sub,     // -
+				op_infix_mul,     // *
+				op_infix_div,     // /
+				op_infix_mod,     // %
+				op_infix_sll,     // <<<
+				op_infix_srl,     // >>>
+				op_infix_sla,     // <<
+				op_infix_sra,     // >>
+				op_infix_andb,    // &
+				op_infix_orb,     // |
+				op_infix_xorb,    // ^
+				op_infix_assign,  // =
+			};
+
+			enum Target
+			{
+				target_unary,
+				target_binary,
+				target_ternary,
+			};
+
             class Operation
             {
-                enum Operator
-                {
-                    // 后缀运算符
-                    op_postfix_at = 12,  // []
-                    op_postfix_pow,      // **
+			public:
+				explicit Operation(Operator _kind, uint8_t _prio) : kind(_kind), priority(_prio) {}
 
-                    // 前缀运算符
-                    op_prefix_neg = 21,   // -
-                    op_prefix_notb = 22,  // ~
-                    op_prefix_notl = 23,  // !
-                    op_prefix_typeof,
+				// 操作符标识
+				Operator kind;
 
-                    // 关系运算符
-                    op_infix_cmp_eq = 70,    // ==
-                    op_infix_cmp_ne = 71,    // !=
-                    op_infix_cmp_lt = 72,    // <
-                    op_infix_cmp_gt = 73,    // >
-                    op_infix_cmp_lte = 74,   // <=
-                    op_infix_cmp_gte = 75,   // >=
-                    op_infix_cmp_3way = 76,  // <=>
+				// 操作数
+				Target taeget;
 
-                    // 通用运算符
-                    op_infix_add = 80,     // +
-                    op_infix_sub = 81,     // -
-                    op_infix_mul = 82,     // *
-                    op_infix_div = 83,     // /
-                    op_infix_mod = 84,     // %
-                    op_infix_sll = 85,     // <<<
-                    op_infix_srl = 86,     // >>>
-                    op_infix_sla = 87,     // <<
-                    op_infix_sra = 88,     // >>
-                    op_infix_andb = 89,    // &
-                    op_infix_orb = 90,     // |
-                    op_infix_xorb = 91,    // ^
-                    op_infix_assign = 92,  // =
-
-                };
+				// 优先级
+				uint8_t priority;
+			};
 
 
-
-
-                struct Literal
-                {
-                    std::shared_ptr<AST::Value> value;
-                };
-
-                struct FunctionCall
-                {
-                    size_t length;
-                };
-
-                struct MemberAccess
-                {
-                    std::string name;
-                };
-
-                struct ListLiteral
-                {
-                    size_t length;
-                };
-
-                struct ObjectLiteral
-                {
-                    std::vector<std::shared_ptr<std::string>> keys;
-                };
+			
+            struct FunctionCall
+            {
+                size_t length;
             };
+
+            struct MemberAccess
+            {
+                std::string name;
+            };
+
+			struct MemberAccessOptional
+			{
+				std::string name;
+			};
+
+            struct ListLiteral
+            {
+                size_t length;
+            };
+
+            struct ObjectLiteral
+            {
+                std::vector<std::shared_ptr<std::string>> keys;
+            };
+
         }
     }
 }

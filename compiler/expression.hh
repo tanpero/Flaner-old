@@ -140,6 +140,7 @@ namespace Flaner
                 };
 
                 Kind kind;
+				explicit UnaryOperator(Kind _kind) : kind(kind) {}
             };
 
             class BinaryOperator
@@ -238,32 +239,35 @@ namespace Flaner
                 std::variant<CommonMemberValue, DescribedMemberValue> value;
             };
             
-			class Expression;
+			class ExpressionNode;
 			
             class UnaryExpressionNode
             {
             public:
-                std::shared_ptr<Value> right;
+                std::shared_ptr<ExpressionNode> right;
                 std::shared_ptr<UnaryOperator> op;
             };
 
             class BinaryExpreesionNode
             {
             public:
-                std::shared_ptr<Expression> left;
-                std::shared_ptr<Expression> right;
+                std::shared_ptr<ExpressionNode> left;
+                std::shared_ptr<ExpressionNode> right;
                 std::shared_ptr<BinaryOperator> op;
             };
             class TernaryExpressionNode
             {
             public:
-                std::shared_ptr<Expression> condition;
-                std::shared_ptr<Expression> yes;
-                std::shared_ptr<Expression> no;
+                std::shared_ptr<ExpressionNode> condition;
+                std::shared_ptr<ExpressionNode> yes;
+                std::shared_ptr<ExpressionNode> no;
             };
+			class ExpressionNode
+			{
+			public:
+				std::variant<UnaryExpressionNode, BinaryExpreesionNode, TernaryExpressionNode> node;
+			};
 
-			using Expression = std::variant<std::shared_ptr<UnaryExpressionNode>,
-				std::shared_ptr<BinaryExpreesionNode>, std::shared_ptr<TernaryExpressionNode>>;
 			
 
             using Unit = std::shared_ptr<std::variant<Value, UnaryOperator, BinaryOperator>>;
@@ -287,7 +291,7 @@ namespace Flaner
 			using ValueQueue = std::shared_ptr<_ValueQueue>;
 
 
-			std::shared_ptr<Expression> makeExpressionTree(OperatorQueue, ValueQueue);
+			std::shared_ptr<ExpressionNode> makeExpressionTree(OperatorQueue, ValueQueue);
     
         }
     }

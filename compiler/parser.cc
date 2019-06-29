@@ -31,9 +31,9 @@ namespace Flaner
                 }
             }
 
-            std::shared_ptr<AST::Value> parseLiteralValue(TokenList tokenList)
+            std::shared_ptr<Expr::Value> parseLiteralValue(TokenList tokenList)
             {
-                return std::shared_ptr<AST::Value>();
+                return std::shared_ptr<Expr::Value>();
             }
 
 
@@ -173,7 +173,7 @@ namespace Flaner
                 // 如果 instantiation 为 nullptr，则省略
                 std::shared_ptr<AST::Instantiation> instantiation = parseInstantiation(tokenList);
 
-                std::shared_ptr<AST::Value> initializer = std::make_shared<AST::Value>();
+                std::shared_ptr<Expr::Value> initializer = std::make_shared<Expr::Value>();
 
                 // 常量定义时必须赋予初始值
                 if (tokenList->now()->noteq(Lex::TOKEN_ASSIGN))
@@ -196,12 +196,12 @@ namespace Flaner
                 return defintionStatement;
             }
 
-            std::shared_ptr<AST::ParamsList> parseParameterList(TokenList tokenList)
+            std::shared_ptr<Expr::ParamsList> parseParameterList(TokenList tokenList)
             {
 
                 // 一旦开始出现默认参数，那么其后的参数必须都是默认参数
                 bool hasDefaultParam = false;
-                std::shared_ptr<AST::ParamsList> paramsList = std::make_shared<AST::ParamsList>();
+                std::shared_ptr<Expr::ParamsList> paramsList = std::make_shared<Expr::ParamsList>();
                 std::shared_ptr<AST::Identifier> name = parseIdentifier(tokenList);
 
                 // 如果是一个标识符
@@ -219,12 +219,12 @@ namespace Flaner
                                 syntax_error("After the default parameter can only follow the default parameter")
                             }
 
-                            std::shared_ptr<AST::Param> param = std::make_shared<AST::Param>(name);
+                            std::shared_ptr<Expr::Param> param = std::make_shared<Expr::Param>(name);
                             paramsList->insert(param);
 
                             tokenList->forward();
                             name = parseIdentifier(tokenList);
-                            paramsList->insert(std::make_shared<AST::Param>(name));
+                            paramsList->insert(std::make_shared<Expr::Param>(name));
                         }
 
                         // 是一个默认实参
@@ -243,7 +243,7 @@ namespace Flaner
                                 unexpected_token_syntax_error(testToken)
                             }
 
-                            std::shared_ptr<AST::Param> param = std::make_shared<AST::Param>(name);
+                            std::shared_ptr<Expr::Param> param = std::make_shared<Expr::Param>(name);
                             param->hasDefaultValue = true;
                             param->defaultValueExpr = expr;
                             param->isRest = false;
@@ -261,7 +261,7 @@ namespace Flaner
 
                 if (tokenList->forward()->eq(Lex::TOKEN_DOT_DOT_DOT))
                 {
-                    std::shared_ptr<AST::Param> param = std::make_shared<AST::Param>();
+                    std::shared_ptr<Expr::Param> param = std::make_shared<Expr::Param>();
 
                     param->isRest = true;
 
@@ -297,7 +297,7 @@ namespace Flaner
                 return paramsList;
             }
 
-            std::shared_ptr<AST::ParamsList> parseParameterListDeclaration(TokenList tokenList)
+            std::shared_ptr<Expr::ParamsList> parseParameterListDeclaration(TokenList tokenList)
             {
                 if (tokenList->now()->noteq(Lex::TOKEN_PAREN_BEGIN))
                 {
@@ -306,7 +306,7 @@ namespace Flaner
 
                 tokenList->forward();
 
-                std::shared_ptr<AST::ParamsList> paramsList = parseParameterList(tokenList);
+                std::shared_ptr<Expr::ParamsList> paramsList = parseParameterList(tokenList);
 
                 if (tokenList->forward()->noteq(Lex::TOKEN_PAREN_END))
                 {
@@ -327,12 +327,12 @@ namespace Flaner
             * };
             *
             */
-            std::shared_ptr<AST::FunctionValue> parseFunctionDefintion(TokenList tokenList)
+            std::shared_ptr<Expr::Function> parseFunctionDefintion(TokenList tokenList)
             {
-                std::shared_ptr<AST::FunctionValue> function = std::shared_ptr<AST::FunctionValue>();
+                std::shared_ptr<Expr::Function> function = std::shared_ptr<Expr::Function>();
                 
                 // 若 parameterList 为 nullptr，说明形参列表为空
-                std::shared_ptr<AST::ParamsList> parameterList = parseParameterListDeclaration(tokenList);
+                std::shared_ptr<Expr::ParamsList> parameterList = parseParameterListDeclaration(tokenList);
                                 
                 if (tokenList->now()->noteq(Lex::TOKEN_FUNCTION_ARROW))
                 {
@@ -401,10 +401,10 @@ namespace Flaner
             }
 
 
-            std::shared_ptr<AST::Value> parseValue(TokenList tokenList)
+            std::shared_ptr<Expr::Value> parseValue(TokenList tokenList)
             {
                 // TODO...
-                return std::shared_ptr<AST::Value>();
+                return std::shared_ptr<Expr::Value>();
             }
 
             std::shared_ptr<bool> parseNegationExpression(TokenList tokenList)
@@ -428,14 +428,14 @@ namespace Flaner
                 tokenList->forward();
 
                 // 那么下一个 token 就应该是一个 value
-                std::shared_ptr<AST::Value> value = std::make_shared<AST::Value>(parseValue(tokenList));
+                std::shared_ptr<Expr::Value> value = std::make_shared<Expr::Value>(parseValue(tokenList));
 
                 if (value == nullptr)
                 {
                     unexpected_token_syntax_error(tokenList->now())
                 }
 
-                unaryExpression->right = std::make_shared<AST::Value>(value);
+                unaryExpression->right = std::make_shared<Expr::Value>(value);
                 unaryExpression->op = std::make_shared<AST::UnaryOperator>(unaryOperator);
 
                 return unaryExpression;
@@ -518,11 +518,6 @@ namespace Flaner
                 }
 
                 return blockStatement;
-            }
-
-            std::shared_ptr<AST::UnaryExpression> parseUnaryExpression(TokenList tokenList)
-            {
-                return std::shared_ptr<AST::UnaryExpression>();
             }
 
 

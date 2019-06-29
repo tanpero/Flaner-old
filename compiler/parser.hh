@@ -20,14 +20,14 @@ namespace Flaner
         {
 
             using TokenList = std::shared_ptr<Lex::TokenList>;
-            using OperatorUnits = std::shared_ptr<std::vector<std::shared_ptr<Meta::Operator>>>;
+            
 
             std::shared_ptr<AST::EmptyStatement> parseEmptyStatement(TokenList tokenList);
 
             void checkWithSemicolon(TokenList tokenList);
 
             //std::shared_ptr<Expression::NumericValue> parseNumeric(TokenList tokenList);
-            std::shared_ptr<AST::Value> parseLiteralValue(TokenList tokenList);
+            std::shared_ptr<Expr::Value> parseLiteralValue(TokenList tokenList);
 
             // 仅为声明
             std::shared_ptr<AST::Declaration> parseVariableDeclaration(TokenList tokenList);
@@ -44,11 +44,11 @@ namespace Flaner
             std::shared_ptr<AST::DefintionStatement> parseConstantDefintion(TokenList tokenList);
 
             // 函数参数列表
-            std::shared_ptr<AST::ParamsList> parseParameterList(TokenList tokenList);
-            std::shared_ptr<AST::ParamsList> parseParameterListDeclaration(TokenList tokenList);
+            std::shared_ptr<Expr::ParamsList> parseParameterList(TokenList tokenList);
+            std::shared_ptr<Expr::ParamsList> parseParameterListDeclaration(TokenList tokenList);
 
             // 函数
-            std::shared_ptr<AST::FunctionValue> parseFunctionDefintion(TokenList tokenList);
+            std::shared_ptr<Expr::Function> parseFunctionDefintion(TokenList tokenList);
 
             // 带分号的表达式语句
             std::shared_ptr<AST::Statement> parseExpressionStatement(TokenList tokenList);
@@ -57,13 +57,13 @@ namespace Flaner
             std::shared_ptr<AST::Identifier> parseIdentifier(TokenList tokenList);
 
             // 调用此函数时，当前 token 是 '(' 或 identifier
-            std::shared_ptr<AST::Value> parseValue(TokenList tokenList);
+            std::shared_ptr<Expr::Value> parseValue(TokenList tokenList);
 
             // 解析否定表达式
             std::shared_ptr<bool> parseNegationExpression(TokenList tokenList);
 
-
-            std::shared_ptr<AST::UnaryExpression> parseUnaryExpression(TokenList tokenList);
+			// TODO...
+            std::shared_ptr<Expr::UnaryExpressionNode> parseUnaryExpression(TokenList tokenList);
 
             std::shared_ptr<AST::Expression> parseExpression(TokenList tokenList);
 
