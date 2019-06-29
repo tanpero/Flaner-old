@@ -9,10 +9,9 @@ namespace Flaner
 		namespace Expr
 		{
 
-			ValueNode parseValue(std::shared_ptr<Lex::TokenList> tokenList)
+			std::shared_ptr<ValueNode> parseValue(TokenList tokenList)
 			{
 				std::shared_ptr<Lex::Token> currentToken = tokenList->now();
-				Unit unit;
 
 				switch (currentToken->type)
 				{
@@ -39,6 +38,131 @@ namespace Flaner
 				}
 			}
 
+
+			std::shared_ptr<UnaryExpressionNode> parseExpressionNeg(TokenList tokenList)
+			{
+				return std::shared_ptr<UnaryExpressionNode>();
+			}
+
+			std::shared_ptr<UnaryExpressionNode> parseExpressionNotB(TokenList tokenList)
+			{
+				return std::shared_ptr<UnaryExpressionNode>();
+			}
+
+			std::shared_ptr<UnaryExpressionNode> parseExpressionNotL(TokenList tokenList)
+			{
+				return std::shared_ptr<UnaryExpressionNode>();
+			}
+
+			std::shared_ptr<UnaryExpressionNode> parseExpressionTypeof(TokenList tokenList)
+			{
+				return std::shared_ptr<UnaryExpressionNode>();
+			}
+
+			std::shared_ptr<BinaryExpressionNode> parseExpressionAt(TokenList tokenList)
+			{
+				return std::shared_ptr<BinaryExpressionNode>();
+			}
+
+			std::shared_ptr<BinaryExpressionNode> parseExpressionPow(TokenList tokenList)
+			{
+				return std::shared_ptr<BinaryExpressionNode>();
+			}
+
+			std::shared_ptr<BinaryExpressionNode> parseExpressionAndL(TokenList tokenList)
+			{
+				return std::shared_ptr<BinaryExpressionNode>();
+			}
+
+			std::shared_ptr<BinaryExpressionNode> parseExpressionOrL(TokenList tokenList)
+			{
+				return std::shared_ptr<BinaryExpressionNode>();
+			}
+
+			std::shared_ptr<BinaryExpressionNode> parseExpressionPipeline(TokenList tokenList)
+			{
+				return std::shared_ptr<BinaryExpressionNode>();
+			}
+
+			std::shared_ptr<BinaryExpressionNode> parseExpressionCoale(TokenList tokenList)
+			{
+				return std::shared_ptr<BinaryExpressionNode>();
+			}
+
+			std::shared_ptr<TernaryExpressionNode> `1parseExpressionBranch(TokenList tokenList)
+			{
+				return std::shared_ptr<TernaryExpressionNode>();
+			}
+
+			std::shared_ptr<BinaryExpressionNode> parseExpressionCompare(TokenList tokenList)
+			{
+				return std::shared_ptr<BinaryExpressionNode>();
+			}
+
+			std::shared_ptr<BinaryExpressionNode> parseExpressionAdd(TokenList tokenList)
+			{
+				return std::shared_ptr<BinaryExpressionNode>();
+			}
+
+			std::shared_ptr<BinaryExpressionNode> parseExpressionSub(TokenList tokenList)
+			{
+				return std::shared_ptr<BinaryExpressionNode>();
+			}
+
+			std::shared_ptr<BinaryExpressionNode> parseExpressionMul(TokenList tokenList)
+			{
+				return std::shared_ptr<BinaryExpressionNode>();
+			}
+
+			std::shared_ptr<BinaryExpressionNode> parseExpressionDiv(TokenList tokenList)
+			{
+				return std::shared_ptr<BinaryExpressionNode>();
+			}
+
+			std::shared_ptr<BinaryExpressionNode> parseExpressionMod(TokenList tokenList)
+			{
+				return std::shared_ptr<BinaryExpressionNode>();
+			}
+
+			std::shared_ptr<BinaryExpressionNode> parseExpressionSA(TokenList tokenList)
+			{
+				return std::shared_ptr<BinaryExpressionNode>();
+			}
+
+			std::shared_ptr<BinaryExpressionNode> parseExpressionSL(TokenList tokenList)
+			{
+				return std::shared_ptr<BinaryExpressionNode>();
+			}
+
+			std::shared_ptr<BinaryExpressionNode> parseExpressionAndB(TokenList tokenList)
+			{
+				return std::shared_ptr<BinaryExpressionNode>();
+			}
+
+			std::shared_ptr<BinaryExpressionNode> parseExpressionOrB(TokenList tokenList)
+			{
+				return std::shared_ptr<BinaryExpressionNode>();
+			}
+
+			std::shared_ptr<BinaryExpressionNode> parseExpressionXorB(TokenList tokenList)
+			{
+				return std::shared_ptr<BinaryExpressionNode>();
+			}
+
+			std::shared_ptr<BinaryExpressionNode> parseExpressionAssign(TokenList tokenList)
+			{
+				return std::shared_ptr<BinaryExpressionNode>();
+			}
+
+			std::shared_ptr<MemberAccessNode> parseMemberAccess(TokenList tokenList)
+			{
+				return std::shared_ptr<MemberAccessNode>();
+			}
+
+			std::shared_ptr<FunctionCallingNode> parseFunctionCalling(TokenList tokenList)
+			{
+				return std::shared_ptr<FunctionCallingNode>();
+			}
 
 			/* std::shared_ptr<Expression> makeExpressionTree(OperatorQueue operatorQueue, ValueQueue valueQueue)
 			{
