@@ -401,16 +401,6 @@ namespace Flaner
             }
 
 
-            std::shared_ptr<Expr::Value> parseValue(TokenList tokenList)
-            {
-                // TODO...
-                return std::shared_ptr<Expr::Value>();
-            }
-
-            std::shared_ptr<bool> parseNegationExpression(TokenList tokenList)
-            {
-                return std::shared_ptr<bool>();
-            }
 
             // TODO...
             /*
