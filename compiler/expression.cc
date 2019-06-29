@@ -9,7 +9,7 @@ namespace Flaner
 		namespace Expr
 		{
 
-			Unit makeUnit(std::shared_ptr<Lex::TokenList> tokenList)
+			ValueNode parseValue(std::shared_ptr<Lex::TokenList> tokenList)
 			{
 				std::shared_ptr<Lex::Token> currentToken = tokenList->now();
 				Unit unit;
@@ -33,7 +33,7 @@ namespace Flaner
 			{
 				switch (switch_on)
 				{
-					case
+					
 					default:
 						break;
 				}

@@ -19,8 +19,7 @@ namespace Flaner
 				// ºó×ºÔËËã·û
 				op_postfix_at,   // []
 				op_postfix_pow,  // **
-
-
+				
 				// Âß¼­ÔËËã·û
 				op_infix_andl,  // &&
 				op_infix_orl,   // ||
