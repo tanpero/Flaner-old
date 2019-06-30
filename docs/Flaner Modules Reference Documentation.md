@@ -14,9 +14,7 @@
 
 ### map
 
-### number
-
-### bigint
+### numeric
 
 ### symbol
 
@@ -52,6 +50,8 @@
 
 
 
+
+
 ### querystring
 
 
@@ -65,6 +65,8 @@
 ### thread
 
 ### threadPool
+
+### cluster
 
 
 
@@ -96,6 +98,8 @@
 
 ## runtime
 
+---
+
 ### os
 
 `os`模块提供了许多与操作系统相关的实用方法。它可以使用以下方式访问：
@@ -110,8 +114,8 @@ import runtime.os
 
 定义特定于操作系统的行尾标记的字符串常量：
 
-- `\n` 在POSIX上
-- `\r\n` 在Windows上
+- POSIX 平台：`\n` 
+- Window 平台：`\r\n`
 
 #### os.arch() 
 
@@ -135,9 +139,9 @@ import runtime.os
 
 每个对象包含的属性包括：
 
-- `model` <字符串>
+- `model` <String>
 - `speed` （以MHz为单位）
-- `times` <对象>
+- `times` <Object>
   - `user`  CPU在用户模式下花费的毫秒数。
   - `nice`  CPU在nice模式下花费的毫秒数。
   - `sys`  CPU在sys模式下花费的毫秒数。
@@ -237,7 +241,7 @@ import runtime.os
 ]
 ```
 
-由于 `nice` 值是特定于 UNIX 的，因此在 Windows上 `nice` 的值始终为 0。
+由于 `nice` 值是特定于 UNIX 的，因此在  Windows 上 `nice` 的值始终为 0。
 
 #### os.endianness() 
 
@@ -285,7 +289,7 @@ import runtime.os
 
 负载平均值是系统活动的度量，由操作系统计算并表示为小数。理想情况下，平均负载应小于系统中逻辑 CPU 的数量。
 
-负载平均值是特定于 UNIX 的概念，在 Windows 平台上没有真正的等价物。在 Windows 上，返回值始终为`[0, 0, 0]`。
+负载平均值是特定于 UNIX 的概念，在  Windows   平台上没有真正的等价物。在  Windows  上，返回值始终为`[0, 0, 0]`。
 
 #### os.networkInterfaces() 
 
@@ -299,7 +303,7 @@ import runtime.os
 
 - `address` 分配的IPv4或IPv6地址
 - `netmask`  IPv4或IPv6网络掩码
-- `family` <字符串>要么`IPv4`或`IPv6`
+- `family` <String>要么`IPv4`或`IPv6`
 - `mac` 网络接口的MAC地址
 - `internal` `true`如果网络接口是无法远程访问的环回或类似接口，则为[ ; 除此以外`false`
 - `scopeid` <数字>的数字IPv6范围ID（当仅指定`family` 是`IPv6`）
@@ -352,7 +356,7 @@ import runtime.os
 
 - `returns` <String>
 
-`os.platform()` 方法返回一个标识运行运行时操作系统平台的字符串。
+`os.platform()` 方法返回一个标识运行运行时操作系统 平台的字符串。
 
 目前可能的值是：
 
@@ -364,9 +368,7 @@ import runtime.os
 - `'sunos'`
 - `'win32'`
 
-相当于 `process.platform`。
-
-`'android'`如果Node.js是在Android操作系统上构建的，则也可以返回该值。但是，Node.js中的Android支持目前被认为 [是实验性的。
+如果 Flaner 是在 Android 上构建的，那么可以返回 `"android"`。
 
 #### os.release() 
 
@@ -374,7 +376,7 @@ import runtime.os
 
 `os.release()` 方法返回标识操作系统版本的字符串。
 
-在POSIX系统上，操作系统版本由调用确定  `uname(3)`。在Windows上，`GetVersionExW()`使用。有关更多信息，请参阅<https://en.wikipedia.org/wiki/Uname#Examples>。
+在 POSIX 系统上，操作系统版本由调用确定  `uname(3)`。在 Windows 上，`GetVersionExW()`使用。有关更多信息，请参阅<https://en.wikipedia.org/wiki/Uname#Examples>。
 
 #### os.setPriority（[pid，] priority）
 
@@ -385,13 +387,11 @@ import runtime.os
 
 `os.setPriority()` 方法尝试为指定的进程设置调度优先级`pid`。如果`pid`未提供，或者是`0`，则使用当前进程的优先级。
 
-的`priority`输入必须之间的整数`-20`（高优先级）和`19` （低优先级）。由于Unix优先级和Windows优先级之间的差异，`priority`映射到六个优先级常量之一 `os.constants.priority`。检索进程优先级时，此范围映射可能导致Windows上的返回值略有不同。为避免混淆，建议将其设置`priority`为优先级常量之一。
+的`priority`输入必须之间的整数`-20`（高优先级）和`19` （低优先级）。由于Unix优先级和 Windows 优先级之间的差异，`priority`映射到六个优先级常量之一 `os.constants.priority`。检索进程优先级时，此范围映射可能导致 Windows 上的返回值略有不同。为避免混淆，建议将其设置`priority`为优先级常量之一。
 
-在Windows上设置优先级`PRIORITY_HIGHEST`需要提升用户，否则设置优先级将以静默方式减少到`PRIORITY_HIGH`。
+在 Windows 上设置优先级`PRIORITY_HIGHEST`需要提升用户，否则设置优先级将以静默方式减少到`PRIORITY_HIGH`。
 
 #### os.tmpdir() 
-
-历史
 
 - `returns` <String>
 
@@ -407,7 +407,7 @@ import runtime.os
 
 - `returns` <String>
 
-`os.type()` 方法返回一个字符串，标识返回的操作系统名称 `uname(3)`。例如，`'Linux'`在Linux，`'Darwin'`macOS和`'Windows_NT'`Windows上。
+`os.type()` 方法返回一个字符串，标识返回的操作系统名称 `uname(3)`。例如，`'Linux'`在Linux，`'Darwin'`macOS和`' Windows _NT'` Windows 上。
 
 有关运行输出的其他信息，请参阅<https://en.wikipedia.org/wiki/Uname#Examples> `uname(3)` 在各种操作系统上。
 
@@ -419,11 +419,11 @@ import runtime.os
 
 #### os.userInfo（[options]）
 
-- `options` <对象>
+- `options` <Object>
   - `encoding` 用于解释结果字符串的字符编码。如果`encoding`设置为`'buffer'`，则`username`，`shell`和`homedir` 值将是`Buffer`实例。**默认值：** `'utf8'`。
 - `returns` <String>
 
-`os.userInfo()` 方法返回有关当前有效用户的信息 - 在POSIX平台上，这通常是密码文件的子集。返回的对象包括`username`，`uid`，`gid`，`shell`，和`homedir`。在Windows上，`uid`和`gid`字段是`-1`，并且`shell`是`null`。
+`os.userInfo()` 方法返回有关当前有效用户的信息 - 在 POSIX  平台上，这通常是密码文件的子集。返回的对象包括`username`，`uid`，`gid`，`shell`，和`homedir`。在 Windows 上，`uid`和`gid`字段是`-1`，并且`shell`是`null`。
 
  `homedir` 返回的值`os.userInfo()`由操作系统提供。这与`os.homedir()`在回退到操作系统响应之前查询主目录的多个环境变量的结果不同。
 
@@ -480,7 +480,7 @@ import runtime.os
 
 以下错误常量通过 `os.constants.errno` 导出：
 
-###### POSIX 错误常量
+######  POSIX  错误常量
 
 | 不变              | 描述                                                         |
 | ----------------- | ------------------------------------------------------------ |
@@ -546,7 +546,7 @@ import runtime.os
 | `ENOTSUP`         | 表示不支持给定的操作。                                       |
 | `ENOTTY`          | 表示不适当的I / O控制操作。                                  |
 | `ENXIO`           | 表示没有此类设备或地址。                                     |
-| `EOPNOTSUPP`      | 表示套接字不支持该操作。请注意，虽然`ENOTSUP`和`EOPNOTSUPP`在Linux上相同的值，根据POSIX.1这些错误值应该是不同的。） |
+| `EOPNOTSUPP`      | 表示套接字不支持该操作。请注意，虽然`ENOTSUP`和`EOPNOTSUPP`在Linux上相同的值，根据 POSIX .1这些错误值应该是不同的。） |
 | `EOVERFLOW`       | 表示某个值太大而无法存储在给定的数据类型中。                 |
 | `EPERM`           | 表示不允许该操作。                                           |
 | `EPIPE`           | 表示管道损坏。                                               |
@@ -564,9 +564,9 @@ import runtime.os
 | `EWOULDBLOCK`     | 表示操作将阻止。                                             |
 | `EXDEV`           | 表示链接不正确。                                             |
 
-###### Windows 错误常量
+######  Windows 错误常量
 
-以下错误代码特定于Windows操作系统：
+以下错误代码特定于 Windows 操作系统：
 
 | 不变                     | 描述                            |
 | ------------------------ | ------------------------------- |
@@ -643,25 +643,473 @@ import runtime.os
 
 ##### 优先级常数
 
-添加于：v10.10.0
-
 以下进程调度常量通过以下方式导出 `os.constants.priority`：
 
 | 不变                    | 描述                                                         |
 | ----------------------- | ------------------------------------------------------------ |
-| `PRIORITY_LOW`          | 最低进程调度优先级。这对应 `IDLE_PRIORITY_CLASS`于Windows，并且`19`在所有其他平台上都很有价值 。 |
-| `PRIORITY_BELOW_NORMAL` | 流程调度优先级高于`PRIORITY_LOW`和低于`PRIORITY_NORMAL`。这对应 `BELOW_NORMAL_PRIORITY_CLASS`于Windows，并且`10`在所有其他平台上都很有价值 。 |
-| `PRIORITY_NORMAL`       | 默认进程调度优先级。这对应 `NORMAL_PRIORITY_CLASS`于Windows，并且`0`在所有其他平台上都很有价值 。 |
-| `PRIORITY_ABOVE_NORMAL` | 流程调度优先级高于`PRIORITY_NORMAL`和低于`PRIORITY_HIGH`。这对应 `ABOVE_NORMAL_PRIORITY_CLASS`于Windows，并且`-7`在所有其他平台上都很有价值 。 |
-| `PRIORITY_HIGH`         | 流程调度优先级高于`PRIORITY_ABOVE_NORMAL` 和低于`PRIORITY_HIGHEST`。这对应 `HIGH_PRIORITY_CLASS`于Windows，并且`-14`在所有其他平台上都很有价值 。 |
-| `PRIORITY_HIGHEST`      | 最高进程调度优先级。这对应 `REALTIME_PRIORITY_CLASS`于Windows，并且`-20`在所有其他平台上都很有价值 。 |
+| `PRIORITY_LOW`          | 最低进程调度优先级。这对应 `IDLE_PRIORITY_CLASS`于 Windows ，并且`19`在所有其他 平台上都很有价值 。 |
+| `PRIORITY_BELOW_NORMAL` | 流程调度优先级高于`PRIORITY_LOW`和低于`PRIORITY_NORMAL`。这对应 `BELOW_NORMAL_PRIORITY_CLASS`于 Windows ，并且`10`在所有其他 平台上都很有价值 。 |
+| `PRIORITY_NORMAL`       | 默认进程调度优先级。这对应 `NORMAL_PRIORITY_CLASS`于 Windows ，并且`0`在所有其他 平台上都很有价值 。 |
+| `PRIORITY_ABOVE_NORMAL` | 流程调度优先级高于`PRIORITY_NORMAL`和低于`PRIORITY_HIGH`。这对应 `ABOVE_NORMAL_PRIORITY_CLASS`于 Windows ，并且`-7`在所有其他 平台上都很有价值 。 |
+| `PRIORITY_HIGH`         | 流程调度优先级高于`PRIORITY_ABOVE_NORMAL` 和低于`PRIORITY_HIGHEST`。这对应 `HIGH_PRIORITY_CLASS`于 Windows ，并且`-14`在所有其他 平台上都很有价值 。 |
+| `PRIORITY_HIGHEST`      | 最高进程调度优先级。这对应 `REALTIME_PRIORITY_CLASS`于 Windows ，并且`-20`在所有其他 平台上都很有价值 。 |
 
 
+
+---
 
 ### path
 
+该`path`模块提供了用于处理文件和目录路径的实用程序。它可以使用以下方式访问：
+
+```js
+const path = require('path');
+```
+
+####  Windows 与 POSIX  
+
+`path`模块的默认操作因运行Node.js应用程序的操作系统而异。具体来说，在 Windows 操作系统上运行时，`path`模块将假定正在使用 Windows 样式的路径。
+
+因此使用`path.basename()` 可能会在 POSIX 和 Windows 上产生不同的结果：
+
+在 POSIX 上：
+
+```js
+path.basename('C:\\temp\\myfile.html');
+// Returns: 'C:\\temp\\myfile.html'
+```
+
+在 Windows 上：
+
+```js
+path.basename('C:\\temp\\myfile.html');
+// Returns: 'myfile.html'
+```
+
+要在任何操作系统上使用 Windows 文件路径时获得一致的结果，请使用 `path.win32`：
+
+在 POSIX 和 Windows 上：
+
+```js
+path.win32.basename('C:\\temp\\myfile.html');
+// Returns: 'myfile.html'
+```
+
+要在任何操作系统上使用 POSIX 文件路径时获得一致的结果，请使用 `path.POSIX `：
+
+在 POSIX 和 Windows 上：
+
+```js
+path.POSIX .basename('/tmp/myfile.html');
+// Returns: 'myfile.html'
+```
+
+在 Windows 上，Node.js遵循每个驱动器工作目录的概念。使用没有反斜杠的驱动器路径时，可以观察到此行为。例如，`path.resolve('c:\\')`可能会返回不同的结果 `path.resolve('c:')`。有关详细信息，请参阅 [此MSDN页面。
+
+#### path.basename（path [，ext]）
+
+- `path` <String>
+- `ext` [可选的文件扩展名
+- returns <>
+
+这些`path.basename()` 方法返回a的最后一部分`path`，类似于Unix `basename`命令。尾随目录分隔符将被忽略，请参阅  `path.sep`。
+
+```js
+path.basename('/foo/bar/baz/asdf/quux.html');
+// Returns: 'quux.html'
+
+path.basename('/foo/bar/baz/asdf/quux.html', '.html');
+// Returns: 'quux'
+```
+
+ `TypeError`如果`path`不是字符串或者是否`ext`给定且不是字符串，则抛出A.
+
+#### path.delimiter
+
+- <String>
+
+提供特定于 平台的路径分隔符：
+
+- `;` 对于 Windows 
+- `:` 对于 POSIX 
+
+例如，在 POSIX 上：
+
+```js
+console.log(process.env.PATH);
+// Prints: '/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin'
+
+process.env.PATH.split(path.delimiter);
+// Returns: ['/usr/bin', '/bin', '/usr/sbin', '/sbin', '/usr/local/bin']
+```
+
+在 Windows 上：
+
+```js
+console.log(process.env.PATH);
+// Prints: 'C:\   Windows  \system32;C:\   Windows  ;C:\Program Files\node\'
+
+process.env.PATH.split(path.delimiter);
+// Returns ['C:\\   Windows  \\system32', 'C:\\   Windows  ', 'C:\\Program Files\\node\\']
+```
+
+#### path.dirname（path）
+
+- `path` <String>
+- returns <>
+
+该`path.dirname()` 方法返回a的目录名`path`，类似于Unix `dirname`命令。尾随目录分隔符将被忽略，请参阅  `path.sep`。
+
+```js
+path.dirname('/foo/bar/baz/asdf/quux');
+// Returns: '/foo/bar/baz/asdf'
+```
+
+ `TypeError`如果`path`不是字符串，则抛出A.
+
+#### path.extname（path）
+
+- `path` <String>
+- returns <>
+
+该`path.extname()` 方法返回`path`从`.`（句点）字符的最后一次出现到最后一部分的字符串结尾的扩展`path`。如果`.`在最后一部分中没有`path`，或者`path`（参见`path.basename()` ）的基本名称的第一个字符是`.`，则返回空字符串。
+
+```js
+path.extname('index.html');
+// Returns: '.html'
+
+path.extname('index.coffee.md');
+// Returns: '.md'
+
+path.extname('index.');
+// Returns: '.'
+
+path.extname('index');
+// Returns: ''
+
+path.extname('.index');
+// Returns: ''
+```
+
+ `TypeError`如果`path`不是字符串，则抛出A.
+
+#### path.format（pathObject）
+
+
+
+- `pathObject` <Object>
+  - `dir` <String>
+  - `root` <String>
+  - `base` <String>
+  - `name` <String>
+  - `ext` <String>
+- returns <>
+
+该`path.format()` 方法从对象返回路径字符串。这与之相反 `path.parse()` 。
+
+在提供属性时，`pathObject`请记住存在一个属性优先于另一个属性的组合：
+
+- `pathObject.root`如果`pathObject.dir`提供，则被忽略
+- `pathObject.ext`并且`pathObject.name`如果`pathObject.base`存在则被忽略
+
+例如，在 POSIX 上：
+
+```js
+// If `dir`, `root` and `base` are provided,
+// `${dir}${path.sep}${base}`
+// will be returned. `root` is ignored.
+path.format({
+  root: '/ignored',
+  dir: '/home/user/dir',
+  base: 'file.txt'
+});
+// Returns: '/home/user/dir/file.txt'
+
+// `root` will be used if `dir` is not specified.
+// If only `root` is provided or `dir` is equal to `root` then the
+// platform separator will not be included. `ext` will be ignored.
+path.format({
+  root: '/',
+  base: 'file.txt',
+  ext: 'ignored'
+});
+// Returns: '/file.txt'
+
+// `name` + `ext` will be used if `base` is not specified.
+path.format({
+  root: '/',
+  name: 'file',
+  ext: '.txt'
+});
+// Returns: '/file.txt'
+```
+
+在 Windows 上：
+
+```js
+path.format({
+  dir: 'C:\\path\\dir',
+  base: 'file.txt'
+});
+// Returns: 'C:\\path\\dir\\file.txt'
+```
+
+#### path.isAbsolute（path）
+
+
+
+- `path` <String>
+- returns <>
+
+该`path.isAbsolute()` 方法确定是否`path`是绝对路径。
+
+如果给定的`path`是零长度字符串，`false`则返回。
+
+例如，在 POSIX 上：
+
+```js
+path.isAbsolute('/foo/bar'); // true
+path.isAbsolute('/baz/..');  // true
+path.isAbsolute('qux/');     // false
+path.isAbsolute('.');        // false
+```
+
+在 Windows 上：
+
+```js
+path.isAbsolute('//server');    // true
+path.isAbsolute('\\\\server');  // true
+path.isAbsolute('C:/foo/..');   // true
+path.isAbsolute('C:\\foo\\..'); // true
+path.isAbsolute('bar\\baz');    // false
+path.isAbsolute('bar/baz');     // false
+path.isAbsolute('.');           // false
+```
+
+ `TypeError`如果`path`不是字符串，则抛出A.
+
+#### path.join（[... paths]）
+
+
+
+- `...paths` [一系列路径段
+- returns <>
+
+该`path.join()` 方法`path`使用特定于 平台的分隔符作为分隔符将所有给定段连接在一起，然后规范化生成的路径。
+
+零长度`path`段被忽略。如果连接的路径字符串是零长度字符串，`'.'`则将返回，表示当前工作目录。
+
+```js
+path.join('/foo', 'bar', 'baz/asdf', 'quux', '..');
+// Returns: '/foo/bar/baz/asdf'
+
+path.join('foo', {}, 'bar');
+// throws 'TypeError: Path must be a string. Received {}'
+```
+
+ `TypeError`如果任何路径段不是字符串，则抛出A.
+
+#### path.normalize（path）
+
+
+
+- `path` <String>
+- returns <>
+
+该`path.normalize()` 方法规范化给定`path`，解析`'..'`和 `'.'`分段。
+
+当找到多个顺序路径段分隔字符时（例如， `/`在 POSIX 上`\`或`/`在 Windows  上或在 Windows 上），它们被特定于 平台的路径段分隔符的单个实例（`/`在 POSIX 和 `\` Windows 上）替换。尾随分隔符被保留。
+
+如果`path`是零长度字符串，`'.'`则返回，表示当前工作目录。
+
+例如，在 POSIX 上：
+
+```js
+path.normalize('/foo/bar//baz/asdf/quux/..');
+// Returns: '/foo/bar/baz/asdf'
+```
+
+在 Windows 上：
+
+```js
+path.normalize('C:\\temp\\\\foo\\bar\\..\\');
+// Returns: 'C:\\temp\\foo\\'
+```
+
+由于 Windows 识别多个路径分隔符，因此两个分隔符将被 Windows 首选分隔符（`\`）的实例替换：
+
+```js
+path.win32.normalize('C:////temp\\\\/\\/\\/foo/bar');
+// Returns: 'C:\\temp\\foo\\bar'
+```
+
+ `TypeError`如果`path`不是字符串，则抛出A.
+
+#### path.parse（path）
+
+
+
+- `path` <String>
+- returns <>
+
+该`path.parse()` 方法返回一个对象，其属性表示该对象的重要元素`path`。尾随目录分隔符将被忽略，请参阅 `path.sep`。
+
+返回的对象将具有以下属性：
+
+- `dir` <String>
+- `root` <String>
+- `base` <String>
+- `name` <String>
+- `ext` <String>
+
+例如，在 POSIX 上：
+
+```js
+path.parse('/home/user/dir/file.txt');
+// Returns:
+// { root: '/',
+//   dir: '/home/user/dir',
+//   base: 'file.txt',
+//   ext: '.txt',
+//   name: 'file' }
+┌─────────────────────┬────────────┐
+│          dir        │    base    │
+├──────┬              ├──────┬─────┤
+│ root │              │ name │ ext │
+"  /    home/user/dir / file  .txt "
+└──────┴──────────────┴──────┴─────┘
+(all spaces in the "" line should be ignored — they are purely for formatting)
+```
+
+在 Windows 上：
+
+```js
+path.parse('C:\\path\\dir\\file.txt');
+// Returns:
+// { root: 'C:\\',
+//   dir: 'C:\\path\\dir',
+//   base: 'file.txt',
+//   ext: '.txt',
+//   name: 'file' }
+┌─────────────────────┬────────────┐
+│          dir        │    base    │
+├──────┬              ├──────┬─────┤
+│ root │              │ name │ ext │
+" C:\      path\dir   \ file  .txt "
+└──────┴──────────────┴──────┴─────┘
+(all spaces in the "" line should be ignored — they are purely for formatting)
+```
+
+ `TypeError`如果`path`不是字符串，则抛出A.
+
+#### path.POSIX 
+
+- <Object>
+
+该`path.POSIX `属性提供对`path`方法的 POSIX 特定实现的访问。
+
+#### path.relative(from，to)
+
+- `from` <String>
+- `to` <String>
+- returns <String>
+
+该`path.relative()` 方法返回从相对路径`from`来`to`基于当前的工作目录。如果`from`和`to`每个解析到相同的路径（在调用`path.resolve()` 每个路径之后），则返回零长度字符串。
+
+如果将零长度字符串作为`from`或传递`to`，则将使用当前工作目录而不是零长度字符串。
+
+例如，在 POSIX 上：
+
+```js
+path.relative('/data/orandea/test/aaa', '/data/orandea/impl/bbb');
+// Returns: '../../impl/bbb'
+```
+
+在 Windows 上：
+
+```js
+path.relative('C:\\orandea\\test\\aaa', 'C:\\orandea\\impl\\bbb');
+// Returns: '..\\..\\impl\\bbb'
+```
+
+ `TypeError`如果其中一个`from`或`to`不是字符串，则抛出A.
+
+#### path.resolve([... paths])
+
+- `...paths` <String>
+- returns <String>
+
+该`path.resolve()` 方法将一系列路径或路径段解析为绝对路径。
+
+给定的路径序列从右到左处理，随后每个`path`路径都被预先加载，直到构造出绝对路径。例如，给定路径段的序列：`/foo`，`/bar`，`baz`，调用`path.resolve('/foo', '/bar', 'baz')`将返回`/bar/baz`。
+
+如果在处理`path`完所有给定段之后尚未生成绝对路径，则使用当前工作目录。
+
+生成的路径已规范化，并且除非将路径解析为根目录，否则将删除尾部斜杠。
+
+零长度`path`段被忽略。
+
+如果没有`path`传递段，`path.resolve()` 将返回当前工作目录的绝对路径。
+
+```js
+path.resolve('/foo/bar', './baz');
+// Returns: '/foo/bar/baz'
+
+path.resolve('/foo/bar', '/tmp/file/');
+// Returns: '/tmp/file'
+
+path.resolve('wwwroot', 'static_files/png/', '../gif/image.gif');
+// if the current working directory is /home/myself/node,
+// this returns '/home/myself/node/wwwroot/static_files/gif/image.gif'
+```
+
+ `TypeError`如果任何参数不是字符串，则抛出A.
+
+#### path.sep
+
+- <String>
+
+提供特定于 平台的路径段分隔符：
+
+- `\` 在 Windows 上
+- `/` 在 POSIX 上
+
+例如，在 POSIX 上：
+
+```js
+'foo/bar/baz'.split(path.sep);
+// Returns: ['foo', 'bar', 'baz']
+```
+
+在 Windows 上：
+
+```js
+'foo\\bar\\baz'.split(path.sep);
+// Returns: ['foo', 'bar', 'baz']
+```
+
+在 Windows 上，正斜杠（`/`）和反斜杠（`\`）都被接受为路径段分隔符; 但是，这些`path`方法只添加反斜杠（`\`）。
+
+#### path.toNamespacedPath（path）
+
+- `path`<String>
+- `returns` <String>
+
+仅在 Windows 系统上，返回给定的等效[命名空间前缀路径`path`。如果`path`不是字符串，`path`将返回而不进行修改。
+
+此方法仅在 Windows 系统上有意义。在 POSIX 系统上，该方法不可操作，并且始终`path`无需修改即可返回。
+
+#### path.win32
+
+- <Object>
+
+该`path.win32`属性提供对特定于 Windows 的`path`方法实现的访问。
+
+
+
 ### filesystem
 
+### stdio
 
 
 
@@ -669,4 +1117,8 @@ import runtime.os
 
 
 
+## utility
 
+### compress
+
+### crypto
