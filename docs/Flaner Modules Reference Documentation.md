@@ -50,9 +50,107 @@
 
 
 
-
+---
 
 ### querystring
+
+`querystring` 模块提供用于解析和格式化URL查询字符串的实用程序。它可以使用以下方式访问：
+
+```
+import network.querystring
+```
+
+#### querystring.decode()
+
+`querystring.decode()`函数是 `querystring.parse()` 的别名。
+
+#### querystring.encode()
+
+`querystring.encode()`函数是 `querystring.stringify()`的别名。
+
+#### querystring.escape(str)
+
+- `str` <String>
+
+该`querystring.escape()`方法`str`以针对URL查询字符串的特定要求进行了优化的方式对给定执行URL百分比编码 。
+
+该`querystring.escape()`方法由`querystring.stringify()`并且通常不期望直接使用。它的导出主要是为了允许应用程序代码在必要时通过分配`querystring.escape`替代函数来提供替换的百分比编码实现。
+
+#### querystring.parse（str [，sep [，eq [，options]]])
+
+- `str` 要解析的URL查询字符串
+- `sep` 用于在查询字符串中分隔键和值对的子字符串。**默认值：** `'&'`。
+- `eq` 用于分隔查询字符串中的键和值的子字符串。**默认值：** `'='`。
+- `options` <Object>
+  - `decodeURIComponent`<Function> 解码查询字符串中的百分比编码字符时使用的函数。**默认值：** `querystring.unescape()`。
+  - `maxKeys` <Number> 指定要解析的最大键数。指定`0`删除键计数限制。**默认值：** `1000`。
+
+该`querystring.parse()`方法将URL查询字符串（`str`）解析为键和值对的集合。
+
+例如，查询字符串`'foo=bar&abc=xyz&abc=123'`被解析为：
+
+```
+{
+  foo: 'bar',
+  abc: ['xyz', '123']
+}
+```
+
+该`querystring.parse()`方法返回的对象*不是* 原型继承自JavaScript `Object`。这意味着，典型的 `Object`方法，例如`obj.toString()`，`obj.hasOwnProperty()`和其他没有定义，*将无法正常工作*。
+
+默认情况下，将假定查询字符串中的百分比编码字符使用UTF-8编码。如果使用替代字符编码，则`decodeURIComponent` 需要指定备用选项：
+
+```
+// Assuming gbkDecodeURIComponent function already exists...
+
+querystring.parse('w=%D6%D0%CE%C4&foo=bar', null, null,
+                  { decodeURIComponent: gbkDecodeURIComponent });
+```
+
+#### querystring.stringify（obj [，sep [，eq [，options]]]）
+
+- `obj` 要序列化为URL查询字符串的对象
+
+- `sep` 用于在查询字符串中分隔键和值对的子字符串。**默认值：** `'&'`。
+
+- `eq` 用于分隔查询字符串中的键和值的子字符串。**默认值：** `'='`。
+
+- `options`
+
+  - `encodeURIComponent`  <Function>
+
+    在查询字符串中将URL不安全字符转换为百分比编码时使用的函数。**默认值：** `querystring.escape()`。
+
+该`querystring.stringify()`方法`obj`通过迭代对象的“自己的属性” 从给定的URL生成URL查询字符串。
+
+它序列化传入的以下类型的值`obj`：<String> | <Number> | <Boolean> | <List<String>> | <List<Number>> | <List<Boolean>>
+
+任何其他输入值都将被强制转换为空字符串。
+
+```
+querystring.stringify({ foo: 'bar', baz: ['qux', 'quux'], corge: '' });
+// returns 'foo=bar&baz=qux&baz=quux&corge='
+
+querystring.stringify({ foo: 'bar', baz: 'qux' }, ';', ':');
+// returns 'foo:bar;baz:qux'
+```
+
+默认情况下，查询字符串中需要百分比编码的字符将编码为UTF-8。如果需要替代编码，则`encodeURIComponent`需要指定备用 选项：
+
+```
+// Assuming gbkEncodeURIComponent function already exists,
+
+querystring.stringify({ w: '中文', foo: 'bar' }, null, null,
+                      { encodeURIComponent: gbkEncodeURIComponent });
+```
+
+#### querystring.unescape(str)
+
+- `str`  <String>
+
+该`querystring.unescape()`方法对给定的URL百分比编码字符进行解码`str`。
+
+该`querystring.unescape()`方法由`querystring.parse()`并且通常不期望直接使用。它的导出主要是为了允许应用程序代码在必要时通过分配`querystring.unescape`替代函数来提供替换解码实现。
 
 
 
@@ -78,7 +176,7 @@
 
 ### xml
 
-### json
+### on
 
 ### yaml
 
@@ -104,7 +202,7 @@
 
 `os`模块提供了许多与操作系统相关的实用方法。它可以使用以下方式访问：
 
-```js
+```
 import runtime.os
 ```
 
@@ -148,7 +246,7 @@ import runtime.os
   - `idle`  CPU在空闲模式下花费的毫秒数。
   - `irq`  CPU在irq模式下花费的毫秒数。
 
-```js
+```
 [
   {
     model: 'Intel(R) Core(TM) i7 CPU         860  @ 2.80GHz',
@@ -309,7 +407,7 @@ import runtime.os
 - `scopeid` <数字>的数字IPv6范围ID（当仅指定`family` 是`IPv6`）
 - `cidr` 分配的IPv4或IPv6地址，其路由前缀为CIDR表示法。如果`netmask`无效，则将此属性设置为`null`。
 
-```js
+```
 {
   lo: [
     {
@@ -635,7 +733,7 @@ import runtime.os
 
 | 不变            | 描述                                                       |
 | --------------- | ---------------------------------------------------------- |
-| `RTLD_LAZY`     | 执行延迟绑定。Node.js默认设置此标志。                      |
+| `RTLD_LAZY`     | 执行延迟绑定。Node.默认设置此标志。                      |
 | `RTLD_NOW`      | 在dlopen（3）返回之前解析库中的所有未定义符号。            |
 | `RTLD_GLOBAL`   | 库定义的符号将可用于后续加载的库的符号解析。               |
 | `RTLD_LOCAL`    | 相反的`RTLD_GLOBAL`。如果未指定任何标志，则这是默认行为。  |
@@ -662,26 +760,26 @@ import runtime.os
 
 该`path`模块提供了用于处理文件和目录路径的实用程序。它可以使用以下方式访问：
 
-```js
+```
 const path = require('path');
 ```
 
 ####  Windows 与 POSIX  
 
-`path`模块的默认操作因运行Node.js应用程序的操作系统而异。具体来说，在 Windows 操作系统上运行时，`path`模块将假定正在使用 Windows 样式的路径。
+`path`模块的默认操作因运行Node.应用程序的操作系统而异。具体来说，在 Windows 操作系统上运行时，`path`模块将假定正在使用 Windows 样式的路径。
 
 因此使用`path.basename()` 可能会在 POSIX 和 Windows 上产生不同的结果：
 
 在 POSIX 上：
 
-```js
+```
 path.basename('C:\\temp\\myfile.html');
 // Returns: 'C:\\temp\\myfile.html'
 ```
 
 在 Windows 上：
 
-```js
+```
 path.basename('C:\\temp\\myfile.html');
 // Returns: 'myfile.html'
 ```
@@ -690,7 +788,7 @@ path.basename('C:\\temp\\myfile.html');
 
 在 POSIX 和 Windows 上：
 
-```js
+```
 path.win32.basename('C:\\temp\\myfile.html');
 // Returns: 'myfile.html'
 ```
@@ -699,12 +797,12 @@ path.win32.basename('C:\\temp\\myfile.html');
 
 在 POSIX 和 Windows 上：
 
-```js
+```
 path.POSIX .basename('/tmp/myfile.html');
 // Returns: 'myfile.html'
 ```
 
-在 Windows 上，Node.js遵循每个驱动器工作目录的概念。使用没有反斜杠的驱动器路径时，可以观察到此行为。例如，`path.resolve('c:\\')`可能会返回不同的结果 `path.resolve('c:')`。有关详细信息，请参阅 [此MSDN页面。
+在 Windows 上，Node.遵循每个驱动器工作目录的概念。使用没有反斜杠的驱动器路径时，可以观察到此行为。例如，`path.resolve('c:\\')`可能会返回不同的结果 `path.resolve('c:')`。有关详细信息，请参阅 [此MSDN页面。
 
 #### path.basename（path [，ext]）
 
@@ -714,7 +812,7 @@ path.POSIX .basename('/tmp/myfile.html');
 
 这些`path.basename()` 方法返回a的最后一部分`path`，类似于Unix `basename`命令。尾随目录分隔符将被忽略，请参阅  `path.sep`。
 
-```js
+```
 path.basename('/foo/bar/baz/asdf/quux.html');
 // Returns: 'quux.html'
 
@@ -735,7 +833,7 @@ path.basename('/foo/bar/baz/asdf/quux.html', '.html');
 
 例如，在 POSIX 上：
 
-```js
+```
 console.log(process.env.PATH);
 // Prints: '/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin'
 
@@ -745,7 +843,7 @@ process.env.PATH.split(path.delimiter);
 
 在 Windows 上：
 
-```js
+```
 console.log(process.env.PATH);
 // Prints: 'C:\   Windows  \system32;C:\   Windows  ;C:\Program Files\node\'
 
@@ -753,28 +851,28 @@ process.env.PATH.split(path.delimiter);
 // Returns ['C:\\   Windows  \\system32', 'C:\\   Windows  ', 'C:\\Program Files\\node\\']
 ```
 
-#### path.dirname（path）
+#### path.dirname(path)
 
 - `path` <String>
 - returns <>
 
 该`path.dirname()` 方法返回a的目录名`path`，类似于Unix `dirname`命令。尾随目录分隔符将被忽略，请参阅  `path.sep`。
 
-```js
+```
 path.dirname('/foo/bar/baz/asdf/quux');
 // Returns: '/foo/bar/baz/asdf'
 ```
 
  `TypeError`如果`path`不是字符串，则抛出A.
 
-#### path.extname（path）
+#### path.extname(path)
 
 - `path` <String>
 - returns <>
 
 该`path.extname()` 方法返回`path`从`.`（句点）字符的最后一次出现到最后一部分的字符串结尾的扩展`path`。如果`.`在最后一部分中没有`path`，或者`path`（参见`path.basename()` ）的基本名称的第一个字符是`.`，则返回空字符串。
 
-```js
+```
 path.extname('index.html');
 // Returns: '.html'
 
@@ -793,7 +891,7 @@ path.extname('.index');
 
  `TypeError`如果`path`不是字符串，则抛出A.
 
-#### path.format（pathObject）
+#### path.format(pathObject)
 
 
 
@@ -814,7 +912,7 @@ path.extname('.index');
 
 例如，在 POSIX 上：
 
-```js
+```
 // If `dir`, `root` and `base` are provided,
 // `${dir}${path.sep}${base}`
 // will be returned. `root` is ignored.
@@ -846,7 +944,7 @@ path.format({
 
 在 Windows 上：
 
-```js
+```
 path.format({
   dir: 'C:\\path\\dir',
   base: 'file.txt'
@@ -854,7 +952,7 @@ path.format({
 // Returns: 'C:\\path\\dir\\file.txt'
 ```
 
-#### path.isAbsolute（path）
+#### path.isAbsolute(path)
 
 
 
@@ -867,7 +965,7 @@ path.format({
 
 例如，在 POSIX 上：
 
-```js
+```
 path.isAbsolute('/foo/bar'); // true
 path.isAbsolute('/baz/..');  // true
 path.isAbsolute('qux/');     // false
@@ -876,7 +974,7 @@ path.isAbsolute('.');        // false
 
 在 Windows 上：
 
-```js
+```
 path.isAbsolute('//server');    // true
 path.isAbsolute('\\\\server');  // true
 path.isAbsolute('C:/foo/..');   // true
@@ -899,7 +997,7 @@ path.isAbsolute('.');           // false
 
 零长度`path`段被忽略。如果连接的路径字符串是零长度字符串，`'.'`则将返回，表示当前工作目录。
 
-```js
+```
 path.join('/foo', 'bar', 'baz/asdf', 'quux', '..');
 // Returns: '/foo/bar/baz/asdf'
 
@@ -909,7 +1007,7 @@ path.join('foo', {}, 'bar');
 
  `TypeError`如果任何路径段不是字符串，则抛出A.
 
-#### path.normalize（path）
+#### path.normalize(path)
 
 
 
@@ -924,28 +1022,28 @@ path.join('foo', {}, 'bar');
 
 例如，在 POSIX 上：
 
-```js
+```
 path.normalize('/foo/bar//baz/asdf/quux/..');
 // Returns: '/foo/bar/baz/asdf'
 ```
 
 在 Windows 上：
 
-```js
+```
 path.normalize('C:\\temp\\\\foo\\bar\\..\\');
 // Returns: 'C:\\temp\\foo\\'
 ```
 
 由于 Windows 识别多个路径分隔符，因此两个分隔符将被 Windows 首选分隔符（`\`）的实例替换：
 
-```js
+```
 path.win32.normalize('C:////temp\\\\/\\/\\/foo/bar');
 // Returns: 'C:\\temp\\foo\\bar'
 ```
 
  `TypeError`如果`path`不是字符串，则抛出A.
 
-#### path.parse（path）
+#### path.parse(path)
 
 
 
@@ -964,7 +1062,7 @@ path.win32.normalize('C:////temp\\\\/\\/\\/foo/bar');
 
 例如，在 POSIX 上：
 
-```js
+```
 path.parse('/home/user/dir/file.txt');
 // Returns:
 // { root: '/',
@@ -983,7 +1081,7 @@ path.parse('/home/user/dir/file.txt');
 
 在 Windows 上：
 
-```js
+```
 path.parse('C:\\path\\dir\\file.txt');
 // Returns:
 // { root: 'C:\\',
@@ -1020,14 +1118,14 @@ path.parse('C:\\path\\dir\\file.txt');
 
 例如，在 POSIX 上：
 
-```js
+```
 path.relative('/data/orandea/test/aaa', '/data/orandea/impl/bbb');
 // Returns: '../../impl/bbb'
 ```
 
 在 Windows 上：
 
-```js
+```
 path.relative('C:\\orandea\\test\\aaa', 'C:\\orandea\\impl\\bbb');
 // Returns: '..\\..\\impl\\bbb'
 ```
@@ -1051,7 +1149,7 @@ path.relative('C:\\orandea\\test\\aaa', 'C:\\orandea\\impl\\bbb');
 
 如果没有`path`传递段，`path.resolve()` 将返回当前工作目录的绝对路径。
 
-```js
+```
 path.resolve('/foo/bar', './baz');
 // Returns: '/foo/bar/baz'
 
@@ -1076,21 +1174,21 @@ path.resolve('wwwroot', 'static_files/png/', '../gif/image.gif');
 
 例如，在 POSIX 上：
 
-```js
+```
 'foo/bar/baz'.split(path.sep);
 // Returns: ['foo', 'bar', 'baz']
 ```
 
 在 Windows 上：
 
-```js
+```
 'foo\\bar\\baz'.split(path.sep);
 // Returns: ['foo', 'bar', 'baz']
 ```
 
 在 Windows 上，正斜杠（`/`）和反斜杠（`\`）都被接受为路径段分隔符; 但是，这些`path`方法只添加反斜杠（`\`）。
 
-#### path.toNamespacedPath（path）
+#### path.toNamespacedPath(path)
 
 - `path`<String>
 - `returns` <String>
@@ -1101,7 +1199,7 @@ path.resolve('wwwroot', 'static_files/png/', '../gif/image.gif');
 
 #### path.win32
 
-- <Object>
+- `returns` <Object>
 
 该`path.win32`属性提供对特定于 Windows 的`path`方法实现的访问。
 
