@@ -21,7 +21,9 @@ namespace Flaner
 
                 TOKEN_ID,
 
-                TOKEN_NUMBER,
+                TOKEN_NUMBER,   // 123456
+				TOKEN_BIGINT,   // 123456n
+				TOKEN_RATIONAL, // 123r456
                 TOKEN_STRING,
 
                 TOKEN_LET,
@@ -53,12 +55,12 @@ namespace Flaner
                 TOKEN_TRUE,
                 TOKEN_FALSE,          
 
-                TOKEN_PAREN_BEGIN,
-                TOKEN_PAREN_END,
-                TOKEN_BRACKET_BEGIN,
-                TOKEN_BRACKET_END,
-                TOKEN_BRACE_BEGIN,
-                TOKEN_BRACE_END,
+                TOKEN_PAREN_BEGIN,     // (
+                TOKEN_PAREN_END,       // )
+                TOKEN_BRACKET_BEGIN,   // [
+                TOKEN_BRACKET_END,     // ]
+                TOKEN_BRACE_BEGIN,     // {
+                TOKEN_BRACE_END,       // }
 
 				TOKEN_BIT_NOT,         // ~        
 				TOKEN_LOGIC_NOT,       // !
@@ -92,9 +94,7 @@ namespace Flaner
 				TOKEN_ROR,             // >>>
 
                 TOKEN_FUNCTION_ARROW,  // =>
-
-				TOKEN_REGEXP,          // ???
-
+				
                 TOKEN_COLON,           // :
                 TOKEN_COMMA,           // ,
                 TOKEN_DOT,             // .

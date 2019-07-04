@@ -282,6 +282,7 @@ namespace Flaner
 				//            -> foo
 				//         -> bar
 				//     -> some
+				//
 				// 同样，对于 a[123].b.c[456]
 				// 会得到以下树：
 				//     [BinaryExpressionNode(op_postfix_at)]
@@ -320,7 +321,38 @@ namespace Flaner
 
 
 			std::map<Lex::TokenType, uint16_t> priorityLookupTable = {
-				Lex::
+				{ Lex::TOKEN_ADD,             0 },
+				{ Lex::TOKEN_BIT_NOT,         0 },
+				{ Lex::TOKEN_LOGIC_NOT,       0 },
+				{ Lex::TOKEN_TYPEOF,          0 },
+
+				{ Lex::TOKEN_LOGIC_AND,       0 },
+				{ Lex::TOKEN_BIT_AND,         0 },
+				{ Lex::TOKEN_LOGIC_OR,        0 },
+				{ Lex::TOKEN_BIT_OR,          0 },
+				{ Lex::TOKEN_LOGIC_XOR,       0 },
+				{ Lex::TOKEN_BIT_XOR,         0 },
+
+				{ Lex::TOKEN_PIPELINE,        0 },
+				{ Lex::TOKEN_EQUAL,           0 },
+				{ Lex::TOKEN_NOT_EQUAL,       0 },
+				{ Lex::TOKEN_LESS_THAN,       0 },
+				{ Lex::TOKEN_GREATER_THAN,    0 },
+				{ Lex::TOKEN_LESS_EQ_THAN,    0 },
+				{ Lex::TOKEN_GREATER_EQ_THAN, 0 },
+				{ Lex::TOKEN_SPACESHIP,       0 },
+
+				{ Lex::TOKEN_ADD,             0 },
+				{ Lex::TOKEN_SUB,             0 },
+				{ Lex::TOKEN_MUL,             0 },
+				{ Lex::TOKEN_DIV,             0 },
+				{ Lex::TOKEN_MOD,             0 },
+				{ Lex::TOKEN_POW,             0 },
+				{ Lex::TOKEN_SAL,             0 },
+				{ Lex::TOKEN_SRL,             0 },
+				{ Lex::TOKEN_ROL,             0 },
+				{ Lex::TOKEN_ROR,             0 },
+			
 			};
 
 
