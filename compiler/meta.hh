@@ -52,54 +52,6 @@ namespace Flaner
 				op_infix_assign,  // =
 			};
 
-			enum Target
-			{
-				target_unary,
-				target_binary,
-				target_ternary,
-			};
-
-            class Operation
-            {
-			public:
-				explicit Operation(Operator _kind, uint8_t _prio) : kind(_kind), priority(_prio) {}
-
-				// 操作符标识
-				Operator kind;
-
-				// 操作数
-				Target taeget;
-
-				// 优先级
-				uint8_t priority;
-			};
-
-
-			
-            struct FunctionCall
-            {
-                size_t length;
-            };
-
-            struct MemberAccess
-            {
-                std::string name;
-            };
-
-			struct MemberAccessOptional
-			{
-				std::string name;
-			};
-
-            struct ListLiteral
-            {
-                size_t length;
-            };
-
-            struct ObjectLiteral
-            {
-                std::vector<std::shared_ptr<std::string>> keys;
-            };
 
         }
     }

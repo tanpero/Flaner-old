@@ -41,7 +41,15 @@ namespace Flaner
 
 			std::shared_ptr<UnaryExpressionNode> parseExpressionNeg(TokenList tokenList)
 			{
-				return std::shared_ptr<UnaryExpressionNode>();
+				std::shared_ptr<UnaryExpressionNode> node = std::make_shared<UnaryExpressionNode>();
+				
+				if (tokenList->now()->eq(Lex::TOKEN_LOGIC_NOT))
+				{
+					std::shared_ptr<UnaryOperator> op = std::make_shared<UnaryOperator>(Meta::op_prefix_notl);
+					op->priority = 
+					node->op = op;
+					
+				}
 			}
 
 			std::shared_ptr<UnaryExpressionNode> parseExpressionNotB(TokenList tokenList)
@@ -89,7 +97,7 @@ namespace Flaner
 				return std::shared_ptr<BinaryExpressionNode>();
 			}
 
-			std::shared_ptr<TernaryExpressionNode> `1parseExpressionBranch(TokenList tokenList)
+			std::shared_ptr<TernaryExpressionNode> parseExpressionBranch(TokenList tokenList)
 			{
 				return std::shared_ptr<TernaryExpressionNode>();
 			}

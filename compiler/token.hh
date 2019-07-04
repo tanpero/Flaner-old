@@ -21,10 +21,8 @@ namespace Flaner
 
                 TOKEN_ID,
 
-                LITERAL_VALUE_BEGIN,
                 TOKEN_NUMBER,
                 TOKEN_STRING,
-                LITERAL_VALUE_END,
 
                 TOKEN_LET,
                 TOKEN_CONST,
@@ -50,13 +48,10 @@ namespace Flaner
                 TOKEN_IMPORT,
                 TOKEN_EXPORT,
 
-                ATOM_VALUE_BEGIN,
                 TOKEN_THIS,
                 TOKEN_NULL,
                 TOKEN_TRUE,
-                TOKEN_FALSE,
-                ATOM_VALUE_END,
-                
+                TOKEN_FALSE,          
 
                 TOKEN_PAREN_BEGIN,
                 TOKEN_PAREN_END,
@@ -65,23 +60,47 @@ namespace Flaner
                 TOKEN_BRACE_BEGIN,
                 TOKEN_BRACE_END,
 
-                TOKEN_ASSIGN,
-                TOKEN_PLUS,
-                TOKEN_MINUS,
-                TOKEN_MULTI,
-                TOKEN_DEVIDE,
-                TOKEN_LOGIC_NOT,
-                TOKEN_BIT_NOT,
-                TOKEN_TYPEOF,
+				TOKEN_BIT_NOT,         // ~        
+				TOKEN_LOGIC_NOT,       // !
+				TOKEN_TYPEOF,          // typeof
 
-                TOKEN_FUNCTION_ARROW,
+				TOKEN_LOGIC_AND,       // &&
+				TOKEN_BIT_AND,         // &
+				TOKEN_LOGIC_OR,        // ||
+				TOKEN_BIT_OR,          // |
+				TOKEN_LOGIC_XOR,       // ^^
+				TOKEN_BIT_XOR,         // ^
+				
+				TOKEN_PIPELINE,        // |>
+				TOKEN_EQUAL,           // ==
+				TOKEN_NOT_EQUAL,       // !=
+				TOKEN_LESS_THAN,       // <
+				TOKEN_GREATER_THAN,    // >
+				TOKEN_LESS_EQ_THAN,    // <=
+				TOKEN_GREATER_EQ_THAN, // >=
+				TOKEN_SPACESHIP,       // <=>
 
-                TOKEN_COLON,
-                TOKEN_COMMA,
-                TOKEN_DOT,
-                TOKEN_DOT_DOT_DOT,
-                TOKEN_QUESTION,
-                TOKEN_SEMICOLON
+				TOKEN_ADD,             // +
+				TOKEN_SUB,             // -
+				TOKEN_MUL,             // *
+				TOKEN_DIV,             // /
+				TOKEN_MOD,             // %
+				TOKEN_POW,             // **
+				TOKEN_SAL,             // <<
+				TOKEN_SRL,             // >>
+				TOKEN_ROL,             // <<<
+				TOKEN_ROR,             // >>>
+
+                TOKEN_FUNCTION_ARROW,  // =>
+
+				TOKEN_REGEXP,          // ???
+
+                TOKEN_COLON,           // :
+                TOKEN_COMMA,           // ,
+                TOKEN_DOT,             // .
+                TOKEN_DOT_DOT_DOT,     // ...
+                TOKEN_QUESTION,        // ?
+                TOKEN_SEMICOLON        // ;
             };
 
             struct Token

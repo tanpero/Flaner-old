@@ -9,6 +9,7 @@
 #include <memory>
 #include <variant>
 #include <queue>
+#include <map>
 
 namespace Flaner
 {
@@ -131,16 +132,10 @@ namespace Flaner
             class UnaryOperator
             {
             public:
-                enum class Kind : uint8_t
-                {
-                    LOGIC_NOT,
-                    BIT_NOT,
-                    NEGATIVE,
-                    TYPEOF,
-                };
 
-                Kind kind;
-				explicit UnaryOperator(Kind _kind) : kind(kind) {}
+                Meta::Operator kind;
+				uint8_t priority;
+				explicit UnaryOperator(Meta::Operator _kind) : kind(kind) {}
             };
 
             class BinaryOperator
@@ -315,13 +310,19 @@ namespace Flaner
 				std::variant<ValueNode, UnaryExpressionNode, BinaryExpressionNode, TernaryExpressionNode> node;
 			};
 
-			using _OperatorQueue = std::vector<std::shared_ptr<Meta::Operation>>;
+			using _OperatorQueue = std::vector<std::shared_ptr<Meta::Operator>>;
 			using OperatorQueue = std::shared_ptr<_OperatorQueue>;
 			using _ValueQueue = std::vector<std::shared_ptr<Value>>;
 			using ValueQueue = std::shared_ptr<_ValueQueue>;
 
 
 			using TokenList = std::shared_ptr<Lex::TokenList>;
+
+
+			std::map<Lex::TokenType, uint16_t> priorityLookupTable = {
+				Lex::
+			};
+
 
 			std::shared_ptr<Value> parseValue(TokenList tokenList);
 			std::shared_ptr<UnaryExpressionNode> parseExpressionNeg(TokenList tokenList);

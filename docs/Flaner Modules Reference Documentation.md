@@ -644,7 +644,7 @@ import runtime.os
 | `ENOTSUP`         | 表示不支持给定的操作。                                       |
 | `ENOTTY`          | 表示不适当的I / O控制操作。                                  |
 | `ENXIO`           | 表示没有此类设备或地址。                                     |
-| `EOPNOTSUPP`      | 表示套接字不支持该操作。请注意，虽然`ENOTSUP`和`EOPNOTSUPP`在Linux上相同的值，根据 POSIX .1这些错误值应该是不同的。） |
+| `EOPNOTSUPP`      | 表示套接字不支持该操作。请注意，虽然`ENOTSUP`和`EOPNOTSUPP`在 Linux 上是相同的值，根据 POSIX 这些错误值应该是不同的。） |
 | `EOVERFLOW`       | 表示某个值太大而无法存储在给定的数据类型中。                 |
 | `EPERM`           | 表示不允许该操作。                                           |
 | `EPIPE`           | 表示管道损坏。                                               |
@@ -761,7 +761,7 @@ import runtime.os
 该`path`模块提供了用于处理文件和目录路径的实用程序。它可以使用以下方式访问：
 
 ```
-const path = require('path');
+import runtime.path
 ```
 
 ####  Windows 与 POSIX  
