@@ -24,10 +24,13 @@ namespace Flaner
     };
 };
 
-#ifdef DEBUG
-#define FLANER_DEBUG
+#ifdef FLANER_DEBUG
+#include <cstdio>
+#define debug(s) printf("%s\n", s)
 #else
-#define FLANER_DEBUG //
+#define debug(s) // 
 #endif // !DEBUG
+
+
 
 #endif // !_FLANER_COMPILER_GLOBAL_HH_

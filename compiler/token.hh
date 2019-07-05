@@ -107,8 +107,9 @@ namespace Flaner
             {
                 TokenType type;
                 std::string value;
+				uint16_t position;
 
-                Token(TokenType _type, std::string _value) : type(_type), value(_value) {}
+                Token(TokenType _type, std::string _value) : type(_type), value(_value), position(0) {}
 
                 inline char raw_value()
                 {
@@ -143,7 +144,7 @@ namespace Flaner
                 {
                     return *this == t;
                 }
-
+				
                 inline bool noteq(TokenType t)
                 {
                     return *this != t;

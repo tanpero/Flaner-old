@@ -238,7 +238,7 @@ namespace Flaner
                 };
 
                 Kind kind;
-                FunctionValue function;
+                Function function;
             };
             
             class ClassStatement : public Statement
@@ -272,7 +272,7 @@ namespace Flaner
             class WithStatement : public Statement
             {
             public:
-                std::shared_ptr<Value> object;
+                std::shared_ptr<Expression> object;
                 std::shared_ptr<BlockStatement> body;
             };
 

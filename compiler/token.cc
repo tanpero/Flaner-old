@@ -8,6 +8,7 @@ namespace Flaner
         {
             void TokenList::push(std::shared_ptr<Token> token)
             {
+				token->position = pos() + 1;
                 tokens.push_back(token);
             }
 

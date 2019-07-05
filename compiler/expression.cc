@@ -9,6 +9,108 @@ namespace Flaner
 		namespace Expr
 		{
 
+			uint16_t getPriority(std::shared_ptr<Lex::Token> token)
+			{
+				uint16_t priority;
+
+				try
+				{
+					priority = priorityLookupTable.at(token->type);
+				}
+				catch (const std::exception&)
+				{
+					debug("Internal Error:"
+						  "    At Expression Parser:"
+						  "    Unable to identify the operator.\n");
+					abort();
+				}
+
+				return priority;
+			}
+
+			
+
+			uint16_t getOperatorParamsCount(Lex::TokenType op)
+			{
+				// 先在操作符优先级表中查询此操作符，
+				//     如果没有找到，说明它不是一个操作符，引发内部错误
+				// 或者，如果此操作符在单目操作符集合中，返回 1
+				//     否则，返回 2
+				// 此时暂不支持三目运算符
+				
+				// TODO...
+				// 需要使用更加优雅的方式√
+
+				switch (op)
+				{
+				case Flaner::Compiler::Lex::TOKEN_BIT_NOT: 
+				case Flaner::Compiler::Lex::TOKEN_LOGIC_NOT:
+				case Flaner::Compiler::Lex::TOKEN_TYPEOF:				case Flaner::Compiler::Lex::TOKEN_DOT_DOT_DOT:
+					return 1;
+				case Flaner::Compiler::Lex::TOKEN_LOGIC_OR:				case Flaner::Compiler::Lex::TOKEN_BIT_OR:				case Flaner::Compiler::Lex::TOKEN_LOGIC_XOR:				case Flaner::Compiler::Lex::TOKEN_BIT_XOR:				case Flaner::Compiler::Lex::TOKEN_PIPELINE:				case Flaner::Compiler::Lex::TOKEN_EQUAL:				case Flaner::Compiler::Lex::TOKEN_NOT_EQUAL:				case Flaner::Compiler::Lex::TOKEN_LESS_THAN:				case Flaner::Compiler::Lex::TOKEN_GREATER_THAN:				case Flaner::Compiler::Lex::TOKEN_LESS_EQ_THAN:				case Flaner::Compiler::Lex::TOKEN_GREATER_EQ_THAN:				case Flaner::Compiler::Lex::TOKEN_SPACESHIP:				case Flaner::Compiler::Lex::TOKEN_ADD:				case Flaner::Compiler::Lex::TOKEN_SUB:				case Flaner::Compiler::Lex::TOKEN_MUL:				case Flaner::Compiler::Lex::TOKEN_DIV:				case Flaner::Compiler::Lex::TOKEN_MOD:				case Flaner::Compiler::Lex::TOKEN_POW:				case Flaner::Compiler::Lex::TOKEN_SAL:				case Flaner::Compiler::Lex::TOKEN_SRL:				case Flaner::Compiler::Lex::TOKEN_ROL:				case Flaner::Compiler::Lex::TOKEN_ROR:
+					return 2;
+				default:
+					return 0;
+				}
+			}
+
+			bool isIdentifier(TokenList tokenList)
+			{
+				return tokenList->now()->eq(Lex::TOKEN_ID);
+			}
+
+			bool isLiteral(TokenList tokenList)
+			{
+				std::shared_ptr<Lex::Token> token = tokenList->now();
+
+				return token->eq(Lex::TOKEN_NUMBER)
+					|| token->eq(Lex::TOKEN_BIGINT)
+					|| token->eq(Lex::TOKEN_RATIONAL)
+					|| token->eq(Lex::TOKEN_STRING)
+					|| token->eq(Lex::TOKEN_TRUE)
+					|| token->eq(Lex::TOKEN_FALSE)
+					|| token->eq(Lex::TOKEN_NULL)
+					|| token->eq(Lex::TOKEN_THIS);
+			}
+
+			bool isFunctionName(TokenList tokenList)
+			{
+				if (!isIdentifier(tokenList)
+					|| tokenList->next()->noteq(Lex::TOKEN_PAREN_BEGIN))
+				{
+					return false;
+				}
+
+				return true;
+			}
+			
+			bool isOperator(TokenList tokenList)
+			{
+				return static_cast<bool>(getOperatorParamsCount(tokenList));
+			}
+
+
+#define op_left_assoc(c) (c == '+' || c == '-' || c == '/' || c == '*' || c == '%')
+#define is_operator(c)   (c == '+' || c == '-' || c == '/' || c == '*' || c == '!' || c == '%' || c == '=')
+#define is_function(c)   (c >= 'A' && c <= 'Z')
+#define is_ident(c)      ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'z'))
+
+			UnitStream shuntingYard(TokenList input)
+			{
+				std::shared_ptr<UnitStream> output = std::make_shared<UnitStream>();
+
+				while (true)
+				{
+					std::shared_ptr<Lex::Token> token = input->now();
+
+					if (isLiteral(input))
+					{
+						output->push(input->now());
+					}
+				}
+			}
+
+
 			std::shared_ptr<ValueNode> parseValue(TokenList tokenList)
 			{
 				std::shared_ptr<Lex::Token> currentToken = tokenList->now();

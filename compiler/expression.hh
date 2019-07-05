@@ -10,6 +10,7 @@
 #include <variant>
 #include <queue>
 #include <map>
+#include <set>
 
 namespace Flaner
 {
@@ -164,13 +165,13 @@ namespace Flaner
             public:
                 bool hasDefaultValue;
                 bool isRest;
-                std::shared_ptr<Expression> defaultValueExpr;
-                std::shared_ptr<Identifier> id;
+                std::shared_ptr<ExpressionNode> defaultValueExpr;
+                std::shared_ptr<AST::Identifier> id;
 
                 Param()
                     : hasDefaultValue(false), isRest(false), defaultValueExpr(nullptr), id(nullptr) {}
 
-                Param(std::shared_ptr<Identifier> id)
+                Param(std::shared_ptr<AST::Identifier> id)
                     : hasDefaultValue(false), isRest(false), defaultValueExpr(nullptr), id(id) {}
 
             };
@@ -305,17 +306,13 @@ namespace Flaner
 				std::vector<std::shared_ptr<ExpressionNode>> arguments;
 			};
 
-			class ExpressionNode
+			class ExpressionNodez
 			{
 			public:
 				std::variant<ValueNode, UnaryExpressionNode, BinaryExpressionNode, TernaryExpressionNode> node;
 			};
 
-			using _OperatorQueue = std::vector<std::shared_ptr<Meta::Operator>>;
-			using OperatorQueue = std::shared_ptr<_OperatorQueue>;
-			using _ValueQueue = std::vector<std::shared_ptr<Value>>;
-			using ValueQueue = std::shared_ptr<_ValueQueue>;
-
+			using UnitStream = std::queue<std::variant<Meta::Operator, Value>>;
 
 			using TokenList = std::shared_ptr<Lex::TokenList>;
 
@@ -355,6 +352,16 @@ namespace Flaner
 			
 			};
 
+			std::set<Lex::TokenType> unaryOperatorsSet = {
+				Lex::TOKEN_ADD,
+				Lex::TOKEN_BIT_NOT,
+				Lex::TOKEN_LOGIC_NOT,
+				Lex::TOKEN_TYPEOF,
+			};
+			
+#include <queue>
+
+			std::queue<>;
 
 			std::shared_ptr<Value> parseValue(TokenList tokenList);
 			std::shared_ptr<UnaryExpressionNode> parseExpressionNeg(TokenList tokenList);

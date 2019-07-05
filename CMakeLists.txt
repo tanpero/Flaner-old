@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(Flaner)
 
+add_definitions("FLANER_DEBUG")
+
 add_subdirectory(compiler)
 add_subdirectory(vm)
 add_subdirectory(runtime)
