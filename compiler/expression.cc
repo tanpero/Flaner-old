@@ -1,6 +1,8 @@
 #include <expression.hh>
 #include <parser.hh>
+#include <exception.hh>
 #include <algorithm>
+#include <stack>
 
 namespace Flaner
 {
@@ -83,10 +85,21 @@ namespace Flaner
 
 				return true;
 			}
-			
+
+			bool isOperator(Token token)
+			{
+				return static_cast<bool>(getOperatorParamsCount(token->type));
+			}
+
 			bool isOperator(TokenList tokenList)
 			{
-				return static_cast<bool>(getOperatorParamsCount(tokenList));
+				return isOperator(tokenList->now());
+			}
+
+			// 暂定所有的双目运算符都是左结合的
+			bool isLeftAssociation(TokenList tokenList)
+			{
+				return getOperatorParamsCount(tokenList) == 2;
 			}
 
 
@@ -95,18 +108,124 @@ namespace Flaner
 #define is_function(c)   (c >= 'A' && c <= 'Z')
 #define is_ident(c)      ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'z'))
 
-			UnitStream shuntingYard(TokenList input)
+			TokenList shuntingYard(TokenList input)
 			{
-				std::shared_ptr<UnitStream> output = std::make_shared<UnitStream>();
+				TokenList output = std::make_shared<TokenList>();
+				std::shared_ptr<std::stack<Token>> stack = std::make_shared<std::stack<Token>>();
+
+				uint8_t parensCount = 0;
 
 				while (true)
 				{
-					std::shared_ptr<Lex::Token> token = input->now();
+					Token token = input->now();
 
 					if (isLiteral(input))
 					{
-						output->push(input->now());
+						output->push(token);
 					}
+					else if (isFunctionName(input))
+					{
+						stack->push(input);
+					}
+					else if (isIdentifier(input))
+					{
+						output->push(token);
+					}
+					else if (input->now()->eq(Lex::TOKEN_COMMA))
+					{
+						bool parenBegin = false;
+						while (!stack->empty())
+						{
+							Token el = stack->top();
+							if (el->eq(Lex::TOKEN_PAREN_BEGIN))
+							{
+								parenBegin = true;
+								break;
+							}
+							else
+							{
+								output->push(el);
+								stack->pop();
+							}
+						}
+
+						// 如果没有遇到左括号，则有可能是符号放错或者不匹配
+						unexpected_token_syntax_error(token)
+					}
+					else if (isOperator(input))
+					{
+						while (!stack->empty())
+						{
+							Token el = stack->top();
+							if (isOperator(el) &&
+								((isLeftAssociation(token) && (getPriority(token) <= getPriority(el))) ||
+								(!isLeftAssociation(token) && (getPriority(token) < getPriority(el)))))
+							{
+								output->push(el);
+								stack->pop();
+							}
+							else
+							{
+								break;
+							}
+						}
+						stack->push(token);
+					}
+					else if (token->eq(Lex::TOKEN_PAREN_BEGIN))
+					{
+						parensCount += 1;
+						stack->push(token);
+					}
+					else if (token->eq(Lex::TOKEN_PAREN_END))
+					{
+						parensCount -= 1;
+						bool parenBegin = false;
+						while (!stack->empty()) {
+							Token el = stack->top();
+							if (el->eq(Lex::TOKEN_PAREN_BEGIN))
+							{
+								parenBegin = true;
+								break;
+							}
+							else
+							{
+								output->push(el);
+								stack->pop();
+							}
+							if (!parenBegin)
+							{
+								unexpected_token_syntax_error(token)
+							}
+
+							stack->pop();
+							if (!stack->empty())
+							{
+								Token el = stack->top();
+								if (el->eq(Lex::TOKEN_ID))
+								{
+									output->push(el);
+									stack->pop();
+								}
+							}
+
+
+						}
+					}
+					
+					// 不属于表达式的 token
+					else
+					{
+						// 若此时还处于小括号包裹内
+						if (parensCount != 0)
+						{
+							unexpected_token_syntax_error(token)
+						}
+
+						// 已经从输入流中获取到了完整的表达式，现在结束
+						break;
+					}
+
+					input->forward();
 				}
 			}
 

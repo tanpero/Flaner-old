@@ -71,6 +71,7 @@ namespace Flaner
             class NumericValue
             {
             public:
+				ValueKindIndex kindIndex;
                 NumericValue() : kindIndex(ValueKindIndex::INDEX_NUMERIC) {}
                 NumericValue(Numeric _value) : kindIndex(ValueKindIndex::INDEX_NUMERIC), value(_value) {}
                 Numeric value;
@@ -79,6 +80,7 @@ namespace Flaner
             class BigintValue
             {
             public:
+				ValueKindIndex kindIndex;
                 BigintValue() : kindIndex(ValueKindIndex::INDEX_BIGINT) {}
             };
 
@@ -306,14 +308,18 @@ namespace Flaner
 				std::vector<std::shared_ptr<ExpressionNode>> arguments;
 			};
 
-			class ExpressionNodez
+			class ExpressionNode
 			{
 			public:
 				std::variant<ValueNode, UnaryExpressionNode, BinaryExpressionNode, TernaryExpressionNode> node;
 			};
 
-			using UnitStream = std::queue<std::variant<Meta::Operator, Value>>;
+			using Unit = std::variant<Meta::Operator, Value>;
 
+			using UnitStream = std::queue<Unit>;
+			using UnitStack = std::stack<Unit>;
+
+			using Token = std::shared_ptr<Lex::Token>;
 			using TokenList = std::shared_ptr<Lex::TokenList>;
 
 
@@ -359,9 +365,6 @@ namespace Flaner
 				Lex::TOKEN_TYPEOF,
 			};
 			
-#include <queue>
-
-			std::queue<>;
 
 			std::shared_ptr<Value> parseValue(TokenList tokenList);
 			std::shared_ptr<UnaryExpressionNode> parseExpressionNeg(TokenList tokenList);
