@@ -11,7 +11,7 @@ namespace Flaner
 		namespace Expr
 		{
 
-			uint16_t getPriority(std::shared_ptr<Lex::Token> token)
+			static inline uint16_t getPriority(std::shared_ptr<Lex::Token> token)
 			{
 				uint16_t priority;
 
@@ -32,7 +32,7 @@ namespace Flaner
 
 			
 
-			uint16_t getOperatorParamsCount(Lex::TokenType op)
+			static inline uint16_t getOperatorParamsCount(Lex::TokenType op)
 			{
 				// 先在操作符优先级表中查询此操作符，
 				//     如果没有找到，说明它不是一个操作符，引发内部错误
@@ -56,12 +56,12 @@ namespace Flaner
 				}
 			}
 
-			bool isIdentifier(TokenList tokenList)
+			static inline bool isIdentifier(TokenList tokenList)
 			{
 				return tokenList->now()->eq(Lex::TOKEN_ID);
 			}
 
-			bool isLiteral(TokenList tokenList)
+			static inline bool isLiteral(TokenList tokenList)
 			{
 				std::shared_ptr<Lex::Token> token = tokenList->now();
 
@@ -75,7 +75,7 @@ namespace Flaner
 					|| token->eq(Lex::TOKEN_THIS);
 			}
 
-			bool isFunctionName(TokenList tokenList)
+			static inline bool isFunctionName(TokenList tokenList)
 			{
 				if (!isIdentifier(tokenList)
 					|| tokenList->next()->noteq(Lex::TOKEN_PAREN_BEGIN))
@@ -86,28 +86,23 @@ namespace Flaner
 				return true;
 			}
 
-			bool isOperator(Token token)
+			static inline bool isOperator(Token token)
 			{
 				return static_cast<bool>(getOperatorParamsCount(token->type));
 			}
 
-			bool isOperator(TokenList tokenList)
+			static inline bool isOperator(TokenList tokenList)
 			{
 				return isOperator(tokenList->now());
 			}
 
+			// TODO...
 			// 暂定所有的双目运算符都是左结合的
-			bool isLeftAssociation(TokenList tokenList)
+			static inline bool isLeftAssociation(TokenList tokenList)
 			{
 				return getOperatorParamsCount(tokenList) == 2;
 			}
-
-
-#define op_left_assoc(c) (c == '+' || c == '-' || c == '/' || c == '*' || c == '%')
-#define is_operator(c)   (c == '+' || c == '-' || c == '/' || c == '*' || c == '!' || c == '%' || c == '=')
-#define is_function(c)   (c >= 'A' && c <= 'Z')
-#define is_ident(c)      ((c >= '0' && c <= '9') || (c >= 'a' && c <= 'z'))
-
+			
 			TokenList shuntingYard(TokenList input)
 			{
 				TokenList output = std::make_shared<TokenList>();
@@ -119,6 +114,8 @@ namespace Flaner
 				{
 					Token token = input->now();
 
+					// 字面值可以直接移入输出流中
+					// TODO: 添加对复杂字面值的支持
 					if (isLiteral(input))
 					{
 						output->push(token);
@@ -227,8 +224,22 @@ namespace Flaner
 
 					input->forward();
 				}
-			}
 
+				// 处理 stack 中余留的 tokens
+				while (!stack->empty())
+				{
+					Token el = stack->top();
+					if (el->eq(Lex::TOKEN_PAREN_BEGIN) || el->eq(Lex::TOKEN_PAREN_END))
+					{
+						unexpected_token_syntax_error(el);
+					}
+					output->push(el);
+					stack->pop();
+				}
+
+				// 完成
+				return output;
+			}
 
 			std::shared_ptr<ValueNode> parseValue(TokenList tokenList)
 			{
